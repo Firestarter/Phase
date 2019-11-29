@@ -1,0 +1,16 @@
+name: Phase
+version: ${version}
+author: TechToolbox (@nkomarn)
+main: xyz.nkomarn.Phase.Phase
+description: A dead simple and hyper efficient warp system.
+api-version: 1.14
+depend: ['Vault']
+
+commands:
+  warp:
+    usage: "/<command> <warp>"
+    description: "View the warp GUI or teleport to a warp."
+    aliases: ['warps', 'go']
+  warpadmin:
+    usage: "/<command> <operation>"
+    description: "Manage the warps system in-game."

@@ -1,0 +1,4 @@
+database: "survival"
+
+messages:
+  prefix: "&3&lWarps &7- "
