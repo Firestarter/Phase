@@ -2,3 +2,11 @@ database: "survival"
 
 messages:
   prefix: "&3&lWarps &7- "
+
+categories:
+  All: BOOK
+  Shop: CHEST
+  Grinder: EXPERIENCE_BOTTLE
+  PvP: GOLD_SWORD
+  Attraction: FIREWORK_ROCKET
+  Town: ORANGE_BED

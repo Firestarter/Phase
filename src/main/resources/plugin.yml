@@ -1,5 +1,5 @@
 name: Phase
-version: ${version}
+version: 1.0
 author: TechToolbox (@nkomarn)
 main: xyz.nkomarn.Phase.Phase
 description: A dead simple and hyper efficient warp system.

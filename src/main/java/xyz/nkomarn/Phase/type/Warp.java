@@ -10,14 +10,13 @@ public class Warp {
     private final String name, owner, category, world;
     private final int visits;
     private final long renewed;
-    private final double x, y, z;
-    private final float pitch, yaw;
+    private final double x, y, z, pitch, yaw;
     private final boolean type, featured, expired;
     private final String[] favorites;
 
     public Warp(final String name, final String owner, final int visits, final boolean type, final String category,
                 final boolean featured, final boolean expired, final long renewed, final double x, final double y,
-                final double z, final float pitch, final float yaw, final String world, final String[] favorites) {
+                final double z, final double pitch, final double yaw, final String world, final String[] favorites) {
         this.name = name;
         this.owner = owner;
         this.visits = visits;
@@ -69,7 +68,7 @@ public class Warp {
 
     public Location getLocation() {
         final World world = Bukkit.getWorld(UUID.fromString(this.world));
-        return new Location(world, this.x, this.y, this.z, this.yaw, this.pitch);
+        return new Location(world, this.x, this.y, this.z, (float) this.yaw, (float) this.pitch);
     }
 
     public String[] getFavorites() {

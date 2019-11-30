@@ -2,9 +2,14 @@ package xyz.nkomarn.Phase.util;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
+import xyz.nkomarn.Phase.Phase;
 import xyz.nkomarn.Phase.type.Warp;
+
+import java.util.HashMap;
 
 public class WarpUtil {
 
@@ -28,5 +33,18 @@ public class WarpUtil {
                 player.playSound(location, Sound.BLOCK_ANVIL_LAND, 1.0f, 1.0f);
             }
         });
+    }
+
+    private static HashMap<String, Material> getCategories() {
+        HashMap<String, Material> categories = new HashMap<>();
+        ConfigurationSection section = Phase.getInstance().getConfig().getConfigurationSection("categories");
+        for (String category : section.getKeys(false)) {
+            categories.put(category, Material.valueOf(section.getString(category)));
+        }
+        return categories;
+    }
+
+    public static Material getItem(final String category) {
+        return getCategories().get(category);
     }
 }
