@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 public class Warp {
@@ -12,11 +13,11 @@ public class Warp {
     private final long renewed;
     private final double x, y, z, pitch, yaw;
     private final boolean type, featured, expired;
-    private final String[] favorites;
+    private final ArrayList<String> favorites;
 
     public Warp(final String name, final String owner, final int visits, final boolean type, final String category,
                 final boolean featured, final boolean expired, final long renewed, final double x, final double y,
-                final double z, final double pitch, final double yaw, final String world, final String[] favorites) {
+                final double z, final double pitch, final double yaw, final String world, final ArrayList<String> favorites) {
         this.name = name;
         this.owner = owner;
         this.visits = visits;
@@ -71,7 +72,7 @@ public class Warp {
         return new Location(world, this.x, this.y, this.z, (float) this.yaw, (float) this.pitch);
     }
 
-    public String[] getFavorites() {
+    public ArrayList<String> getFavorites() {
         return this.favorites;
     }
 }

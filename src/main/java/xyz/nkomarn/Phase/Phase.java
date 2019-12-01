@@ -8,6 +8,7 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import xyz.nkomarn.Kerosene.database.Database;
 import xyz.nkomarn.Kerosene.database.SyncAsyncCollection;
+import xyz.nkomarn.Phase.command.SetWarpCommand;
 import xyz.nkomarn.Phase.command.WarpCommand;
 import xyz.nkomarn.Phase.listener.InventoryClickListener;
 
@@ -27,6 +28,9 @@ public class Phase extends JavaPlugin {
         PluginCommand warpCommand = getCommand("warp");
         warpCommand.setExecutor(new WarpCommand());
         warpCommand.setTabCompleter(new WarpCommand());
+        PluginCommand setWarpCommand = getCommand("setwarp");
+        setWarpCommand.setExecutor(new SetWarpCommand());
+        setWarpCommand.setTabCompleter(new SetWarpCommand());
         Bukkit.getPluginManager().registerEvents(new InventoryClickListener(), this);
     }
 

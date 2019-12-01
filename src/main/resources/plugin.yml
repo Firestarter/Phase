@@ -11,6 +11,10 @@ commands:
     usage: "/<command> <warp>"
     description: "View the warp GUI or teleport to a warp."
     aliases: ['warps', 'go']
+  setwarp:
+    usage: "/<command> <name>"
+    description: "Set a warp at your current location."
+    aliases: ['createwarp', 'newwarp', 'addwarp']
   warpadmin:
     usage: "/<command> <operation>"
     description: "Manage the warps system in-game."

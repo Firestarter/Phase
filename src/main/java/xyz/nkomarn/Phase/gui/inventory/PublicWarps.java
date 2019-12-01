@@ -7,11 +7,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.scheduler.BukkitRunnable;
+import xyz.nkomarn.Phase.Phase;
 import xyz.nkomarn.Phase.gui.GUIHolder;
 import xyz.nkomarn.Phase.gui.GUIType;
 import xyz.nkomarn.Phase.type.Warp;
+import xyz.nkomarn.Phase.util.GUIUtil;
 import xyz.nkomarn.Phase.util.Search;
-import xyz.nkomarn.Phase.util.WarpUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -49,28 +51,19 @@ public class PublicWarps {
         next.setItemMeta(nextMeta);
         menu.setItem(41, next);
 
-        try {
-            ArrayList<Warp> warps = Search.getPublicWarps().get();
-            final int totalWarps = warps.size();
-            final int startingIndex = Math.min(Math.max(36 * (page - 1), 0), totalWarps);
-            final int endingIndex = Math.min(Math.max(36 * page, startingIndex), warps.size());
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                ArrayList<Warp> warps = Search.getPublicWarps();
+                final int totalWarps = warps.size();
+                final int startingIndex = Math.min(Math.max(36 * (page - 1), 0), totalWarps);
+                final int endingIndex = Math.min(Math.max(36 * page, startingIndex), warps.size());
 
-            warps.subList(startingIndex, endingIndex).forEach(warp -> {
-                ItemStack warpItem = new ItemStack(WarpUtil.getItem(warp.getCategory()));
-                ItemMeta warpItemMeta = warpItem.getItemMeta();
-                warpItemMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&',
-                        String.format("&7%s", warp.getName())));
-                warpItemMeta.setLore(Arrays.asList(
-                        ChatColor.translateAlternateColorCodes('&', String.format("&7Category: &6%s", warp.getCategory())),
-                        ChatColor.translateAlternateColorCodes('&', String.format("&7Visits: &6%s", warp.getVisits()))
-                ));
-                warpItem.setItemMeta(warpItemMeta);
-                menu.setItem(warps.indexOf(warp) % 36, warpItem);
-            });
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-        }
-
-        player.openInventory(menu);
+                warps.subList(startingIndex, endingIndex).forEach(warp -> {
+                    menu.setItem(warps.indexOf(warp) % 36, GUIUtil.getWarpItem(warp));
+                });
+                player.openInventory(menu);
+            }
+        }.runTask(Phase.getInstance());
     }
 }

@@ -1,20 +1,20 @@
 package xyz.nkomarn.Phase.command;
 
 import org.bukkit.ChatColor;
-import org.bukkit.Sound;
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
-import xyz.nkomarn.Phase.gui.inventory.MainMenu;
 import xyz.nkomarn.Phase.type.Warp;
 import xyz.nkomarn.Phase.util.Config;
 import xyz.nkomarn.Phase.util.Search;
 import xyz.nkomarn.Phase.util.WarpUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class WarpCommand implements TabExecutor {
+public class SetWarpCommand implements TabExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
         final String prefix = Config.getString("messages.prefix");
@@ -29,27 +29,33 @@ public class WarpCommand implements TabExecutor {
         final Player player = (Player) sender;
 
         if (args.length < 1) {
-            new MainMenu(player);
-            player.playSound(player.getLocation(), Sound.BLOCK_BEACON_ACTIVATE, 1.0f, 1.0f);
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', String.format(
+                    "%sUsage: /setwarp <name>", prefix
+            )));
             return true;
         }
 
-        // TODO parse input and warp
         StringBuilder warpNameBuilder = new StringBuilder();
         for (int i = 0; i < args.length; i++) {
             warpNameBuilder.append(args[i]).append(" ");
         }
         final String warpName = warpNameBuilder.toString().trim();
 
-        if (!Search.exists(warpName)) {
+        if (Search.exists(warpName)) {
             player.sendMessage(ChatColor.translateAlternateColorCodes('&', String.format(
-                    "%sWarp '%s' doesn't exist.", prefix, warpName
+                    "%sA warp with the name '%s' already exists.", prefix, warpName
             )));
-            return true;
+        } else {
+            // FIXME temporary insertion testing code
+            final Location location = player.getLocation();
+            final Warp warp = new Warp(warpName, player.getUniqueId().toString(), 0, true, "Grinder", true,
+                    false, System.currentTimeMillis(), location.getX(), location.getY(), location.getZ(), location.getPitch(),
+                    location.getYaw(), location.getWorld().getUID().toString(), new ArrayList<>());
+            WarpUtil.createWarp(warp);
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', String.format(
+                    "%sCreated warp '%s'!", prefix, warpName
+            )));
         }
-
-        final Warp warp = Search.getWarpByName(warpName);
-        WarpUtil.warp(player, warp);
         return true;
     }
 

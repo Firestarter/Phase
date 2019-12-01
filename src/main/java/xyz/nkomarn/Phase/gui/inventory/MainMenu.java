@@ -26,7 +26,7 @@ public class MainMenu {
 
         ItemStack information = new ItemStack(Material.WRITABLE_BOOK, 1);
         ItemMeta informationMeta = information.getItemMeta();
-        informationMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&b&lInformation"));
+        informationMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&b&lThe Guide"));
         informationMeta.setLore(Arrays.asList(ChatColor.GRAY + "Click to learn how to", ChatColor.GRAY + "use the warps system!"));
         information.setItemMeta(informationMeta);
         menu.setItem(10, information);
