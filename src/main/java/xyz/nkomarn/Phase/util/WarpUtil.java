@@ -57,7 +57,7 @@ public class WarpUtil {
             } else {
                 player.sendTitle(ChatColor.translateAlternateColorCodes('&',
                         "&c&lTeleporter machine broke."), ChatColor.translateAlternateColorCodes('&',
-                        String.format("Some teleportation error occurred.")));
+                        "Some teleportation error occurred."));
                 player.playSound(location, Sound.BLOCK_ANVIL_LAND, 1.0f, 1.0f);
             }
         });
@@ -80,7 +80,7 @@ public class WarpUtil {
         return categories;
     }
 
-    public static Material getItem(final String category) {
+    static Material getItem(final String category) {
         return getCategories().get(category);
     }
 }
