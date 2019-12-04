@@ -80,7 +80,7 @@ public class WarpUtil {
         return categories;
     }
 
-    static Material getItem(final String category) {
+    public static Material getItem(final String category) {
         return getCategories().get(category);
     }
 }

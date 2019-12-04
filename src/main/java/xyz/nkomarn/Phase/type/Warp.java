@@ -1,10 +1,15 @@
 package xyz.nkomarn.Phase.type;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import xyz.nkomarn.Phase.util.WarpUtil;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.UUID;
 
 public class Warp {
@@ -74,5 +79,18 @@ public class Warp {
 
     public ArrayList<String> getFavorites() {
         return this.favorites;
+    }
+
+    public ItemStack getItem() {
+        ItemStack warpItem = new ItemStack(WarpUtil.getItem(this.getCategory()));
+        ItemMeta warpItemMeta = warpItem.getItemMeta();
+        warpItemMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&',
+                String.format("&6&l%s", this.getName())));
+        warpItemMeta.setLore(Arrays.asList(
+                ChatColor.translateAlternateColorCodes('&', String.format("&7Category: &6%s", this.getCategory())),
+                ChatColor.translateAlternateColorCodes('&', String.format("&7Visits: &6%s", this.getVisits()))
+        ));
+        warpItem.setItemMeta(warpItemMeta);
+        return warpItem;
     }
 }

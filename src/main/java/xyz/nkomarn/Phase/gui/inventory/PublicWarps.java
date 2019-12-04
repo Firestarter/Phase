@@ -12,16 +12,14 @@ import xyz.nkomarn.Phase.Phase;
 import xyz.nkomarn.Phase.gui.GUIHolder;
 import xyz.nkomarn.Phase.gui.GUIType;
 import xyz.nkomarn.Phase.type.Warp;
-import xyz.nkomarn.Phase.util.GUIUtil;
 import xyz.nkomarn.Phase.util.Search;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.concurrent.ExecutionException;
 
 public class PublicWarps {
     public PublicWarps(final Player player, final int page) {
-        Inventory menu = Bukkit.createInventory(new GUIHolder(GUIType.PUBLICWARPS, page), 45,
+        Inventory menu = Bukkit.createInventory(new GUIHolder(GUIType.PUBLIC_WARPS, page), 45,
                 String.format("Public Warps (Page %s)", page));
 
         ItemStack glass = new ItemStack(Material.GRAY_STAINED_GLASS_PANE, 1);
@@ -59,9 +57,7 @@ public class PublicWarps {
                 final int startingIndex = Math.min(Math.max(36 * (page - 1), 0), totalWarps);
                 final int endingIndex = Math.min(Math.max(36 * page, startingIndex), warps.size());
 
-                warps.subList(startingIndex, endingIndex).forEach(warp -> {
-                    menu.setItem(warps.indexOf(warp) % 36, GUIUtil.getWarpItem(warp));
-                });
+                warps.subList(startingIndex, endingIndex).forEach(warp -> menu.setItem(warps.indexOf(warp) % 36, warp.getItem()));
                 player.openInventory(menu);
             }
         }.runTask(Phase.getInstance());

@@ -31,8 +31,8 @@ public class InventoryClickListener implements Listener {
             final Player player = (Player) event.getWhoClicked();
 
             GUIHandler handler = null;
-            if (type == GUIType.MAINMENU) handler = new MainMenuHandler();
-            else if (type == GUIType.PUBLICWARPS) handler = new PublicWarpsHandler();
+            if (type == GUIType.MAIN_MENU) handler = new MainMenuHandler();
+            else if (type == GUIType.PUBLIC_WARPS) handler = new PublicWarpsHandler();
 
             if (handler != null) {
                 handler.handle(player, slot, event);

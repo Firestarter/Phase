@@ -1,6 +1,6 @@
 package xyz.nkomarn.Phase.gui;
 
 public enum GUIType {
-    MAINMENU,
-    PUBLICWARPS
+    MAIN_MENU,
+    PUBLIC_WARPS
 }

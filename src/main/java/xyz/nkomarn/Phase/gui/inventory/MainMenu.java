@@ -14,7 +14,7 @@ import java.util.Arrays;
 
 public class MainMenu {
     public MainMenu(final Player player) {
-        Inventory menu = Bukkit.createInventory(new GUIHolder(GUIType.MAINMENU, 1), 27, "Warps Menu");
+        Inventory menu = Bukkit.createInventory(new GUIHolder(GUIType.MAIN_MENU, 1), 27, "Warps Menu");
         player.openInventory(menu);
 
         ItemStack glass = new ItemStack(Material.GRAY_STAINED_GLASS_PANE, 1);
