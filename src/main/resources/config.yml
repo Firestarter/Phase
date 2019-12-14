@@ -1,7 +1,7 @@
 database: "survival"
 
 messages:
-  prefix: "&3&lWarps &7- "
+  prefix: "&3&lWarps: &7"
 
 categories:
   All: BOOK

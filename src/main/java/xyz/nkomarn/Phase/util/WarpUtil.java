@@ -2,6 +2,7 @@ package xyz.nkomarn.Phase.util;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.client.model.Filters;
+import io.papermc.lib.PaperLib;
 import org.bson.Document;
 import org.bukkit.*;
 import org.bukkit.configuration.ConfigurationSection;
@@ -36,6 +37,7 @@ public class WarpUtil {
                 .append("world", location.getWorld().getUID().toString())
                 .append("favorites", warp.getFavorites());
         Phase.getCollection().sync().insertOne(document); // TODO async with subscriber
+        Search.cacheWarp(warp);
     }
 
     /**
@@ -45,7 +47,8 @@ public class WarpUtil {
      */
     public static void warp(final Player player, final Warp warp) { // TODO warp safety checking
         final Location location = warp.getLocation();
-        player.teleportAsync(location).thenAccept(result -> {
+        // TODO warp safety check
+        PaperLib.teleportAsync(player, location.add(0 , 0.2, 0)).thenAccept(result -> {
             if (result) {
                 player.sendTitle(ChatColor.translateAlternateColorCodes('&',
                         "&6&lWhoosh."), ChatColor.translateAlternateColorCodes('&',
@@ -54,6 +57,7 @@ public class WarpUtil {
                 player.playEffect(player.getLocation(), Effect.ENDER_SIGNAL, 15);
                 Phase.getCollection().sync().updateOne(Filters.eq("name", warp.getName()), new Document("$inc",
                         new BasicDBObject().append("visits", 1)));
+                Search.incrementVisits(warp);
             } else {
                 player.sendTitle(ChatColor.translateAlternateColorCodes('&',
                         "&c&lTeleporter machine broke."), ChatColor.translateAlternateColorCodes('&',

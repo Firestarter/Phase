@@ -11,6 +11,7 @@ import xyz.nkomarn.Kerosene.database.SyncAsyncCollection;
 import xyz.nkomarn.Phase.command.SetWarpCommand;
 import xyz.nkomarn.Phase.command.WarpCommand;
 import xyz.nkomarn.Phase.listener.InventoryClickListener;
+import xyz.nkomarn.Phase.util.Search;
 
 public class Phase extends JavaPlugin {
     private static Phase instance;
@@ -20,10 +21,13 @@ public class Phase extends JavaPlugin {
     public void onEnable() {
         instance = this;
         saveDefaultConfig();
-        initializeEconomy();
+        if (!initializeEconomy()) {
+            return;
+        }
 
         final String database = getConfig().getString("database");
         warps = Database.getSyncAsyncCollection(database, "warps");
+        Search.read();
 
         PluginCommand warpCommand = getCommand("warp");
         warpCommand.setExecutor(new WarpCommand());

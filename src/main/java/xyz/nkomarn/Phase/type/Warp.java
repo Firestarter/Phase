@@ -11,10 +11,11 @@ import xyz.nkomarn.Phase.util.WarpUtil;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Warp {
     private final String name, owner, category, world;
-    private final int visits;
+    private AtomicInteger visits;
     private final long renewed;
     private final double x, y, z, pitch, yaw;
     private final boolean type, featured, expired;
@@ -25,7 +26,7 @@ public class Warp {
                 final double z, final double pitch, final double yaw, final String world, final ArrayList<String> favorites) {
         this.name = name;
         this.owner = owner;
-        this.visits = visits;
+        this.visits = new AtomicInteger(visits);
         this.type = type;
         this.category = category;
         this.featured = featured;
@@ -48,7 +49,7 @@ public class Warp {
         return UUID.fromString(owner);
     }
 
-    public int getVisits() {
+    public AtomicInteger getVisits() {
         return this.visits;
     }
 
