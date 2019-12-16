@@ -8,9 +8,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.InventoryView;
 import xyz.nkomarn.Phase.gui.GUIHolder;
 import xyz.nkomarn.Phase.gui.GUIType;
-import xyz.nkomarn.Phase.gui.handler.GUIHandler;
-import xyz.nkomarn.Phase.gui.handler.MainMenuHandler;
-import xyz.nkomarn.Phase.gui.handler.PublicWarpsHandler;
+import xyz.nkomarn.Phase.gui.handler.*;
 
 public class InventoryClickListener implements Listener {
     @EventHandler
@@ -32,7 +30,9 @@ public class InventoryClickListener implements Listener {
 
             GUIHandler handler = null;
             if (type == GUIType.MAIN_MENU) handler = new MainMenuHandler();
+            else if (type == GUIType.FEATURED_WARPS) handler = new FeaturedWarpsHandler();
             else if (type == GUIType.PUBLIC_WARPS) handler = new PublicWarpsHandler();
+            else if (type == GUIType.PLAYER_WARPS) handler = new PlayerWarpsHandler();
 
             if (handler != null) {
                 handler.handle(player, slot, event);

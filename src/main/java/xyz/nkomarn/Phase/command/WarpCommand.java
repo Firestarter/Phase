@@ -12,7 +12,9 @@ import xyz.nkomarn.Phase.util.Config;
 import xyz.nkomarn.Phase.util.Search;
 import xyz.nkomarn.Phase.util.WarpUtil;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class WarpCommand implements TabExecutor {
     @Override
@@ -55,6 +57,14 @@ public class WarpCommand implements TabExecutor {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String s, String[] args) {
-        return null;
+        StringBuilder arguments = new StringBuilder();
+        for (String arg : args) {
+            arguments.append(arg).append(" ");
+        }
+        ArrayList<String> queryResults = new ArrayList<>();
+        Search.getPublicWarps().stream()
+                .filter(warp -> warp.getName().toLowerCase().contains(arguments.toString().trim()))
+                .collect(Collectors.toList()).forEach(warp -> queryResults.add(warp.getName()));
+        return queryResults;
     }
 }

@@ -19,4 +19,13 @@ public class EconomyUtil {
         }
         return balance;
     }
+
+    /**
+     * Withdraws an amount from a player's balance
+     * @param player The player to withdraw money from
+     * @param amount Amount to withdraw
+     */
+    public static void withdraw(final Player player, final double amount) {
+        Phase.getEconomy().withdrawPlayer(player, amount);
+    }
 }

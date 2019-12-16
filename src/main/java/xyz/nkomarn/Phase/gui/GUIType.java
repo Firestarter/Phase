@@ -2,5 +2,7 @@ package xyz.nkomarn.Phase.gui;
 
 public enum GUIType {
     MAIN_MENU,
-    PUBLIC_WARPS
+    FEATURED_WARPS,
+    PUBLIC_WARPS,
+    PLAYER_WARPS
 }

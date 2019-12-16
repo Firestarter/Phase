@@ -3,6 +3,9 @@ database: "survival"
 messages:
   prefix: "&3&lWarps: &7"
 
+economy:
+  create: 5000
+
 categories:
   All: BOOK
   Shop: CHEST

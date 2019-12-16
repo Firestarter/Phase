@@ -54,7 +54,7 @@ public class WarpUtil {
                         "&6&lWhoosh."), ChatColor.translateAlternateColorCodes('&',
                         String.format("You've arrived safely at '%s'.", warp.getName())));
                 player.playSound(location, Sound.BLOCK_ENDER_CHEST_OPEN, 1.0f, 1.0f);
-                player.playEffect(player.getLocation(), Effect.ENDER_SIGNAL, 15);
+                player.getWorld().playEffect(player.getLocation(), Effect.ENDER_SIGNAL, 15);
                 Phase.getCollection().sync().updateOne(Filters.eq("name", warp.getName()), new Document("$inc",
                         new BasicDBObject().append("visits", 1)));
                 Search.incrementVisits(warp);
