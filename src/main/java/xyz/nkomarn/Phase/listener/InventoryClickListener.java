@@ -24,7 +24,7 @@ public class InventoryClickListener implements Listener {
             event.setCancelled(true);
             final GUIHolder holder = (GUIHolder) event.getInventory().getHolder();
             final GUIType type = holder.getType();
-            final String category = holder.getCategory();
+            final String category = holder.getData();
             final int page = holder.getPage();
             final Player player = (Player) event.getWhoClicked();
 
@@ -33,6 +33,7 @@ public class InventoryClickListener implements Listener {
             else if (type == GUIType.FEATURED_WARPS) handler = new FeaturedWarpsHandler();
             else if (type == GUIType.PUBLIC_WARPS) handler = new PublicWarpsHandler();
             else if (type == GUIType.PLAYER_WARPS) handler = new PlayerWarpsHandler();
+            else if (type == GUIType.OPTIONS) handler = new OptionsHandler();
 
             if (handler != null) {
                 handler.handle(player, slot, event);

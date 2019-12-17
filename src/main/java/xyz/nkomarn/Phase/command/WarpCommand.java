@@ -51,7 +51,7 @@ public class WarpCommand implements TabExecutor {
         }
 
         final Warp warp = Search.getWarpByName(warpName);
-        WarpUtil.warp(player, warp);
+        WarpUtil.warp(player, warp); // Convert to null check instead of using exists()
         return true;
     }
 

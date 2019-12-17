@@ -4,11 +4,11 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.Filters;
 import org.bson.Document;
-import org.bukkit.entity.Player;
 import xyz.nkomarn.Phase.Phase;
 import xyz.nkomarn.Phase.type.Warp;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -22,14 +22,14 @@ public class Search {
      * Reads the warps database into memory
      */
     public static void read() {
-        try (MongoCursor<Document> cursor = Phase.getCollection().sync().find(Filters.and(Filters.eq("expired", false),
-                Filters.eq("type", true))).sort(new BasicDBObject("visits", -1)).iterator()) {
+        try (MongoCursor<Document> cursor = Phase.getCollection().sync().find(Filters.eq("expired", false))
+                .sort(new BasicDBObject("visits", -1)).iterator()) {
             while (cursor.hasNext()) {
                 Document document = cursor.next();
                 warps.add(new Warp(document.getString("name"), document.getString("owner"), document.getInteger("visits"),
-                        document.getBoolean("type"), document.getString("category"), document.getBoolean("featured"),
-                        document.getBoolean("expired"), document.getLong("renewed"), document.getDouble("x"),
-                        document.getDouble("y"), document.getDouble("z"), document.getDouble("pitch"), document.getDouble("yaw"),
+                        document.getString("category"), document.getBoolean("featured"), document.getBoolean("expired"),
+                        document.getLong("renewed"), document.getDouble("x"), document.getDouble("y"),
+                        document.getDouble("z"), document.getDouble("pitch"), document.getDouble("yaw"),
                         document.getString("world"), (ArrayList<String>) document.get("favorites"))); // TODO check cast
             }
         }
@@ -49,6 +49,8 @@ public class Search {
      */
     public static void incrementVisits(final Warp warp) {
         getWarpByName(warp.getName()).getVisits().incrementAndGet();
+        Phase.getCollection().sync().updateOne(Filters.eq("name", warp.getName()), new Document("$inc",
+                new BasicDBObject().append("visits", 1)));
     }
 
     /**
@@ -58,6 +60,14 @@ public class Search {
      */
     public static boolean exists(final String name) {
         return getWarpByName(name) != null;
+    }
+
+    /**
+     * Removes a warp from the cache
+     * @param warp Warp to delete
+     */
+    public static void remove(final Warp warp) {
+        warps.remove(warp);
     }
 
     /**
@@ -80,8 +90,9 @@ public class Search {
      * @return ArrayList of every warp object in the database
      */
     public static ArrayList<Warp> getPublicWarps() {
+        sort();
         return (ArrayList<Warp>) warps.stream()
-                .filter(Warp::getType)
+                .filter(warp -> !warp.isExpired())
                 .collect(Collectors.toList());
     }
 
@@ -90,6 +101,7 @@ public class Search {
      * @return ArrayList of all public featured warps
      */
     public static ArrayList<Warp> getFeaturedWarps() {
+        sort();
         return (ArrayList<Warp>) getPublicWarps().stream()
                 .filter(Warp::isFeatured)
                 .collect(Collectors.toList());
@@ -101,8 +113,13 @@ public class Search {
      * @return ArrayList of player's warps
      */
     public static ArrayList<Warp> getPlayerWarps(final UUID uuid) {
+        sort();
         return (ArrayList<Warp>) warps.stream()
                 .filter(warp -> warp.getOwnerUUID().equals(uuid))
                 .collect(Collectors.toList());
+    }
+
+    private static void sort() {
+        Collections.sort(warps, Collections.reverseOrder());
     }
 }

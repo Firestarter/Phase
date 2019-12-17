@@ -26,7 +26,7 @@ public class PlayerWarps {
         ItemMeta glassMeta = glass.getItemMeta();
         glassMeta.setDisplayName(" ");
         glass.setItemMeta(glassMeta);
-        Arrays.asList(36, 37, 38, 42, 43, 44).forEach(slot -> menu.setItem(slot, glass));
+        Arrays.asList(36, 37, 38, 42, 43).forEach(slot -> menu.setItem(slot, glass));
 
         ItemStack previous = new ItemStack(Material.SPRUCE_BUTTON, 1);
         ItemMeta previousMeta = previous.getItemMeta();
@@ -38,7 +38,7 @@ public class PlayerWarps {
         ItemMeta createMeta = create.getItemMeta();
         createMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&a&lCreate a Warp"));
         createMeta.setLore(Arrays.asList(
-                ChatColor.GRAY + "Create a new warp at your.", ChatColor.GRAY + "location. This costs $0." // TODO fetch costs from config
+                ChatColor.GRAY + "Create a new warp at your", ChatColor.GRAY + "location. This costs $0." // TODO fetch costs from config
         ));
         create.setItemMeta(createMeta);
         menu.setItem(40, create);
@@ -49,6 +49,15 @@ public class PlayerWarps {
         next.setItemMeta(nextMeta);
         menu.setItem(41, next);
 
+        ItemStack favorites = new ItemStack(Material.ENDER_CHEST, 1);
+        ItemMeta favoritesMeta = favorites.getItemMeta();
+        favoritesMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&d&lFavorite Warps"));
+        favoritesMeta.setLore(Arrays.asList(
+                ChatColor.GRAY + "View and edit your", ChatColor.GRAY + "favorited warps."
+        ));
+        favorites.setItemMeta(favoritesMeta);
+        menu.setItem(44, favorites);
+
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -56,8 +65,7 @@ public class PlayerWarps {
                 final int totalWarps = warps.size();
                 final int startingIndex = Math.min(Math.max(36 * (page - 1), 0), totalWarps);
                 final int endingIndex = Math.min(Math.max(36 * page, startingIndex), warps.size());
-
-                warps.subList(startingIndex, endingIndex).forEach(warp -> menu.setItem(warps.indexOf(warp) % 36, warp.getItem()));
+                warps.subList(startingIndex, endingIndex).forEach(warp -> menu.setItem(warps.indexOf(warp) % 36, warp.getItem(player)));
                 player.openInventory(menu);
             }
         }.runTask(Phase.getInstance());

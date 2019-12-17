@@ -6,7 +6,7 @@ import org.bukkit.inventory.InventoryHolder;
 public class GUIHolder implements InventoryHolder {
     private GUIType type;
     private int page;
-    private String category;
+    private String data;
 
     public GUIHolder(final GUIType type, final int page) {
         this.type = type;
@@ -14,10 +14,10 @@ public class GUIHolder implements InventoryHolder {
     }
 
     public GUIHolder(final GUIType type, final int page,
-                     final String category) {
+                     final String data) {
         this.type = type;
         this.page = page;
-        this.category = category;
+        this.data = data;
     }
 
     public Inventory getInventory() {
@@ -32,7 +32,7 @@ public class GUIHolder implements InventoryHolder {
         return this.type;
     }
 
-    public String getCategory() {
-        return this.category;
+    public String getData() {
+        return this.data;
     }
 }

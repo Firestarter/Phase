@@ -39,8 +39,8 @@ public class SetWarpCommand implements TabExecutor {
         }
 
         StringBuilder warpNameBuilder = new StringBuilder();
-        for (int i = 0; i < args.length; i++) {
-            warpNameBuilder.append(args[i]).append(" ");
+        for (String arg : args) {
+            warpNameBuilder.append(arg).append(" ");
         }
         final String warpName = warpNameBuilder.toString().trim();
 
@@ -60,9 +60,9 @@ public class SetWarpCommand implements TabExecutor {
             return true;
         }
 
-        // FIXME temporary insertion testing code\
+        // FIXME temporary insertion testing code
         final Location location = player.getLocation();
-        final Warp warp = new Warp(warpName, player.getUniqueId().toString(), 0, true, "Grinder", true,
+        final Warp warp = new Warp(warpName, player.getUniqueId().toString(), 0, "All", false,
                 false, System.currentTimeMillis(), location.getX(), location.getY(), location.getZ(), location.getPitch(),
                 location.getYaw(), location.getWorld().getUID().toString(), new ArrayList<>());
         WarpUtil.createWarp(warp);
@@ -70,7 +70,7 @@ public class SetWarpCommand implements TabExecutor {
         player.sendMessage(ChatColor.translateAlternateColorCodes('&', String.format(
                 "%sCreated warp '%s'!", prefix, warpName
         )));
-        return true;
+        return true; // TODO special character in beginning filter
     }
 
     @Override

@@ -7,6 +7,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import xyz.nkomarn.Phase.gui.GUIHolder;
 import xyz.nkomarn.Phase.gui.inventory.MainMenu;
+import xyz.nkomarn.Phase.gui.inventory.OptionsMenu;
 import xyz.nkomarn.Phase.gui.inventory.PlayerWarps;
 import xyz.nkomarn.Phase.gui.inventory.PublicWarps;
 import xyz.nkomarn.Phase.type.Warp;
@@ -32,6 +33,8 @@ public class PlayerWarpsHandler implements GUIHandler {
                     Config.getPrefix() + "&7Use the /setwarp command to create a warp."));
         } else if (slot == 41) {
             new PlayerWarps(player, Math.max(0, ++page));
+        } else if (slot == 44) {
+
         } else {
             ItemStack clickedItem = event.getCurrentItem();
             if (clickedItem != null && clickedItem.getType() != Material.AIR
@@ -41,7 +44,7 @@ public class PlayerWarpsHandler implements GUIHandler {
                 if (name.trim().length() < 1) return;
                 Warp warp = Search.getWarpByName(name);
                 if (warp == null) return;
-                WarpUtil.warp(player, warp);
+                new OptionsMenu(player, warp);
             }
         }
     }

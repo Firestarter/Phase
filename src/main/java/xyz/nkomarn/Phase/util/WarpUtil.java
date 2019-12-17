@@ -10,7 +10,6 @@ import org.bukkit.entity.Player;
 import xyz.nkomarn.Phase.Phase;
 import xyz.nkomarn.Phase.type.Warp;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class WarpUtil {
@@ -24,7 +23,6 @@ public class WarpUtil {
         Document document = new Document("name", warp.getName())
                 .append("owner", warp.getOwnerUUID().toString())
                 .append("visits", warp.getVisits())
-                .append("type", warp.getType())
                 .append("category", warp.getCategory())
                 .append("featured", warp.isFeatured())
                 .append("expired", warp.isExpired())
@@ -55,8 +53,6 @@ public class WarpUtil {
                         String.format("You've arrived safely at '%s'.", warp.getName())));
                 player.playSound(location, Sound.BLOCK_ENDER_CHEST_OPEN, 1.0f, 1.0f);
                 player.getWorld().playEffect(player.getLocation(), Effect.ENDER_SIGNAL, 15);
-                Phase.getCollection().sync().updateOne(Filters.eq("name", warp.getName()), new Document("$inc",
-                        new BasicDBObject().append("visits", 1)));
                 Search.incrementVisits(warp);
             } else {
                 player.sendTitle(ChatColor.translateAlternateColorCodes('&',
@@ -67,12 +63,42 @@ public class WarpUtil {
         });
     }
 
+    public static void relocate(final Player player, final Warp warp) {
+        final Location location = player.getLocation();
+        warp.setLocation(location); // TODO warp safety checking
+        Phase.getCollection().sync().updateOne(Filters.eq("name", warp.getName()), new Document("$set",
+                new BasicDBObject().append("x", location.getX()).append("y", location.getY())
+                        .append("z", location.getZ()).append("pitch", location.getPitch())
+                        .append("yaw", location.getYaw()).append("world", location.getWorld().getUID().toString()))); // TODO async w/ subscriber
+        player.sendTitle(ChatColor.translateAlternateColorCodes('&', "&6&lRelocated"),
+                ChatColor.translateAlternateColorCodes('&', "The warp is now at your location."));
+        player.playSound(location, Sound.BLOCK_NOTE_BLOCK_CHIME, 1.0f, 1.0f);
+    }
+
+    public static void delete(final Player player, final Warp warp) {
+        Phase.getCollection().sync().deleteOne(Filters.eq("name", warp.getName())); // A S Y N C  PLZ
+        Search.remove(warp);
+        player.sendTitle(ChatColor.translateAlternateColorCodes('&', "&c&lDeleted"),
+                ChatColor.translateAlternateColorCodes('&', "The warp was blown away with the wind."));
+        player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_LAND, 1.0f, 1.0f);
+    }
+
     /**
      * Adds a player to the favorites list of a warp
      */
     public static void favorite(final Player player, final Warp warp) {
-        ArrayList<String> favorites = warp.getFavorites();
-        favorites.add(player.getUniqueId().toString());
+        warp.addFavorite(player);
+        Phase.getCollection().sync().updateOne(Filters.eq("name", warp.getName()), new Document("$set",
+                new BasicDBObject().append("favorites", warp.getFavorites()))); // TODO async w/ subscriber
+    }
+
+    /**
+     * Removes a player from the favorites list of a warp
+     */
+    public static void unFavorite(final Player player, final Warp warp) {
+        warp.removeFavorite(player);
+        Phase.getCollection().sync().updateOne(Filters.eq("name", warp.getName()), new Document("$set",
+                new BasicDBObject().append("favorites", warp.getFavorites()))); // TODO async w/ subscriber
     }
 
     private static HashMap<String, Material> getCategories() {
