@@ -6,9 +6,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
-import xyz.nkomarn.Kerosene.database.Database;
-import xyz.nkomarn.Kerosene.database.SyncAsyncCollection;
+import xyz.nkomarn.Kerosene.database.mongo.MongoDatabase;
+import xyz.nkomarn.Kerosene.database.mongo.subscribers.SyncAsyncCollection;
 import xyz.nkomarn.Phase.command.SetWarpCommand;
+import xyz.nkomarn.Phase.command.WarpAdminCommand;
 import xyz.nkomarn.Phase.command.WarpCommand;
 import xyz.nkomarn.Phase.listener.InventoryClickListener;
 import xyz.nkomarn.Phase.util.Search;
@@ -26,16 +27,21 @@ public class Phase extends JavaPlugin {
         }
 
         final String database = getConfig().getString("database");
-        warps = Database.getSyncAsyncCollection(database, "warps");
+        warps = MongoDatabase.getSyncAsyncCollection(database, "warps");
         Search.read();
 
         PluginCommand warpCommand = getCommand("warp");
         warpCommand.setExecutor(new WarpCommand());
         warpCommand.setTabCompleter(new WarpCommand());
+        PluginCommand warpAdminCommand = getCommand("warpadmin");
+        warpAdminCommand.setExecutor(new WarpAdminCommand());
+        warpAdminCommand.setTabCompleter(new WarpAdminCommand());
         PluginCommand setWarpCommand = getCommand("setwarp");
         setWarpCommand.setExecutor(new SetWarpCommand());
         setWarpCommand.setTabCompleter(new SetWarpCommand());
         Bukkit.getPluginManager().registerEvents(new InventoryClickListener(), this);
+
+        getServer().getScheduler().scheduleSyncRepeatingTask(this, Search::sort, 0, 60 * 20);
     }
 
     public void onDisable() {

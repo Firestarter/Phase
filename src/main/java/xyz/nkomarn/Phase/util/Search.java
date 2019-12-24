@@ -4,6 +4,7 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.Filters;
 import org.bson.Document;
+import org.bukkit.Bukkit;
 import xyz.nkomarn.Phase.Phase;
 import xyz.nkomarn.Phase.type.Warp;
 
@@ -30,7 +31,7 @@ public class Search {
                         document.getString("category"), document.getBoolean("featured"), document.getBoolean("expired"),
                         document.getLong("renewed"), document.getDouble("x"), document.getDouble("y"),
                         document.getDouble("z"), document.getDouble("pitch"), document.getDouble("yaw"),
-                        document.getString("world"), (ArrayList<String>) document.get("favorites"))); // TODO check cast
+                        document.getString("world"), (ArrayList<String>) document.get("favorites")));
             }
         }
     }
@@ -54,19 +55,10 @@ public class Search {
     }
 
     /**
-     * Checks if a warp (public or private) exists in the database
-     * @param name Warp name to check for
-     * @return true if exists, false if doesn't
-     */
-    public static boolean exists(final String name) {
-        return getWarpByName(name) != null;
-    }
-
-    /**
      * Removes a warp from the cache
      * @param warp Warp to delete
      */
-    public static void remove(final Warp warp) {
+    static void remove(final Warp warp) {
         warps.remove(warp);
     }
 
@@ -90,8 +82,7 @@ public class Search {
      * @return ArrayList of every warp object in the database
      */
     public static ArrayList<Warp> getPublicWarps() {
-        sort();
-        return (ArrayList<Warp>) warps.stream()
+        return (ArrayList<Warp>) warps.stream().parallel()
                 .filter(warp -> !warp.isExpired())
                 .collect(Collectors.toList());
     }
@@ -101,7 +92,6 @@ public class Search {
      * @return ArrayList of all public featured warps
      */
     public static ArrayList<Warp> getFeaturedWarps() {
-        sort();
         return (ArrayList<Warp>) getPublicWarps().stream()
                 .filter(Warp::isFeatured)
                 .collect(Collectors.toList());
@@ -113,13 +103,31 @@ public class Search {
      * @return ArrayList of player's warps
      */
     public static ArrayList<Warp> getPlayerWarps(final UUID uuid) {
-        sort();
-        return (ArrayList<Warp>) warps.stream()
+        return (ArrayList<Warp>) warps.stream().parallel()
                 .filter(warp -> warp.getOwnerUUID().equals(uuid))
                 .collect(Collectors.toList());
     }
 
-    private static void sort() {
-        Collections.sort(warps, Collections.reverseOrder());
+    /**
+     * Returns all of the warps a player has favorited
+     * @param uuid Player's UUID
+     * @return ArrayList of player's favorited warps
+     */
+    public static ArrayList<Warp> getFavoritedWarps(final UUID uuid) {
+        ArrayList<Warp> favorites = new ArrayList<>();
+        getPublicWarps().forEach(warp -> {
+            if (warp == null) return;
+            if (warp.getFavorites().contains(uuid.toString()))
+                favorites.add(warp);
+        });
+        return favorites;
+    }
+
+    /**
+     * Sorts all of the warps by visit count (since warps are cached)
+     */
+    public static void sort() {
+        Bukkit.getScheduler().runTaskAsynchronously(Phase.getInstance(),
+                () -> warps.sort(Collections.reverseOrder()));
     }
 }

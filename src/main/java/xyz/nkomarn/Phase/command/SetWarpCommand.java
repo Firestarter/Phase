@@ -44,7 +44,8 @@ public class SetWarpCommand implements TabExecutor {
         }
         final String warpName = warpNameBuilder.toString().trim();
 
-        if (Search.exists(warpName)) {
+        final Warp warp = Search.getWarpByName(warpName);
+        if (warp != null) {
             player.sendMessage(ChatColor.translateAlternateColorCodes('&', String.format(
                     "%sA warp with the name '%s' already exists.", prefix, warpName
             )));
@@ -62,10 +63,10 @@ public class SetWarpCommand implements TabExecutor {
 
         // FIXME temporary insertion testing code
         final Location location = player.getLocation();
-        final Warp warp = new Warp(warpName, player.getUniqueId().toString(), 0, "All", false,
+        final Warp newWarp = new Warp(warpName, player.getUniqueId().toString(), 0, "All", false,
                 false, System.currentTimeMillis(), location.getX(), location.getY(), location.getZ(), location.getPitch(),
                 location.getYaw(), location.getWorld().getUID().toString(), new ArrayList<>());
-        WarpUtil.createWarp(warp);
+        WarpUtil.createWarp(newWarp);
         EconomyUtil.withdraw(player, creationCost);
         player.sendMessage(ChatColor.translateAlternateColorCodes('&', String.format(
                 "%sCreated warp '%s'!", prefix, warpName

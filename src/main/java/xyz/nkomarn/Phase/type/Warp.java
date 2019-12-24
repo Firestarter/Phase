@@ -16,6 +16,7 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Warp implements Comparable {
+    private DecimalFormat formatter = new DecimalFormat("#,###");
     private String name, owner, category, world;
     private AtomicInteger visits;
     private final long renewed;
@@ -101,12 +102,13 @@ public class Warp implements Comparable {
     public ItemStack getItem(final Player player) {
         ItemStack warpItem = new ItemStack(WarpUtil.getItem(this.getCategory()));
         ItemMeta warpItemMeta = warpItem.getItemMeta();
-        String displayName = String.format("&6&l%s", this.getName());
+        String displayName;
         if (this.getFavorites().contains(player.getUniqueId().toString())) {
-            displayName += " &e&l★";
+            displayName = String.format("&e&l%s", this.getName());
+        } else {
+            displayName = String.format("&6&l%s", this.getName());
         }
         warpItemMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', displayName));
-        DecimalFormat formatter = new DecimalFormat("#,###");
         warpItemMeta.setLore(Arrays.asList(
                 ChatColor.translateAlternateColorCodes('&', String.format("&7Category: &6%s", this.getCategory())),
                 ChatColor.translateAlternateColorCodes('&', String.format("&7Visits: &6%s", formatter.format(this.getVisits())))

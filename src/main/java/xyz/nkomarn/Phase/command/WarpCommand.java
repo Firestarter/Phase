@@ -38,20 +38,20 @@ public class WarpCommand implements TabExecutor {
 
         // TODO parse input and warp
         StringBuilder warpNameBuilder = new StringBuilder();
-        for (int i = 0; i < args.length; i++) {
-            warpNameBuilder.append(args[i]).append(" ");
+        for (String arg : args) {
+            warpNameBuilder.append(arg).append(" ");
         }
         final String warpName = warpNameBuilder.toString().trim();
 
-        if (!Search.exists(warpName)) {
+        final Warp warp = Search.getWarpByName(warpName);
+        if (warp == null) {
             player.sendMessage(ChatColor.translateAlternateColorCodes('&', String.format(
                     "%sWarp '%s' doesn't exist.", prefix, warpName
             )));
             return true;
         }
 
-        final Warp warp = Search.getWarpByName(warpName);
-        WarpUtil.warp(player, warp); // Convert to null check instead of using exists()
+        WarpUtil.warp(player, warp);
         return true;
     }
 

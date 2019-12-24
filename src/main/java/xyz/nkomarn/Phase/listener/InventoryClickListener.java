@@ -34,6 +34,7 @@ public class InventoryClickListener implements Listener {
             else if (type == GUIType.PUBLIC_WARPS) handler = new PublicWarpsHandler();
             else if (type == GUIType.PLAYER_WARPS) handler = new PlayerWarpsHandler();
             else if (type == GUIType.OPTIONS) handler = new OptionsHandler();
+            else if (type == GUIType.FAVORITES) handler = new FavoriteWarpsHandler();
 
             if (handler != null) {
                 handler.handle(player, slot, event);

@@ -41,7 +41,7 @@ public class PublicWarpsHandler implements GUIHandler {
                 if (event.getClick().isRightClick()) {
                     if (warp.getFavorites().contains(player.getUniqueId().toString())) {
                         WarpUtil.unFavorite(player, warp);
-                        player.playSound(player.getLocation(), Sound.ENTITY_HORSE_DEATH, 1.0f, 1.0f);
+                        player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_LAND, 1.0f, 1.0f);
                     } else {
                         WarpUtil.favorite(player, warp);
                         player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0f, 1.0f);
