@@ -6,8 +6,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
-import xyz.nkomarn.Kerosene.database.mongo.MongoDatabase;
-import xyz.nkomarn.Kerosene.database.mongo.subscribers.SyncAsyncCollection;
+import xyz.nkomarn.Kerosene.database.FlexibleCollection;
+import xyz.nkomarn.Kerosene.database.MongoDatabase;
 import xyz.nkomarn.Phase.command.SetWarpCommand;
 import xyz.nkomarn.Phase.command.WarpAdminCommand;
 import xyz.nkomarn.Phase.command.WarpCommand;
@@ -16,7 +16,7 @@ import xyz.nkomarn.Phase.util.Search;
 
 public class Phase extends JavaPlugin {
     private static Phase instance;
-    private static SyncAsyncCollection<Document> warps;
+    private static FlexibleCollection<Document> warps;
     private static Economy economy = null;
 
     public void onEnable() {
@@ -27,7 +27,7 @@ public class Phase extends JavaPlugin {
         }
 
         final String database = getConfig().getString("database");
-        warps = MongoDatabase.getSyncAsyncCollection(database, "warps");
+        warps = MongoDatabase.getFlexibleCollection(database, "warps");
         Search.read();
 
         PluginCommand warpCommand = getCommand("warp");
@@ -52,7 +52,7 @@ public class Phase extends JavaPlugin {
         return instance;
     }
 
-    public static SyncAsyncCollection<Document> getCollection() {
+    public static FlexibleCollection<Document> getCollection() {
         return warps;
     }
 
