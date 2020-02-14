@@ -63,6 +63,14 @@ public class WarpUtil {
         });
     }
 
+    public static void rename(final Warp warp, final String name) {
+        Phase.getCollection().sync().updateOne(Filters.eq("name", warp.getName()), new Document("$set",
+                new BasicDBObject().append("name", name)));
+        Search.remove(warp);
+        warp.setName(name);
+        Search.cacheWarp(warp);
+    }
+
     public static void relocate(final Player player, final Warp warp) {
         final Location location = player.getLocation();
         warp.setLocation(location); // TODO warp safety checking

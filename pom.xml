@@ -23,13 +23,19 @@
         <dependency>
             <groupId>com.github.firestartermc</groupId>
             <artifactId>kerosene</artifactId>
-            <version>fb4333bb7c</version>
+            <version>1bc68013cb</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.github.MilkBowl</groupId>
             <artifactId>VaultAPI</artifactId>
             <version>1.7</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.FirestarterMC</groupId>
+            <artifactId>AnvilGUI</artifactId>
+            <version>99a504a3bb</version>
         </dependency>
     </dependencies>
 

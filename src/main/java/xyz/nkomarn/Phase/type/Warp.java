@@ -48,6 +48,10 @@ public class Warp implements Comparable {
         return this.name;
     }
 
+    public void setName(final String name) {
+        this.name = name;
+    }
+
     public UUID getOwnerUUID() {
         return UUID.fromString(owner);
     }
