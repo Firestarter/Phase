@@ -22,7 +22,7 @@ public class FavoriteWarps {
         Inventory menu = Bukkit.createInventory(new GUIHolder(GUIType.FAVORITES, page), 45,
                 String.format("Favorited Warps (Page %s)", page));
 
-        ItemStack glass = new ItemStack(Material.GRAY_STAINED_GLASS_PANE, 1);
+        ItemStack glass = new ItemStack(Material.WHITE_STAINED_GLASS_PANE, 1);
         ItemMeta glassMeta = glass.getItemMeta();
         glassMeta.setDisplayName(" ");
         glass.setItemMeta(glassMeta);

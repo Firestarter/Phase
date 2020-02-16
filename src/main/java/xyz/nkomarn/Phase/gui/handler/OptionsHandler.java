@@ -42,7 +42,7 @@ public class OptionsHandler implements GUIHandler {
                             return AnvilGUI.Response.close();
                         }
 
-                        WarpUtil.rename(warp, text);
+                        WarpUtil.rename(warp, ChatColor.stripColor(text));
                         p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 1.0f, 1.0f);
                         player.sendTitle(ChatColor.translateAlternateColorCodes('&',
                                 "&6&lRenamed warp."), ChatColor.translateAlternateColorCodes('&',

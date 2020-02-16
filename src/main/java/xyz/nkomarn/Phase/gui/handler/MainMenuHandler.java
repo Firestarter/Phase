@@ -1,5 +1,6 @@
 package xyz.nkomarn.Phase.gui.handler;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -10,6 +11,8 @@ import xyz.nkomarn.Phase.gui.inventory.PlayerWarps;
 import xyz.nkomarn.Phase.gui.inventory.PublicWarps;
 import xyz.nkomarn.Phase.util.Config;
 
+import java.util.stream.Collectors;
+
 public class MainMenuHandler implements GUIHandler {
     @Override
     public void handle(Player player, int slot, InventoryClickEvent event) {
@@ -18,7 +21,8 @@ public class MainMenuHandler implements GUIHandler {
             BookMeta guideBookMeta = (BookMeta) guideBook.getItemMeta();
             guideBookMeta.setTitle(Config.getString("guide.title"));
             guideBookMeta.setAuthor(Config.getString("guide.author"));
-            guideBookMeta.setPages(Config.getList("guide.pages"));
+            guideBookMeta.setPages(Config.getList("guide.pages").stream().map(s ->
+                    ChatColor.translateAlternateColorCodes('&', s)).collect(Collectors.toList()));
             guideBook.setItemMeta(guideBookMeta);
             player.openBook(guideBook);
         } else if (slot == 12) {

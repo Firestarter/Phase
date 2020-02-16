@@ -36,6 +36,13 @@ public class WarpUtil {
                 .append("favorites", warp.getFavorites());
         Phase.getCollection().sync().insertOne(document); // TODO async with subscriber
         Search.cacheWarp(warp);
+
+        Player player = Bukkit.getPlayer(warp.getOwnerUUID());
+        if (player == null) return;
+        if (!Advancements.isComplete(player, "warp-create")) {
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), String.format("advancement grant %s only firestarter:warp-create",
+                    player.getName()));
+        }
     }
 
     /**
@@ -61,6 +68,23 @@ public class WarpUtil {
                 player.playSound(location, Sound.BLOCK_ANVIL_LAND, 1.0f, 1.0f);
             }
         });
+
+        Player owner = Bukkit.getPlayer(warp.getOwnerUUID());
+        if (owner == null) return;
+
+        if (warp.getVisits().get() >= 1000) {
+            if (!Advancements.isComplete(player, "warp-visits-1")) {
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), String.format("advancement grant %s only firestarter:warp-visits-1",
+                        owner.getName()));
+            }
+
+            if (warp.getVisits().get() >= 10000) {
+                if (!Advancements.isComplete(player, "warp-visits-2")) {
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), String.format("advancement grant %s only firestarter:warp-visits-2",
+                            owner.getName()));
+                }
+            }
+        }
     }
 
     public static void rename(final Warp warp, final String name) {

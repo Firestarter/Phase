@@ -19,7 +19,7 @@ public class OptionsMenu {
                 String.format("Options: '%s'", warp.getName()));
         player.openInventory(menu);
 
-        ItemStack glass = new ItemStack(Material.GRAY_STAINED_GLASS_PANE, 1);
+        ItemStack glass = new ItemStack(Material.WHITE_STAINED_GLASS_PANE, 1);
         ItemMeta glassMeta = glass.getItemMeta();
         glassMeta.setDisplayName(" ");
         glass.setItemMeta(glassMeta);

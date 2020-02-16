@@ -22,7 +22,7 @@ public class PublicWarps {
         Inventory menu = Bukkit.createInventory(new GUIHolder(GUIType.PUBLIC_WARPS, page), 45,
                 String.format("Public Warps (Page %s)", page));
 
-        ItemStack glass = new ItemStack(Material.GRAY_STAINED_GLASS_PANE, 1);
+        ItemStack glass = new ItemStack(Material.WHITE_STAINED_GLASS_PANE, 1);
         ItemMeta glassMeta = glass.getItemMeta();
         glassMeta.setDisplayName(" ");
         glass.setItemMeta(glassMeta);
