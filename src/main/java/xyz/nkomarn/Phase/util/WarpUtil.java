@@ -135,7 +135,7 @@ public class WarpUtil {
 
     private static HashMap<String, Material> getCategories() {
         HashMap<String, Material> categories = new HashMap<>();
-        ConfigurationSection section = Phase.getInstance().getConfig().getConfigurationSection("categories");
+        ConfigurationSection section = Phase.getPhase().getConfig().getConfigurationSection("categories");
         for (String category : section.getKeys(false)) {
             categories.put(category, Material.valueOf(section.getString(category)));
         }

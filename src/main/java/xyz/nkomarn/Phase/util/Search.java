@@ -23,7 +23,7 @@ public class Search {
      * Reads the warps database into memory
      */
     public static void read() {
-        try (MongoCursor<Document> cursor = Phase.getCollection().sync().find(Filters.eq("expired", false))
+        try (MongoCursor<Document> cursor = Phase.getCollection().sync().find()
                 .sort(new BasicDBObject("visits", -1)).iterator()) {
             while (cursor.hasNext()) {
                 Document document = cursor.next();
@@ -127,7 +127,7 @@ public class Search {
      * Sorts all of the warps by visit count (since warps are cached)
      */
     public static void sort() {
-        Bukkit.getScheduler().runTaskAsynchronously(Phase.getInstance(),
+        Bukkit.getScheduler().runTaskAsynchronously(Phase.getPhase(),
                 () -> warps.sort(Collections.reverseOrder()));
     }
 }

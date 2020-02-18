@@ -9,9 +9,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import xyz.nkomarn.Phase.Phase;
 import xyz.nkomarn.Phase.gui.GUIHolder;
-import xyz.nkomarn.Phase.gui.inventory.FeaturedWarps;
-import xyz.nkomarn.Phase.gui.inventory.PlayerWarps;
-import xyz.nkomarn.Phase.gui.inventory.PublicWarps;
 import xyz.nkomarn.Phase.type.Warp;
 import xyz.nkomarn.Phase.util.Config;
 import xyz.nkomarn.Phase.util.Search;
@@ -53,7 +50,7 @@ public class OptionsHandler implements GUIHandler {
                     .text(ChatColor.translateAlternateColorCodes('&',
                             "Enter a new name."))
                     .item(new ItemStack(Material.BOOK))
-                    .plugin(Phase.getInstance())
+                    .plugin(Phase.getPhase())
                     .open(player);
 
             /*player.sendMessage(ChatColor.translateAlternateColorCodes('&', String.format(

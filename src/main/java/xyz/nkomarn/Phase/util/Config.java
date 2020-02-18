@@ -21,7 +21,7 @@ public class Config {
      * @param location Configuration location of the boolean
      */
     public static boolean getBoolean(final String location) {
-        return Phase.getInstance().getConfig().getBoolean(location, false);
+        return Phase.getPhase().getConfig().getBoolean(location, false);
     }
 
     /**
@@ -30,7 +30,7 @@ public class Config {
      * @param location Configuration location of the string
      */
     public static String getString(final String location) {
-        return Phase.getInstance().getConfig().getString(location, "");
+        return Phase.getPhase().getConfig().getString(location, "");
     }
 
     /**
@@ -39,7 +39,7 @@ public class Config {
      * @param location Configuration location of the integer
      */
     public static int getInteger(final String location) {
-        return Phase.getInstance().getConfig().getInt(location, 0);
+        return Phase.getPhase().getConfig().getInt(location, 0);
     }
 
     /**
@@ -48,7 +48,7 @@ public class Config {
      * @param location Configuration location of the double
      */
     public static double getDouble(final String location) {
-        return Phase.getInstance().getConfig().getDouble(location, 0.0);
+        return Phase.getPhase().getConfig().getDouble(location, 0.0);
     }
 
     /**
@@ -57,6 +57,6 @@ public class Config {
      * @param location Configuration location of the list
      */
     public static List<String> getList(final String location) {
-        return (List<String>) Phase.getInstance().getConfig().getList(location, new ArrayList<>());
+        return (List<String>) Phase.getPhase().getConfig().getList(location, new ArrayList<>());
     }
 }

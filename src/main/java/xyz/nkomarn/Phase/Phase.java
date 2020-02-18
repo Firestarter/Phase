@@ -12,15 +12,17 @@ import xyz.nkomarn.Phase.command.SetWarpCommand;
 import xyz.nkomarn.Phase.command.WarpAdminCommand;
 import xyz.nkomarn.Phase.command.WarpCommand;
 import xyz.nkomarn.Phase.listener.InventoryClickListener;
+import xyz.nkomarn.Phase.listener.PlayerJoinListener;
+import xyz.nkomarn.Phase.task.ExpirationTask;
 import xyz.nkomarn.Phase.util.Search;
 
 public class Phase extends JavaPlugin {
-    private static Phase instance;
+    private static Phase phase;
     private static FlexibleCollection<Document> warps;
     private static Economy economy = null;
 
     public void onEnable() {
-        instance = this;
+        phase = this;
         saveDefaultConfig();
         if (!initializeEconomy()) {
             return;
@@ -39,17 +41,17 @@ public class Phase extends JavaPlugin {
         PluginCommand setWarpCommand = getCommand("setwarp");
         setWarpCommand.setExecutor(new SetWarpCommand());
         setWarpCommand.setTabCompleter(new SetWarpCommand());
+        Bukkit.getPluginManager().registerEvents(new PlayerJoinListener(), this);
         Bukkit.getPluginManager().registerEvents(new InventoryClickListener(), this);
 
-        getServer().getScheduler().scheduleSyncRepeatingTask(this, Search::sort, 0, 60 * 20);
+        getServer().getScheduler().runTaskTimerAsynchronously(this, Search::sort, 0, 60 * 20);
+        getServer().getScheduler().runTaskTimerAsynchronously(this, new ExpirationTask(), 0, 10 * 20);
     }
 
-    public void onDisable() {
+    public void onDisable() { }
 
-    }
-
-    public static Phase getInstance() {
-        return instance;
+    public static Phase getPhase() {
+        return phase;
     }
 
     public static FlexibleCollection<Document> getCollection() {
@@ -63,7 +65,7 @@ public class Phase extends JavaPlugin {
     private boolean initializeEconomy() {
         if (getServer().getPluginManager().getPlugin("Vault") == null) {
             getLogger().severe("Phase requires Vault to operate.");
-            getServer().getPluginManager().disablePlugin(instance);
+            getServer().getPluginManager().disablePlugin(phase);
         }
         RegisteredServiceProvider<Economy> provider = getServer().getServicesManager()
                 .getRegistration(Economy.class);

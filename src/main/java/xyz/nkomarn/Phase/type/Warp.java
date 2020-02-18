@@ -19,9 +19,9 @@ public class Warp implements Comparable {
     private DecimalFormat formatter = new DecimalFormat("#,###");
     private String name, owner, category, world;
     private AtomicInteger visits;
-    private final long renewed;
+    private long renewed;
     private double x, y, z, pitch, yaw;
-    private final boolean featured, expired;
+    private boolean featured, expired;
     private final ArrayList<String> favorites;
 
     // TODO remove type- only public warps from now on
@@ -90,6 +90,14 @@ public class Warp implements Comparable {
         this.world = location.getWorld().getUID().toString();
     }
 
+    public void setExpired(final boolean expired) {
+        this.expired = expired;
+    }
+
+    public void setRenewed(long timestamp) {
+        this.renewed = timestamp;
+    }
+
     public ArrayList<String> getFavorites() {
         return this.favorites;
     }
@@ -101,7 +109,6 @@ public class Warp implements Comparable {
     public void removeFavorite(final Player player) {
         favorites.remove(player.getUniqueId().toString());
     }
-
 
     public ItemStack getItem(final Player player) {
         ItemStack warpItem = new ItemStack(WarpUtil.getItem(this.getCategory()));

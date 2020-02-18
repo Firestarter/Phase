@@ -5,3 +5,4 @@
 .vscode
 .settings
 *.iml
+/dependency-reduced-pom.xml

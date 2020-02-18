@@ -72,6 +72,6 @@ public class PlayerWarps {
                 warps.subList(startingIndex, endingIndex).forEach(warp -> menu.setItem(warps.indexOf(warp) % 36, warp.getItem(player)));
                 player.openInventory(menu);
             }
-        }.runTask(Phase.getInstance());
+        }.runTask(Phase.getPhase());
     }
 }
