@@ -1,5 +1,7 @@
 package xyz.nkomarn.Phase.listener;
 
+import com.mongodb.client.model.Filters;
+import org.bson.Document;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -13,11 +15,11 @@ public class PlayerJoinListener implements Listener {
         new BukkitRunnable() {
             @Override
             public void run() {
-                System.out.println("Renewing " + event.getPlayer().getName() + "'s warps.");
                 Search.getPlayerWarps(event.getPlayer().getUniqueId()).forEach(warp -> {
-                    System.out.println("Renewed " + warp.getName());
                     warp.setRenewed(System.currentTimeMillis());
                     warp.setExpired(false);
+                    Phase.getCollection().sync().updateOne(Filters.eq("name", warp.getName()), new Document("$set",
+                            new Document("renewed", System.currentTimeMillis()))); // A S Y N C  PLZ
                 });
             }
         }.runTaskAsynchronously(Phase.getPhase());

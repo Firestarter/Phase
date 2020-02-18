@@ -55,17 +55,17 @@ public class WarpAdminCommand implements TabExecutor {
             }
 
             StringBuilder information = new StringBuilder();
-            information.append(String.format("%sInfo for warp '%s': .", Config.getPrefix(), warp.getName()));
+            information.append(String.format("%sInfo for warp '%s': .\n", Config.getPrefix(), warp.getName()));
             final OfflinePlayer owner = Bukkit.getOfflinePlayer(warp.getOwnerUUID());
-            information.append(String.format(ChatColor.GRAY + "Owner: %s (%s)", owner.getName(), warp.getOwnerUUID().toString()));
+            information.append(String.format(ChatColor.GRAY + "Owner: %s (%s)\n", owner.getName(), warp.getOwnerUUID().toString()));
             final Location warpLocation = warp.getLocation();
-            information.append(String.format(ChatColor.GRAY + "X: %s, Y: %s, Z: %s, pitch: %s, yaw: %s, world: %s",
+            information.append(String.format(ChatColor.GRAY + "X: %s, Y: %s, Z: %s, pitch: %s, yaw: %s, world: %s\n",
                     warpLocation.getX(), warpLocation.getY(), warpLocation.getZ(), warpLocation.getPitch(),
                     warpLocation.getYaw(), warpLocation.getWorld().getName()));
-            information.append(String.format(ChatColor.GRAY + "Featured: %s", warp.isFeatured()));
-            information.append(String.format(ChatColor.GRAY + "Expired: %s", warp.isExpired()));
-            information.append(String.format(ChatColor.GRAY + "Last renewed: %s", warp.getRenewedTime()));
-            information.append(String.format(ChatColor.GRAY + "Favorites: %s", warp.getFavorites()));
+            information.append(String.format(ChatColor.GRAY + "Featured: %s\n", warp.isFeatured()));
+            information.append(String.format(ChatColor.GRAY + "Expired: %s\n", warp.isExpired()));
+            information.append(String.format(ChatColor.GRAY + "Last renewed: %s\n", warp.getRenewedTime()));
+            information.append(String.format(ChatColor.GRAY + "Favorites: %s\n", warp.getFavorites()));
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', information.toString()));
             return true;
         }
