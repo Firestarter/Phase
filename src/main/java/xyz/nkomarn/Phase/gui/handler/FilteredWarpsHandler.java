@@ -2,30 +2,34 @@ package xyz.nkomarn.Phase.gui.handler;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import xyz.nkomarn.Phase.gui.GUIHolder;
-import xyz.nkomarn.Phase.gui.inventory.*;
+import xyz.nkomarn.Phase.gui.inventory.FilterMenu;
+import xyz.nkomarn.Phase.gui.inventory.FilteredWarps;
+import xyz.nkomarn.Phase.gui.inventory.MainMenu;
 import xyz.nkomarn.Phase.type.Warp;
 import xyz.nkomarn.Phase.util.Search;
 import xyz.nkomarn.Phase.util.WarpUtil;
 
-public class FavoriteWarpsHandler implements GUIHandler {
+public class FilteredWarpsHandler implements GUIHandler {
     @Override
     public void handle(Player player, int slot, InventoryClickEvent event) {
         final GUIHolder holder = (GUIHolder) event.getInventory().getHolder();
         int page = holder.getPage();
+        String category = holder.getData();
 
         if (slot == 39) {
             if (page <= 1) {
-                new PlayerWarps(player, 1);
+                new MainMenu(player);
             } else {
-                new FavoriteWarps(player, Math.max(0, --page));
+                new FilteredWarps(player, Math.max(0, --page), category);
             }
+        } else if (slot == 40) {
+            new FilterMenu(player);
         } else if (slot == 41) {
-            new FavoriteWarps(player, Math.max(0, ++page));
+            new FilteredWarps(player, Math.max(0, ++page), category);
         } else {
             ItemStack clickedItem = event.getCurrentItem();
             if (clickedItem != null && clickedItem.getType() != Material.AIR
@@ -35,17 +39,6 @@ public class FavoriteWarpsHandler implements GUIHandler {
                 if (name.trim().length() < 1) return;
                 Warp warp = Search.getWarpByName(name);
                 if (warp == null) return;
-                if (event.getClick().isRightClick()) {
-                    if (warp.getFavorites().contains(player.getUniqueId().toString())) {
-                        WarpUtil.unFavorite(player, warp);
-                        player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_LAND, 1.0f, 1.0f);
-                    } else {
-                        WarpUtil.favorite(player, warp);
-                        player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0f, 1.0f);
-                    }
-                    new FavoriteWarps(player, page);
-                    return;
-                }
                 WarpUtil.warp(player, warp);
             }
         }

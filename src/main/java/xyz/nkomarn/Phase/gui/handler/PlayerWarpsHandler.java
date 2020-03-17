@@ -30,8 +30,6 @@ public class PlayerWarpsHandler implements GUIHandler {
                     Config.getPrefix() + "&7Use the /setwarp command to create a warp."));
         } else if (slot == 41) {
             new PlayerWarps(player, Math.max(0, ++page));
-        } else if (slot == 44) {
-            new FavoriteWarps(player, 1);
         } else {
             ItemStack clickedItem = event.getCurrentItem();
             if (clickedItem != null && clickedItem.getType() != Material.AIR

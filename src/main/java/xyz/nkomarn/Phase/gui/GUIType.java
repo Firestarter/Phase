@@ -6,6 +6,7 @@ public enum GUIType {
     PUBLIC_WARPS,
     PLAYER_WARPS,
     FILTER,
+    FILTERED_WARPS,
     OPTIONS,
-    FAVORITES
+    CATEGORY_PICKER
 }

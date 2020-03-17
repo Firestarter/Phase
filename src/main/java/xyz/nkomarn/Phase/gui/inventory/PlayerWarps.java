@@ -28,7 +28,7 @@ public class PlayerWarps {
         ItemMeta glassMeta = glass.getItemMeta();
         glassMeta.setDisplayName(" ");
         glass.setItemMeta(glassMeta);
-        Arrays.asList(36, 37, 38, 42, 43).forEach(slot -> menu.setItem(slot, glass));
+        Arrays.asList(36, 37, 38, 42, 43, 44).forEach(slot -> menu.setItem(slot, glass));
 
         ItemStack previous = new ItemStack(Material.SPRUCE_BUTTON, 1);
         ItemMeta previousMeta = previous.getItemMeta();
@@ -52,15 +52,6 @@ public class PlayerWarps {
         nextMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&6&lNext"));
         next.setItemMeta(nextMeta);
         menu.setItem(41, next);
-
-        ItemStack favorites = new ItemStack(Material.ENDER_CHEST, 1);
-        ItemMeta favoritesMeta = favorites.getItemMeta();
-        favoritesMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&d&lFavorite Warps"));
-        favoritesMeta.setLore(Arrays.asList(
-                ChatColor.GRAY + "View and edit your", ChatColor.GRAY + "favorited warps."
-        ));
-        favorites.setItemMeta(favoritesMeta);
-        menu.setItem(44, favorites);
 
         new BukkitRunnable() {
             @Override

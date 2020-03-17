@@ -9,15 +9,15 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import xyz.nkomarn.Phase.gui.GUIHolder;
 import xyz.nkomarn.Phase.gui.GUIType;
+import xyz.nkomarn.Phase.type.Warp;
 import xyz.nkomarn.Phase.util.WarpUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 
-public class FilterMenu {
-    public FilterMenu(final Player player) {
-        Inventory menu = Bukkit.createInventory(new GUIHolder(GUIType.FILTER, 1), 9, "Filter by Category");
+public class CategoryPicker {
+    public CategoryPicker(final Player player, final Warp warp) {
+        Inventory menu = Bukkit.createInventory(new GUIHolder(GUIType.CATEGORY_PICKER, 1, warp.getName()), 9, "Select Category");
 
         ItemStack glass = new ItemStack(Material.WHITE_STAINED_GLASS_PANE, 1);
         ItemMeta glassMeta = glass.getItemMeta();

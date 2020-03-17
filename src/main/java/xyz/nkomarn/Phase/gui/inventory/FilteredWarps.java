@@ -17,22 +17,31 @@ import xyz.nkomarn.Phase.util.Search;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class FavoriteWarps {
-    public FavoriteWarps(final Player player, final int page) {
-        Inventory menu = Bukkit.createInventory(new GUIHolder(GUIType.FAVORITES, page), 45,
-                String.format("Favorited Warps (Page %s)", page));
+public class FilteredWarps {
+    public FilteredWarps(final Player player, final int page, final String category) {
+        Inventory menu = Bukkit.createInventory(new GUIHolder(GUIType.FILTERED_WARPS, page, category), 45,
+                String.format("%s Warps (Page %s)", category, page));
 
         ItemStack glass = new ItemStack(Material.WHITE_STAINED_GLASS_PANE, 1);
         ItemMeta glassMeta = glass.getItemMeta();
         glassMeta.setDisplayName(" ");
         glass.setItemMeta(glassMeta);
-        Arrays.asList(36, 37, 38, 40, 42, 43, 44).forEach(slot -> menu.setItem(slot, glass));
+        Arrays.asList(36, 37, 38, 42, 43, 44).forEach(slot -> menu.setItem(slot, glass));
 
         ItemStack previous = new ItemStack(Material.SPRUCE_BUTTON, 1);
         ItemMeta previousMeta = previous.getItemMeta();
         previousMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&6&lPrevious"));
         previous.setItemMeta(previousMeta);
         menu.setItem(39, previous);
+
+        ItemStack filter = new ItemStack(Material.HOPPER, 1);
+        ItemMeta filterMeta = filter.getItemMeta();
+        filterMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&a&lFilter by Category"));
+        filterMeta.setLore(Arrays.asList(
+                ChatColor.GRAY + "Display only warps of", ChatColor.GRAY + "a certain category."
+        ));
+        filter.setItemMeta(filterMeta);
+        menu.setItem(40, filter);
 
         ItemStack next = new ItemStack(Material.SPRUCE_BUTTON, 1);
         ItemMeta nextMeta = next.getItemMeta();
@@ -43,7 +52,7 @@ public class FavoriteWarps {
         new BukkitRunnable() {
             @Override
             public void run() {
-                ArrayList<Warp> warps = Search.getFavoritedWarps(player.getUniqueId());
+                ArrayList<Warp> warps = Search.getWarpsByCategory(category);
                 final int totalWarps = warps.size();
                 final int startingIndex = Math.min(Math.max(36 * (page - 1), 0), totalWarps);
                 final int endingIndex = Math.min(Math.max(36 * page, startingIndex), warps.size());

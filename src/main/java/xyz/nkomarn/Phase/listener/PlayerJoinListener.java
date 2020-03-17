@@ -20,6 +20,8 @@ public class PlayerJoinListener implements Listener {
                     warp.setExpired(false);
                     Phase.getCollection().sync().updateOne(Filters.eq("name", warp.getName()), new Document("$set",
                             new Document("renewed", System.currentTimeMillis()))); // A S Y N C  PLZ
+                    Phase.getCollection().sync().updateOne(Filters.eq("name", warp.getName()), new Document("$set",
+                            new Document("expired", false))); // A S Y N C  PLZ
                 });
             }
         }.runTaskAsynchronously(Phase.getPhase());

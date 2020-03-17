@@ -1,5 +1,6 @@
 package xyz.nkomarn.Phase;
 
+import com.earth2me.essentials.Essentials;
 import net.milkbowl.vault.economy.Economy;
 import org.bson.Document;
 import org.bukkit.Bukkit;
@@ -20,17 +21,20 @@ public class Phase extends JavaPlugin {
     private static Phase phase;
     private static FlexibleCollection<Document> warps;
     private static Economy economy = null;
+    private static Essentials essentials;
 
     public void onEnable() {
         phase = this;
         saveDefaultConfig();
         if (!initializeEconomy()) {
+            getLogger().warning("Couldn't initialize economy.");
             return;
         }
 
         final String database = getConfig().getString("database");
         warps = MongoDatabase.getFlexibleCollection(database, "warps");
         Search.read();
+        getLogger().info("Cached warps locally.");
 
         PluginCommand warpCommand = getCommand("warp");
         warpCommand.setExecutor(new WarpCommand());
@@ -41,11 +45,13 @@ public class Phase extends JavaPlugin {
         PluginCommand setWarpCommand = getCommand("setwarp");
         setWarpCommand.setExecutor(new SetWarpCommand());
         setWarpCommand.setTabCompleter(new SetWarpCommand());
+
+        essentials = (Essentials) Bukkit.getServer().getPluginManager().getPlugin("Essentials");
+
         Bukkit.getPluginManager().registerEvents(new PlayerJoinListener(), this);
         Bukkit.getPluginManager().registerEvents(new InventoryClickListener(), this);
-
         getServer().getScheduler().runTaskTimerAsynchronously(this, Search::sort, 0, 60 * 20);
-        getServer().getScheduler().runTaskTimerAsynchronously(this, new ExpirationTask(), 0, 10 * 20);
+        getServer().getScheduler().runTaskTimer(this, new ExpirationTask(), 0, 10 * 20);
     }
 
     public void onDisable() { }
@@ -60,6 +66,10 @@ public class Phase extends JavaPlugin {
 
     public static Economy getEconomy() {
         return economy;
+    }
+
+    public static Essentials getEssentials() {
+        return essentials;
     }
 
     private boolean initializeEconomy() {

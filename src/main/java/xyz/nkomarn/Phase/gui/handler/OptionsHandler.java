@@ -9,6 +9,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import xyz.nkomarn.Phase.Phase;
 import xyz.nkomarn.Phase.gui.GUIHolder;
+import xyz.nkomarn.Phase.gui.inventory.CategoryPicker;
 import xyz.nkomarn.Phase.type.Warp;
 import xyz.nkomarn.Phase.util.Config;
 import xyz.nkomarn.Phase.util.Search;
@@ -59,9 +60,10 @@ public class OptionsHandler implements GUIHandler {
         } else if (slot == 4) {
             WarpUtil.relocate(player, warp);
         } else if (slot == 5) {
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', String.format(
+            new CategoryPicker(player, warp);
+            /*player.sendMessage(ChatColor.translateAlternateColorCodes('&', String.format(
                     "%sThis feature is currently not implemented. Check back in a few days.", Config.getPrefix()
-            )));
+            )));*/
         } else if (slot == 6) {
             WarpUtil.delete(player, warp);
         }

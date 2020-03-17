@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>xyz.nkomarn</groupId>
   <artifactId>Phase</artifactId>
-  <version>1.0</version>
+  <version>1.2</version>
   <build>
     <plugins>
       <plugin>
@@ -35,6 +35,10 @@
     <repository>
       <id>jitpack.io</id>
       <url>https://jitpack.io</url>
+    </repository>
+    <repository>
+      <id>ess-repo</id>
+      <url>https://ci.ender.zone/plugin/repository/everything/</url>
     </repository>
   </repositories>
   <dependencies>
@@ -87,6 +91,12 @@
       </exclusions>
     </dependency>
     <dependency>
+      <groupId>com.github.firestartermc</groupId>
+      <artifactId>kerosene</artifactId>
+      <version>1bc68013cb</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
       <groupId>com.github.MilkBowl</groupId>
       <artifactId>VaultAPI</artifactId>
       <version>1.7</version>
@@ -95,6 +105,46 @@
         <exclusion>
           <artifactId>bukkit</artifactId>
           <groupId>org.bukkit</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>net.ess3</groupId>
+      <artifactId>EssentialsX</artifactId>
+      <version>2.17.0</version>
+      <scope>provided</scope>
+      <exclusions>
+        <exclusion>
+          <artifactId>paperlib</artifactId>
+          <groupId>io.papermc</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>NMSProvider</artifactId>
+          <groupId>net.ess3</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>UpdatedMetaProvider</artifactId>
+          <groupId>net.ess3</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>1_8_R1Provider</artifactId>
+          <groupId>net.ess3</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>1_8_R2Provider</artifactId>
+          <groupId>net.ess3</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>LegacyProvider</artifactId>
+          <groupId>net.ess3</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>ReflectionProvider</artifactId>
+          <groupId>net.ess3</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>FlattenedProvider</artifactId>
+          <groupId>net.ess3</groupId>
         </exclusion>
       </exclusions>
     </dependency>

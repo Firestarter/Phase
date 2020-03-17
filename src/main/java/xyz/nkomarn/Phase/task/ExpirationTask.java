@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit;
 public class ExpirationTask implements Runnable {
     @Override
     public void run() {
-        Search.getPublicWarps().forEach(warp -> {
+        Search.getPublicWarps().stream().parallel().forEach(warp -> {
             long days = TimeUnit.MILLISECONDS.toDays(System.currentTimeMillis() - warp.getRenewedTime());
             if (days >= 14) {
                 warp.setExpired(true);

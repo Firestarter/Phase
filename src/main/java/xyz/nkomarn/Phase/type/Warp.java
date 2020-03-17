@@ -15,19 +15,18 @@ import java.util.Arrays;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class Warp implements Comparable {
+public class Warp implements Comparable<Warp> {
     private DecimalFormat formatter = new DecimalFormat("#,###");
     private String name, owner, category, world;
     private AtomicInteger visits;
     private long renewed;
     private double x, y, z, pitch, yaw;
     private boolean featured, expired;
-    private final ArrayList<String> favorites;
 
     // TODO remove type- only public warps from now on
     public Warp(final String name, final String owner, final int visits, final String category,
                 final boolean featured, final boolean expired, final long renewed, final double x, final double y,
-                final double z, final double pitch, final double yaw, final String world, final ArrayList<String> favorites) {
+                final double z, final double pitch, final double yaw, final String world) {
         this.name = name;
         this.owner = owner;
         this.visits = new AtomicInteger(visits);
@@ -41,7 +40,6 @@ public class Warp implements Comparable {
         this.pitch = pitch;
         this.yaw = yaw;
         this.world = world;
-        this.favorites = favorites;
     }
 
     public String getName() {
@@ -90,6 +88,10 @@ public class Warp implements Comparable {
         this.world = location.getWorld().getUID().toString();
     }
 
+    public void setCategory(final String category) {
+        this.category = category;
+    }
+
     public void setExpired(final boolean expired) {
         this.expired = expired;
     }
@@ -98,28 +100,10 @@ public class Warp implements Comparable {
         this.renewed = timestamp;
     }
 
-    public ArrayList<String> getFavorites() {
-        return this.favorites;
-    }
-
-    public void addFavorite(final Player player) {
-        favorites.add(player.getUniqueId().toString());
-    }
-
-    public void removeFavorite(final Player player) {
-        favorites.remove(player.getUniqueId().toString());
-    }
-
     public ItemStack getItem(final Player player) {
         ItemStack warpItem = new ItemStack(WarpUtil.getItem(this.getCategory()));
         ItemMeta warpItemMeta = warpItem.getItemMeta();
-        String displayName;
-        if (this.getFavorites().contains(player.getUniqueId().toString())) {
-            displayName = String.format("&e&l%s", this.getName());
-        } else {
-            displayName = String.format("&6&l%s", this.getName());
-        }
-        warpItemMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', displayName));
+        warpItemMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', String.format("&6&l%s", this.getName())));
         warpItemMeta.setLore(Arrays.asList(
                 ChatColor.translateAlternateColorCodes('&', String.format("&7Category: &6%s", this.getCategory())),
                 ChatColor.translateAlternateColorCodes('&', String.format("&7Visits: &6%s", formatter.format(this.getVisits())))
@@ -129,7 +113,7 @@ public class Warp implements Comparable {
     }
 
     @Override
-    public int compareTo(Object o) {
-        return Integer.compare(this.visits.get(), ((Warp) o).visits.get());
+    public int compareTo(Warp warp) {
+        return Integer.compare(this.visits.get(), warp.visits.get());
     }
 }

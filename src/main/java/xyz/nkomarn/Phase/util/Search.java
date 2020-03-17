@@ -31,7 +31,7 @@ public class Search {
                         document.getString("category"), document.getBoolean("featured"), document.getBoolean("expired"),
                         document.getLong("renewed"), document.getDouble("x"), document.getDouble("y"),
                         document.getDouble("z"), document.getDouble("pitch"), document.getDouble("yaw"),
-                        document.getString("world"), (ArrayList<String>) document.get("favorites")));
+                        document.getString("world")));
             }
         }
     }
@@ -109,24 +109,20 @@ public class Search {
     }
 
     /**
-     * Returns all of the warps a player has favorited
-     * @param uuid Player's UUID
-     * @return ArrayList of player's favorited warps
+     * Returns all of the warps that match a category
+     * @param String Selected category to search for
+     * @return ArrayList of warps that match the category
      */
-    public static ArrayList<Warp> getFavoritedWarps(final UUID uuid) {
-        ArrayList<Warp> favorites = new ArrayList<>();
-        getPublicWarps().forEach(warp -> {
-            if (warp == null) return;
-            if (warp.getFavorites().contains(uuid.toString()))
-                favorites.add(warp);
-        });
-        return favorites;
+    public static ArrayList<Warp> getWarpsByCategory(final String category) {
+        return (ArrayList<Warp>) warps.stream().parallel()
+                .filter(warp -> warp.getCategory().equals(category))
+                .collect(Collectors.toList());
     }
 
     /**
      * Sorts all of the warps by visit count (since warps are cached)
      */
-    public static void sort() {
+    public static synchronized void sort() {
         Bukkit.getScheduler().runTaskAsynchronously(Phase.getPhase(),
                 () -> warps.sort(Collections.reverseOrder()));
     }

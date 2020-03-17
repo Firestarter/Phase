@@ -65,7 +65,6 @@ public class WarpAdminCommand implements TabExecutor {
             information.append(String.format(ChatColor.GRAY + "Featured: %s\n", warp.isFeatured()));
             information.append(String.format(ChatColor.GRAY + "Expired: %s\n", warp.isExpired()));
             information.append(String.format(ChatColor.GRAY + "Last renewed: %s\n", warp.getRenewedTime()));
-            information.append(String.format(ChatColor.GRAY + "Favorites: %s\n", warp.getFavorites()));
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', information.toString()));
             return true;
         }
