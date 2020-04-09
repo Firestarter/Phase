@@ -1,13 +1,14 @@
 package xyz.nkomarn.Phase.util;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.client.MongoCursor;
-import com.mongodb.client.model.Filters;
-import org.bson.Document;
 import org.bukkit.Bukkit;
 import xyz.nkomarn.Phase.Phase;
 import xyz.nkomarn.Phase.type.Warp;
+import xyz.nkomarn.Kerosene.data.LocalStorage;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.UUID;
@@ -15,63 +16,61 @@ import java.util.stream.Collectors;
 
 public class Search {
     /**
-     * Stores every warp object in memory
+     * Increments the visit count for a warp
+     * @param warp Warp object to increment
      */
-    private static ArrayList<Warp> warps = new ArrayList<>();
+    public static void incrementVisits(final Warp warp) {
+        Connection connection = null;
 
-    /**
-     * Reads the warps database into memory
-     */
-    public static void read() {
-        try (MongoCursor<Document> cursor = Phase.getCollection().sync().find()
-                .sort(new BasicDBObject("visits", -1)).iterator()) {
-            while (cursor.hasNext()) {
-                Document document = cursor.next();
-                warps.add(new Warp(document.getString("name"), document.getString("owner"), document.getInteger("visits"),
-                        document.getString("category"), document.getBoolean("featured"), document.getBoolean("expired"),
-                        document.getLong("renewed"), document.getDouble("x"), document.getDouble("y"),
-                        document.getDouble("z"), document.getDouble("pitch"), document.getDouble("yaw"),
-                        document.getString("world")));
+        try {
+            connection = LocalStorage.getConnection();
+            PreparedStatement statement = connection.prepareStatement("UPDATE warps SET visits = visits + 1 " +
+                    "WHERE name LIKE ?;");
+            statement.setString(1, warp.getName());
+            statement.executeUpdate();
+        }catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
 
     /**
-     * Adds a warp object to the arraylist
-     * @param warp Warp object to cache
-     */
-    public static void cacheWarp(final Warp warp) {
-        warps.add(warp);
-    }
-
-    /**
-     * Increments the visit count for a warp
-     * @param warp Warp object to increment
-     */
-    public static void incrementVisits(final Warp warp) {
-        getWarpByName(warp.getName()).getVisits().incrementAndGet();
-        Phase.getCollection().sync().updateOne(Filters.eq("name", warp.getName()), new Document("$inc",
-                new BasicDBObject().append("visits", 1)));
-    }
-
-    /**
-     * Removes a warp from the cache
-     * @param warp Warp to delete
-     */
-    static void remove(final Warp warp) {
-        warps.remove(warp);
-    }
-
-    /**
      * Returns a public warp by name
      * @param name Warp name (case insensitive)
-     * @return Warp object or null in the case of
-     * a warp not being found
+     * @return Warp object or null in the case of a warp not being found
      */ // TODO figure out private warp handling with this
     public static Warp getWarpByName(final String name) {
-        for (Warp warp : warps) {
-            if (warp.getName().toLowerCase().equals(name.toLowerCase())) {
-                return warp;
+        Connection connection = null;
+
+        try {
+            connection = LocalStorage.getConnection();
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM warps WHERE name LIKE ?;");
+            statement.setString(1, name);
+            ResultSet result = statement.executeQuery();
+
+            while (result.next()) {
+                return new Warp(result.getString(2), result.getString(3), result.getInt(4),
+                        result.getString(5), result.getBoolean(6), result.getBoolean(7),
+                        result.getLong(8), result.getDouble(9), result.getDouble(10),
+                        result.getDouble(11), result.getDouble(12), result.getDouble(13),
+                        result.getString(14));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
         }
         return null;
@@ -82,9 +81,34 @@ public class Search {
      * @return ArrayList of every warp object in the database
      */
     public static ArrayList<Warp> getPublicWarps() {
-        return (ArrayList<Warp>) warps.stream().parallel()
-                .filter(warp -> !warp.isExpired())
-                .collect(Collectors.toList());
+        ArrayList<Warp> warps = new ArrayList<>();
+        Connection connection = null;
+
+        try {
+            connection = LocalStorage.getConnection();
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM warps WHERE expired = 0;");
+            ResultSet result = statement.executeQuery();
+
+            while (result.next()) {
+                warps.add(new Warp(result.getString(2), result.getString(3), result.getInt(4),
+                        result.getString(5), result.getBoolean(6), result.getBoolean(7),
+                        result.getLong(8), result.getDouble(9), result.getDouble(10),
+                        result.getDouble(11), result.getDouble(12), result.getDouble(13),
+                        result.getString(14)));
+            }
+            return warps;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return warps;
     }
 
     /**
@@ -103,27 +127,71 @@ public class Search {
      * @return ArrayList of player's warps
      */
     public static ArrayList<Warp> getPlayerWarps(final UUID uuid) {
-        return (ArrayList<Warp>) warps.stream().parallel()
-                .filter(warp -> warp.getOwnerUUID().equals(uuid))
-                .collect(Collectors.toList());
+        ArrayList<Warp> warps = new ArrayList<>();
+        Connection connection = null;
+
+        try {
+            connection = LocalStorage.getConnection();
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM warps WHERE owner = ?;");
+            statement.setString(1, uuid.toString());
+            ResultSet result = statement.executeQuery();
+
+            while (result.next()) {
+                warps.add(new Warp(result.getString(2), result.getString(3), result.getInt(4),
+                        result.getString(5), result.getBoolean(6), result.getBoolean(7),
+                        result.getLong(8), result.getDouble(9), result.getDouble(10),
+                        result.getDouble(11), result.getDouble(12), result.getDouble(13),
+                        result.getString(14)));
+            }
+            return warps;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return warps;
     }
 
     /**
      * Returns all of the warps that match a category
-     * @param String Selected category to search for
+     * @param category Selected category to search for
      * @return ArrayList of warps that match the category
      */
     public static ArrayList<Warp> getWarpsByCategory(final String category) {
-        return (ArrayList<Warp>) warps.stream().parallel()
-                .filter(warp -> warp.getCategory().equals(category))
-                .collect(Collectors.toList());
-    }
+        ArrayList<Warp> warps = new ArrayList<>();
+        Connection connection = null;
 
-    /**
-     * Sorts all of the warps by visit count (since warps are cached)
-     */
-    public static synchronized void sort() {
-        Bukkit.getScheduler().runTaskAsynchronously(Phase.getPhase(),
-                () -> warps.sort(Collections.reverseOrder()));
+        try {
+            connection = LocalStorage.getConnection();
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM warps WHERE category = ?;");
+            statement.setString(1, category);
+            ResultSet result = statement.executeQuery();
+
+            while (result.next()) {
+                warps.add(new Warp(result.getString(2), result.getString(3), result.getInt(4),
+                        result.getString(5), result.getBoolean(6), result.getBoolean(7),
+                        result.getLong(8), result.getDouble(9), result.getDouble(10),
+                        result.getDouble(11), result.getDouble(12), result.getDouble(13),
+                        result.getString(14)));
+            }
+            return warps;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return warps;
     }
 }

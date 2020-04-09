@@ -4,21 +4,18 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import xyz.nkomarn.Phase.util.WarpUtil;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicInteger;
 
-public class Warp implements Comparable<Warp> {
+public class Warp {
     private DecimalFormat formatter = new DecimalFormat("#,###");
     private String name, owner, category, world;
-    private AtomicInteger visits;
+    private int visits;
     private long renewed;
     private double x, y, z, pitch, yaw;
     private boolean featured, expired;
@@ -29,7 +26,7 @@ public class Warp implements Comparable<Warp> {
                 final double z, final double pitch, final double yaw, final String world) {
         this.name = name;
         this.owner = owner;
-        this.visits = new AtomicInteger(visits);
+        this.visits = visits;
         this.category = category;
         this.featured = featured;
         this.expired = expired;
@@ -54,7 +51,7 @@ public class Warp implements Comparable<Warp> {
         return UUID.fromString(owner);
     }
 
-    public AtomicInteger getVisits() {
+    public int getVisits() {
         return this.visits;
     }
 
@@ -100,20 +97,15 @@ public class Warp implements Comparable<Warp> {
         this.renewed = timestamp;
     }
 
-    public ItemStack getItem(final Player player) {
-        ItemStack warpItem = new ItemStack(WarpUtil.getItem(this.getCategory()));
-        ItemMeta warpItemMeta = warpItem.getItemMeta();
-        warpItemMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', String.format("&6&l%s", this.getName())));
+    public ItemStack getItem() {
+        final ItemStack warpItem = new ItemStack(WarpUtil.getItem(this.getCategory()));
+        final ItemMeta warpItemMeta = warpItem.getItemMeta();
+        warpItemMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', String.format("&f&l%s", this.getName())));
         warpItemMeta.setLore(Arrays.asList(
-                ChatColor.translateAlternateColorCodes('&', String.format("&7Category: &6%s", this.getCategory())),
-                ChatColor.translateAlternateColorCodes('&', String.format("&7Visits: &6%s", formatter.format(this.getVisits())))
+                ChatColor.translateAlternateColorCodes('&', String.format("&7Category: &a%s", this.getCategory())),
+                ChatColor.translateAlternateColorCodes('&', String.format("&7Visits: &b%s", formatter.format(this.getVisits())))
         ));
         warpItem.setItemMeta(warpItemMeta);
         return warpItem;
-    }
-
-    @Override
-    public int compareTo(Warp warp) {
-        return Integer.compare(this.visits.get(), warp.visits.get());
     }
 }

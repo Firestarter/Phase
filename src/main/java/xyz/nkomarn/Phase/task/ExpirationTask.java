@@ -1,7 +1,5 @@
 package xyz.nkomarn.Phase.task;
 
-import com.mongodb.client.model.Filters;
-import org.bson.Document;
 import xyz.nkomarn.Phase.Phase;
 import xyz.nkomarn.Phase.util.Search;
 
@@ -15,8 +13,8 @@ public class ExpirationTask implements Runnable {
             if (days >= 14) {
                 warp.setExpired(true);
                 Phase.getPhase().getLogger().info(String.format("Warp '%s' expired.", warp.getName()));
-                Phase.getCollection().sync().updateOne(Filters.eq("name", warp.getName()), new Document("$set",
-                        new Document("expired", true))); // A S Y N C  PLZ
+               /* Phase.getCollection().sync().updateOne(Filters.eq("name", warp.getName()), new Document("$set",
+                        new Document("expired", true))); // A S Y N C  PLZ*/
             }
         });
     }

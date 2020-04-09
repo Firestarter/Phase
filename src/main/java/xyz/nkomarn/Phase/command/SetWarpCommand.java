@@ -1,18 +1,21 @@
 package xyz.nkomarn.Phase.command;
 
 import net.milkbowl.vault.economy.Economy;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
+import xyz.nkomarn.Phase.Phase;
 import xyz.nkomarn.Phase.type.Warp;
 import xyz.nkomarn.Phase.util.Config;
 import xyz.nkomarn.Phase.util.EconomyUtil;
 import xyz.nkomarn.Phase.util.Search;
 import xyz.nkomarn.Phase.util.WarpUtil;
 
+import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,13 +47,13 @@ public class SetWarpCommand implements TabExecutor {
         }
         final String warpName = warpNameBuilder.toString().trim();
 
-        final Warp warp = Search.getWarpByName(warpName);
+        /*final Warp warp = Search.getWarpByName(warpName);
         if (warp != null) {
             player.sendMessage(ChatColor.translateAlternateColorCodes('&', String.format(
                     "%sA warp with the name '%s' already exists.", prefix, warpName
             )));
             return true;
-        }
+        }*/
 
         final int creationCost = Config.getInteger("economy.create");
         if (EconomyUtil.getBalance(player) < creationCost) {
@@ -66,11 +69,18 @@ public class SetWarpCommand implements TabExecutor {
         final Warp newWarp = new Warp(warpName, player.getUniqueId().toString(), 0, "All", false,
                 false, System.currentTimeMillis(), location.getX(), location.getY(), location.getZ(), location.getPitch(),
                 location.getYaw(), location.getWorld().getUID().toString());
-        WarpUtil.createWarp(newWarp);
-        EconomyUtil.withdraw(player, creationCost);
-        player.sendMessage(ChatColor.translateAlternateColorCodes('&', String.format(
-                "%sCreated warp '%s'!", prefix, warpName
-        )));
+        Bukkit.getScheduler().runTaskAsynchronously(Phase.getPhase(), () -> {
+            try {
+                WarpUtil.createWarp(newWarp);
+                EconomyUtil.withdraw(player, creationCost);
+                player.sendMessage(ChatColor.translateAlternateColorCodes('&', String.format(
+                        "%sCreated warp '%s'!", prefix, warpName
+                )));
+            } catch (SQLException e) {
+                e.printStackTrace();
+                // TODO send the player an error
+            }
+        });
         return true; // TODO special character in beginning filter
     }
 

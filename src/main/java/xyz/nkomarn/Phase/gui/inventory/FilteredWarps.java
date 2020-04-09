@@ -56,7 +56,7 @@ public class FilteredWarps {
                 final int totalWarps = warps.size();
                 final int startingIndex = Math.min(Math.max(36 * (page - 1), 0), totalWarps);
                 final int endingIndex = Math.min(Math.max(36 * page, startingIndex), warps.size());
-                warps.subList(startingIndex, endingIndex).forEach(warp -> menu.setItem(warps.indexOf(warp) % 36, warp.getItem(player)));
+                warps.subList(startingIndex, endingIndex).forEach(warp -> menu.setItem(warps.indexOf(warp) % 36, warp.getItem()));
                 player.openInventory(menu);
             }
         }.runTask(Phase.getPhase());

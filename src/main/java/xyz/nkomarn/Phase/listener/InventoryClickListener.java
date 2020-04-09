@@ -24,8 +24,6 @@ public class InventoryClickListener implements Listener {
             event.setCancelled(true);
             final GUIHolder holder = (GUIHolder) event.getInventory().getHolder();
             final GUIType type = holder.getType();
-            final String category = holder.getData();
-            final int page = holder.getPage();
             final Player player = (Player) event.getWhoClicked();
 
             GUIHandler handler = null;

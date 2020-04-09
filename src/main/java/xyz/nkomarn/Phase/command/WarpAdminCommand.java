@@ -11,6 +11,7 @@ import xyz.nkomarn.Phase.type.Warp;
 import xyz.nkomarn.Phase.util.Config;
 import xyz.nkomarn.Phase.util.Search;
 
+import java.sql.Connection;
 import java.util.Arrays;
 import java.util.List;
 
@@ -67,6 +68,8 @@ public class WarpAdminCommand implements TabExecutor {
             information.append(String.format(ChatColor.GRAY + "Last renewed: %s\n", warp.getRenewedTime()));
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', information.toString()));
             return true;
+        } else if (operation.equals("feature")) {
+           // TODO
         }
         return true;
     }

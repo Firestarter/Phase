@@ -1,7 +1,6 @@
 package xyz.nkomarn.Phase.listener;
 
-import com.mongodb.client.model.Filters;
-import org.bson.Document;
+import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -12,7 +11,11 @@ import xyz.nkomarn.Phase.util.Search;
 public class PlayerJoinListener implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-        new BukkitRunnable() {
+        Bukkit.getScheduler().runTaskAsynchronously(Phase.getPhase(), () -> {
+
+        });
+
+        /*new BukkitRunnable() {
             @Override
             public void run() {
                 Search.getPlayerWarps(event.getPlayer().getUniqueId()).forEach(warp -> {
@@ -24,6 +27,6 @@ public class PlayerJoinListener implements Listener {
                             new Document("expired", false))); // A S Y N C  PLZ
                 });
             }
-        }.runTaskAsynchronously(Phase.getPhase());
+        }.runTaskAsynchronously(Phase.getPhase());*/
     }
 }
