@@ -42,10 +42,14 @@ public class WarpUtil {
             player.playSound(location, Sound.BLOCK_ANVIL_LAND, 1.0f, 1.0f);
         }
 
-        Player owner = Bukkit.getPlayer(warp.getOwnerUUID());
-        if (owner == null) throw new NullPointerException("Invalid player object during teleportation.");;
-        AdvancementUtil.grantAdvancement(owner, "warp-visits-1");
-        AdvancementUtil.grantAdvancement(owner, "warp-visits-2");
+        final OfflinePlayer ownerOffline = Bukkit.getOfflinePlayer(warp.getOwnerUUID());
+        if (ownerOffline.isOnline()) {
+            final Player owner = (Player) ownerOffline;
+            Bukkit.getScheduler().runTask(Phase.getPhase(), () -> {
+                AdvancementUtil.grantAdvancement(owner, "warp-visits-1");
+                AdvancementUtil.grantAdvancement(owner, "warp-visits-2");
+            });
+        }
     }
 
     /**
