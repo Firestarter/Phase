@@ -19,6 +19,8 @@ import xyz.nkomarn.Phase.util.WarpUtil;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class SetWarpCommand implements TabExecutor {
     final String prefix = Config.getString("messages.prefix");
@@ -54,8 +56,9 @@ public class SetWarpCommand implements TabExecutor {
                 )));
             } else {
                 final Location warpLocation = player.getLocation();
+                final Matcher matcher = Pattern.compile("^[a-zA-Z0-9]+$").matcher(warpName);
 
-                if (!StringUtils.isAlphanumeric(warpName)) {
+                if (!matcher.matches()) {
                     player.sendMessage(ChatColor.translateAlternateColorCodes('&', String.format(
                             "%sWarp names must be alphanumeric.", prefix
                     )));

@@ -46,8 +46,8 @@ public class WarpUtil {
         if (ownerOffline.isOnline()) {
             final Player owner = (Player) ownerOffline;
             Bukkit.getScheduler().runTask(Phase.getPhase(), () -> {
-                AdvancementUtil.grantAdvancement(owner, "warp-visits-1");
-                AdvancementUtil.grantAdvancement(owner, "warp-visits-2");
+                if (warp.getVisits() >= 1000) AdvancementUtil.grantAdvancement(owner, "warp-visits-1");
+                if (warp.getVisits() >= 10000) AdvancementUtil.grantAdvancement(owner, "warp-visits-2");
             });
         }
     }

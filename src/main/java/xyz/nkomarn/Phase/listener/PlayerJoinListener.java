@@ -21,8 +21,8 @@ public class PlayerJoinListener implements Listener {
 
             try {
                 connection = LocalStorage.getConnection();
-                PreparedStatement statement = connection.prepareStatement("UPDATE warps SET (renewed = ?, " +
-                        "expired = FALSE) WHERE owner = ?;");
+                PreparedStatement statement = connection.prepareStatement("UPDATE warps SET renewed = ?, " +
+                        "expired = FALSE WHERE owner = ?;");
                 statement.setLong(1, System.currentTimeMillis());
                 statement.setString(2, event.getPlayer().getUniqueId().toString());
                 statement.executeUpdate();
