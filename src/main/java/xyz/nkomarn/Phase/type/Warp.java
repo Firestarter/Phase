@@ -20,7 +20,6 @@ public class Warp {
     private final double x, y, z, pitch, yaw;
     private final boolean featured, expired;
 
-    // TODO remove type- only public warps from now on
     public Warp(final String name, final String owner, final int visits, final String category,
                 final boolean featured, final boolean expired, final long renewed, final double x, final double y,
                 final double z, final double pitch, final double yaw, final String world) {
