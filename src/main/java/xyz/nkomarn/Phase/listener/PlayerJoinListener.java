@@ -5,28 +5,38 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.scheduler.BukkitRunnable;
+import xyz.nkomarn.Kerosene.data.LocalStorage;
 import xyz.nkomarn.Phase.Phase;
 import xyz.nkomarn.Phase.util.Search;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 public class PlayerJoinListener implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         Bukkit.getScheduler().runTaskAsynchronously(Phase.getPhase(), () -> {
+            Connection connection = null;
 
-        });
-
-        /*new BukkitRunnable() {
-            @Override
-            public void run() {
-                Search.getPlayerWarps(event.getPlayer().getUniqueId()).forEach(warp -> {
-                    warp.setRenewed(System.currentTimeMillis());
-                    warp.setExpired(false);
-                    Phase.getCollection().sync().updateOne(Filters.eq("name", warp.getName()), new Document("$set",
-                            new Document("renewed", System.currentTimeMillis()))); // A S Y N C  PLZ
-                    Phase.getCollection().sync().updateOne(Filters.eq("name", warp.getName()), new Document("$set",
-                            new Document("expired", false))); // A S Y N C  PLZ
-                });
+            try {
+                connection = LocalStorage.getConnection();
+                PreparedStatement statement = connection.prepareStatement("UPDATE warps SET (renewed = ?, " +
+                        "expired = FALSE) WHERE owner = ?;");
+                statement.setLong(1, System.currentTimeMillis());
+                statement.setString(2, event.getPlayer().getUniqueId().toString());
+                statement.executeUpdate();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } finally {
+                if (connection != null) {
+                    try {
+                        connection.close();
+                    } catch (SQLException throwables) {
+                        throwables.printStackTrace();
+                    }
+                }
             }
-        }.runTaskAsynchronously(Phase.getPhase());*/
+        });
     }
 }

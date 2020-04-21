@@ -13,12 +13,12 @@ import java.util.Arrays;
 import java.util.UUID;
 
 public class Warp {
-    private DecimalFormat formatter = new DecimalFormat("#,###");
-    private String name, owner, category, world;
-    private int visits;
-    private long renewed;
-    private double x, y, z, pitch, yaw;
-    private boolean featured, expired;
+    private final DecimalFormat formatter = new DecimalFormat("#,###");
+    private final String name, owner, category, world;
+    private final int visits;
+    private final long renewed;
+    private final double x, y, z, pitch, yaw;
+    private final boolean featured, expired;
 
     // TODO remove type- only public warps from now on
     public Warp(final String name, final String owner, final int visits, final String category,
@@ -41,10 +41,6 @@ public class Warp {
 
     public String getName() {
         return this.name;
-    }
-
-    public void setName(final String name) {
-        this.name = name;
     }
 
     public UUID getOwnerUUID() {
@@ -74,27 +70,6 @@ public class Warp {
     public Location getLocation() {
         final World world = Bukkit.getWorld(UUID.fromString(this.world));
         return new Location(world, this.x, this.y, this.z, (float) this.yaw, (float) this.pitch);
-    }
-
-    public void setLocation(final Location location) {
-        this.x = location.getX();
-        this.y = location.getY();
-        this.z = location.getZ();
-        this.pitch = location.getPitch();
-        this.yaw = location.getYaw();
-        this.world = location.getWorld().getUID().toString();
-    }
-
-    public void setCategory(final String category) {
-        this.category = category;
-    }
-
-    public void setExpired(final boolean expired) {
-        this.expired = expired;
-    }
-
-    public void setRenewed(long timestamp) {
-        this.renewed = timestamp;
     }
 
     public ItemStack getItem() {
