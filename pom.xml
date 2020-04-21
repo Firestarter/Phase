@@ -43,6 +43,12 @@
             <artifactId>AnvilGUI</artifactId>
             <version>7a87a9dd65</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.FirestarterMC</groupId>
+            <artifactId>GriefPrevention</artifactId>
+            <version>bcfdd54e91</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <build>

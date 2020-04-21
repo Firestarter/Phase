@@ -1,6 +1,7 @@
 package xyz.nkomarn.Phase.gui.handler;
 
 import net.wesjd.anvilgui.AnvilGUI;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -21,13 +22,12 @@ public class OptionsHandler implements GUIHandler {
     @Override
     public void handle(Player player, int slot, InventoryClickEvent event) {
         final GUIHolder holder = (GUIHolder) event.getInventory().getHolder();
-
-        player.closeInventory();
         final Warp warp = Search.getWarpByName(holder.getData().toLowerCase());
         if (warp == null) return;
+        player.closeInventory();
 
         if (slot == 2) {
-            WarpUtil.warp(player, warp);
+            Bukkit.getScheduler().runTaskAsynchronously(Phase.getPhase(), () -> WarpUtil.warp(player, warp));
         } else if (slot == 3) {
             new AnvilGUI.Builder()
                     .onComplete((p, text) -> {
@@ -40,7 +40,8 @@ public class OptionsHandler implements GUIHandler {
                             return AnvilGUI.Response.close();
                         }
 
-                        WarpUtil.rename(warp, ChatColor.stripColor(text));
+                        Bukkit.getScheduler().runTaskAsynchronously(Phase.getPhase(), () ->
+                                WarpUtil.rename(warp, ChatColor.stripColor(text)));
                         p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 1.0f, 1.0f);
                         player.sendTitle(ChatColor.translateAlternateColorCodes('&',
                                 "&6&lRenamed warp."), ChatColor.translateAlternateColorCodes('&',
@@ -53,17 +54,14 @@ public class OptionsHandler implements GUIHandler {
                     .item(new ItemStack(Material.BOOK))
                     .plugin(Phase.getPhase())
                     .open(player);
-
-            /*player.sendMessage(ChatColor.translateAlternateColorCodes('&', String.format(
-                    "%sThis feature is currently not implemented. Check back in a few days.", Config.getPrefix()
-            )));*/
         } else if (slot == 4) {
-            WarpUtil.relocate(player, warp);
+            if (WarpUtil.locationHasClaims(player, player.getLocation())) {
+                player.sendMessage(ChatColor.translateAlternateColorCodes('&', String.format(
+                        "%sYou can't move warps to others' claims.", prefix
+                )));
+            } else WarpUtil.relocate(player, warp);
         } else if (slot == 5) {
             new CategoryPicker(player, warp);
-            /*player.sendMessage(ChatColor.translateAlternateColorCodes('&', String.format(
-                    "%sThis feature is currently not implemented. Check back in a few days.", Config.getPrefix()
-            )));*/
         } else if (slot == 6) {
             WarpUtil.delete(player, warp);
         }

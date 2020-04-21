@@ -7,6 +7,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
+import xyz.nkomarn.Phase.Phase;
 import xyz.nkomarn.Phase.gui.inventory.MainMenu;
 import xyz.nkomarn.Phase.type.Warp;
 import xyz.nkomarn.Phase.util.Advancements;
@@ -42,31 +43,28 @@ public class WarpCommand implements TabExecutor {
             return true;
         }
 
-        // TODO parse input and warp
-        StringBuilder warpNameBuilder = new StringBuilder();
-        for (String arg : args) {
-            warpNameBuilder.append(arg).append(" ");
-        }
+        final StringBuilder warpNameBuilder = new StringBuilder();
+        for (String arg : args) warpNameBuilder.append(arg).append(" ");
         final String warpName = warpNameBuilder.toString().trim();
 
-        final Warp warp = Search.getWarpByName(warpName);
-        if (warp == null) {
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', String.format(
-                    "%sWarp '%s' doesn't exist.", prefix, warpName
-            )));
-            return true;
-        }
-
-        WarpUtil.warp(player, warp);
+        Bukkit.getScheduler().runTaskAsynchronously(Phase.getPhase(), () -> {
+            final Warp warp = Search.getWarpByName(warpName);
+            if (warp == null) {
+                player.sendMessage(ChatColor.translateAlternateColorCodes('&', String.format(
+                        "%sWarp '%s' doesn't exist.", prefix, warpName
+                )));
+            } else {
+                WarpUtil.warp(player, warp);
+            }
+        });
         return true;
     }
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String s, String[] args) {
         StringBuilder arguments = new StringBuilder();
-        for (String arg : args) {
-            arguments.append(arg).append(" ");
-        }
+        for (String arg : args) arguments.append(arg).append(" ");
+
         ArrayList<String> queryResults = new ArrayList<>();
         Search.getPublicWarps().stream()
                 .filter(warp -> warp.getName().toLowerCase().contains(arguments.toString().trim()))

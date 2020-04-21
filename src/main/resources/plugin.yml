@@ -5,7 +5,7 @@ main: xyz.nkomarn.Phase.Phase
 description: A dead simple and hyper efficient warp system.
 website: https://github.com/firestartermc/Phase
 api-version: 1.15
-depend: ['Kerosene', 'Essentials', 'Vault']
+depend: ['Kerosene', 'Essentials', 'Vault', 'GriefPrevention']
 
 commands:
   warp:

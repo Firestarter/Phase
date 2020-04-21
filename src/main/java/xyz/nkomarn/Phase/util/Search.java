@@ -86,7 +86,7 @@ public class Search {
 
         try {
             connection = LocalStorage.getConnection();
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM warps WHERE expired = 0;");
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM warps WHERE expired = 0 ORDER BY visits DESC;");
             ResultSet result = statement.executeQuery();
 
             while (result.next()) {
@@ -132,7 +132,7 @@ public class Search {
 
         try {
             connection = LocalStorage.getConnection();
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM warps WHERE owner = ?;");
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM warps WHERE owner = ? ORDER BY visits DESC;");
             statement.setString(1, uuid.toString());
             ResultSet result = statement.executeQuery();
 
@@ -169,7 +169,7 @@ public class Search {
 
         try {
             connection = LocalStorage.getConnection();
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM warps WHERE category = ?;");
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM warps WHERE category = ? ORDER BY visits DESC;");
             statement.setString(1, category);
             ResultSet result = statement.executeQuery();
 

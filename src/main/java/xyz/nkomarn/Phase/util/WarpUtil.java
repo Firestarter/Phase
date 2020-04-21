@@ -1,8 +1,11 @@
 package xyz.nkomarn.Phase.util;
 
+import me.ryanhamshire.GriefPrevention.Claim;
+import me.ryanhamshire.GriefPrevention.GriefPrevention;
 import org.bukkit.*;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
+import xyz.nkomarn.Kerosene.util.AdvancementUtil;
 import xyz.nkomarn.Kerosene.util.LocationUtil;
 import xyz.nkomarn.Phase.Phase;
 import xyz.nkomarn.Phase.type.Warp;
@@ -11,6 +14,7 @@ import xyz.nkomarn.Kerosene.data.LocalStorage;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.Collection;
 import java.util.HashMap;
 
 
@@ -38,22 +42,10 @@ public class WarpUtil {
             player.playSound(location, Sound.BLOCK_ANVIL_LAND, 1.0f, 1.0f);
         }
 
-        //Player owner = Bukkit.getPlayer(warp.getOwnerUUID());
-        //if (owner == null) throw new NullPointerException("Invalid player object during teleportation.");;
-
-        /*if (warp.getVisits() >= 1000) {
-            if (!Advancements.isComplete(player, "warp-visits-1")) {
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), String.format("advancement grant %s only firestarter:warp-visits-1",
-                        owner.getName()));
-            }
-
-            if (warp.getVisits() >= 10000) {
-                if (!Advancements.isComplete(player, "warp-visits-2")) {
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), String.format("advancement grant %s only firestarter:warp-visits-2",
-                            owner.getName()));
-                }
-            }
-        }*/
+        Player owner = Bukkit.getPlayer(warp.getOwnerUUID());
+        if (owner == null) throw new NullPointerException("Invalid player object during teleportation.");;
+        AdvancementUtil.grantAdvancement(owner, "warp-visits-1");
+        AdvancementUtil.grantAdvancement(owner, "warp-visits-2");
     }
 
     /**
@@ -83,10 +75,7 @@ public class WarpUtil {
 
         Player player = Bukkit.getPlayer(warp.getOwnerUUID());
         if (player == null) throw new NullPointerException("Invalid player object when creating warp.");
-        //if (!Advancements.isComplete(player, "warp-create")) {
-            /*Bukkit.dispatchCommand(Bukkit.getConsoleSender(), String.format("advancement grant %s only firestarter:warp-create",
-                    player.getName()));*/
-        //}
+        AdvancementUtil.grantAdvancement(player, "warp-create");
     }
 
     public static void changeCategory(final Warp warp, final String category) {
@@ -204,5 +193,21 @@ public class WarpUtil {
 
     public static Material getItem(final String category) {
         return getCategories().get(category);
+    }
+
+    public static boolean locationHasClaims(final Player player, final Location location) {
+        final Collection<Claim> claims = GriefPrevention.instance.dataStore.getClaims(location.getChunk().getX(),
+                location.getChunk().getZ());
+
+        if (claims.size() > 0) {
+            for (Claim claim : claims) {
+                if (!claim.getOwnerName().equals(player.getName())) {
+                    if (!claim.managers.contains(player.getUniqueId().toString())) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 }

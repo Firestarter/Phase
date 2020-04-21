@@ -7,11 +7,15 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
+import xyz.nkomarn.Kerosene.data.LocalStorage;
+import xyz.nkomarn.Phase.Phase;
 import xyz.nkomarn.Phase.type.Warp;
 import xyz.nkomarn.Phase.util.Config;
 import xyz.nkomarn.Phase.util.Search;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -69,7 +73,74 @@ public class WarpAdminCommand implements TabExecutor {
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', information.toString()));
             return true;
         } else if (operation.equals("feature")) {
-           // TODO
+           if (args.length < 2) {
+               return false;
+           } else {
+               StringBuilder warpNameBuilder = new StringBuilder();
+               for (int i = 1; i < args.length; i++) {
+                   warpNameBuilder.append(args[i]).append(" ");
+               }
+               final String warpName = warpNameBuilder.toString().trim();
+
+               Bukkit.getScheduler().runTaskAsynchronously(Phase.getPhase(), () -> {
+                   Connection connection = null;
+
+                   try {
+                       connection = LocalStorage.getConnection();
+                       PreparedStatement statement = connection.prepareStatement("UPDATE `warps` SET `featured` = NOT " +
+                               "featured WHERE name LIKE ?;");
+                       statement.setString(1, warpName);
+                       statement.executeUpdate();
+                   } catch (SQLException e) {
+                       e.printStackTrace();
+                   } finally {
+                       if (connection != null) {
+                           try {
+                               connection.close();
+                           } catch (SQLException e) {
+                               e.printStackTrace();
+                           }
+                       }
+                   }
+
+                   sender.sendMessage(ChatColor.translateAlternateColorCodes('&', String.format("%sToggled " +
+                           "featured status for warp '%s'.", Config.getPrefix(), warpName)));
+               });
+           }
+        } else if (operation.equals("delete")) {
+            if (args.length < 2) {
+                return false;
+            } else {
+                StringBuilder warpNameBuilder = new StringBuilder();
+                for (int i = 1; i < args.length; i++) {
+                    warpNameBuilder.append(args[i]).append(" ");
+                }
+                final String warpName = warpNameBuilder.toString().trim();
+
+                Bukkit.getScheduler().runTaskAsynchronously(Phase.getPhase(), () -> {
+                    Connection connection = null;
+
+                    try {
+                        connection = LocalStorage.getConnection();
+                        PreparedStatement statement = connection.prepareStatement("DELETE FROM warps WHERE name LIKE ?;");
+                        statement.setString(1, warpName);
+                        statement.executeUpdate();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    } finally {
+                        if (connection != null) {
+                            try {
+                                connection.close();
+                            } catch (SQLException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+
+                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', String.format("%sToggled " +
+                            "featured status for warp '%s'.", Config.getPrefix(), warpName)));
+                });
+            }
         }
         return true;
     }
