@@ -34,7 +34,7 @@ public class WarpUtil {
                     String.format("You've arrived safely at '%s'.", warp.getName())));
             player.playSound(location, Sound.BLOCK_ENDER_CHEST_OPEN, 1.0f, 1.0f);
             player.getWorld().playEffect(player.getLocation(), Effect.ENDER_SIGNAL, 15);
-            Search.incrementVisits(warp);
+            if (!player.getUniqueId().equals(warp.getOwnerUUID())) Search.incrementVisits(warp);
         } catch (Exception e) {
             player.sendTitle(ChatColor.translateAlternateColorCodes('&',
                     "&c&lTeleporter machine broke."), ChatColor.translateAlternateColorCodes('&',
