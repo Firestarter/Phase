@@ -7,10 +7,10 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
+import xyz.nkomarn.Kerosene.util.AdvancementUtil;
 import xyz.nkomarn.Phase.Phase;
 import xyz.nkomarn.Phase.gui.inventory.MainMenu;
 import xyz.nkomarn.Phase.type.Warp;
-import xyz.nkomarn.Phase.util.Advancements;
 import xyz.nkomarn.Phase.util.Config;
 import xyz.nkomarn.Phase.util.Search;
 import xyz.nkomarn.Phase.util.WarpUtil;
@@ -36,10 +36,7 @@ public class WarpCommand implements TabExecutor {
         if (args.length < 1) {
             new MainMenu(player);
             player.playSound(player.getLocation(), Sound.BLOCK_BEACON_ACTIVATE, 1.0f, 1.0f);
-            if (!Advancements.isComplete(player, "warp-menu")) {
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), String.format("advancement grant %s only firestarter:warp-menu",
-                        player.getName()));
-            }
+            AdvancementUtil.grantAdvancement(player, "warp-menu");
             return true;
         }
 
@@ -54,7 +51,7 @@ public class WarpCommand implements TabExecutor {
                         "%sWarp '%s' doesn't exist.", prefix, warpName
                 )));
             } else {
-                WarpUtil.warp(player, warp);
+                WarpUtil.warpPlayer(player, warp);
             }
         });
         return true;

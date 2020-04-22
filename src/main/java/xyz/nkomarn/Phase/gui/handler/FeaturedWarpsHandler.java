@@ -8,7 +8,6 @@ import org.bukkit.inventory.ItemStack;
 import xyz.nkomarn.Phase.gui.GUIHolder;
 import xyz.nkomarn.Phase.gui.inventory.FeaturedWarps;
 import xyz.nkomarn.Phase.gui.inventory.MainMenu;
-import xyz.nkomarn.Phase.gui.inventory.PublicWarps;
 import xyz.nkomarn.Phase.type.Warp;
 import xyz.nkomarn.Phase.util.Search;
 import xyz.nkomarn.Phase.util.WarpUtil;
@@ -36,7 +35,7 @@ public class FeaturedWarpsHandler implements GUIHandler {
                 if (name.trim().length() < 1) return;
                 Warp warp = Search.getWarpByName(name);
                 if (warp == null) return;
-                WarpUtil.warp(player, warp);
+                WarpUtil.warpPlayer(player, warp);
             }
         }
     }

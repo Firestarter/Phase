@@ -49,16 +49,10 @@ public class PublicWarps {
         next.setItemMeta(nextMeta);
         menu.setItem(41, next);
 
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                ArrayList<Warp> warps = Search.getPublicWarps();
-                final int totalWarps = warps.size();
-                final int startingIndex = Math.min(Math.max(36 * (page - 1), 0), totalWarps);
-                final int endingIndex = Math.min(Math.max(36 * page, startingIndex), warps.size());
-                warps.subList(startingIndex, endingIndex).forEach(warp -> menu.setItem(warps.indexOf(warp) % 36, warp.getItem()));
-                player.openInventory(menu);
-            }
-        }.runTask(Phase.getPhase());
+        Bukkit.getScheduler().runTaskAsynchronously(Phase.getPhase(), () -> {
+            final ArrayList<Warp> warps = Search.getPublicWarpsPage(page);
+            warps.forEach(warp -> menu.setItem(warps.indexOf(warp) % 36, warp.getItemStack()));
+            Bukkit.getScheduler().runTask(Phase.getPhase(), () -> player.openInventory(menu));
+        });
     }
 }

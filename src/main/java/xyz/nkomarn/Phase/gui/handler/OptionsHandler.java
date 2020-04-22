@@ -27,7 +27,7 @@ public class OptionsHandler implements GUIHandler {
         player.closeInventory();
 
         if (slot == 2) {
-            Bukkit.getScheduler().runTaskAsynchronously(Phase.getPhase(), () -> WarpUtil.warp(player, warp));
+            Bukkit.getScheduler().runTaskAsynchronously(Phase.getPhase(), () -> WarpUtil.warpPlayer(player, warp));
         } else if (slot == 3) {
             new AnvilGUI.Builder()
                     .onComplete((p, text) -> {
@@ -55,15 +55,23 @@ public class OptionsHandler implements GUIHandler {
                     .plugin(Phase.getPhase())
                     .open(player);
         } else if (slot == 4) {
-            if (WarpUtil.locationHasClaims(player, player.getLocation())) {
+            if (WarpUtil.doesLocationHaveClaims(player, player.getLocation())) {
                 player.sendMessage(ChatColor.translateAlternateColorCodes('&', String.format(
                         "%sYou can't move warps to others' claims.", prefix
                 )));
-            } else WarpUtil.relocate(player, warp);
+            } else {
+                WarpUtil.relocate(player, warp);
+                player.sendTitle(ChatColor.translateAlternateColorCodes('&', "&6&lRelocated"),
+                        ChatColor.translateAlternateColorCodes('&', "The warp is now at your location."));
+                player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 1.0f, 1.0f);
+            }
         } else if (slot == 5) {
             new CategoryPicker(player, warp);
         } else if (slot == 6) {
             WarpUtil.delete(player, warp);
+            player.sendTitle(ChatColor.translateAlternateColorCodes('&', "&c&lDeleted"),
+                    ChatColor.translateAlternateColorCodes('&', "The warp was blown away with the wind."));
+            player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_LAND, 1.0f, 1.0f);
         }
     }
 }

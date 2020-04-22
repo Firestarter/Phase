@@ -8,12 +8,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import xyz.nkomarn.Phase.util.WarpUtil;
 
-import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.UUID;
 
 public class Warp {
-    private final DecimalFormat formatter = new DecimalFormat("#,###");
     private final String name, owner, category, world;
     private final int visits;
     private final long renewed;
@@ -71,13 +69,15 @@ public class Warp {
         return new Location(world, this.x, this.y, this.z, (float) this.yaw, (float) this.pitch);
     }
 
-    public ItemStack getItem() {
-        final ItemStack warpItem = new ItemStack(WarpUtil.getItem(this.getCategory()));
+    public ItemStack getItemStack() {
+        final ItemStack warpItem = new ItemStack(WarpUtil.getItem(this.category));
         final ItemMeta warpItemMeta = warpItem.getItemMeta();
-        warpItemMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', String.format("&f&l%s", this.getName())));
+        warpItemMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&',
+                String.format("&f&l%s", this.name)));
         warpItemMeta.setLore(Arrays.asList(
-                ChatColor.translateAlternateColorCodes('&', String.format("&7Category: &a%s", this.getCategory())),
-                ChatColor.translateAlternateColorCodes('&', String.format("&7Visits: &b%s", formatter.format(this.getVisits())))
+                ChatColor.translateAlternateColorCodes('&', String.format("&7Category: &a%s", this.category)),
+                ChatColor.translateAlternateColorCodes('&', String.format("&7Visits: &b%s",
+                        WarpUtil.formatNumber(this.visits)))
         ));
         warpItem.setItemMeta(warpItemMeta);
         return warpItem;

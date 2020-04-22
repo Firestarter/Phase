@@ -39,7 +39,7 @@ public class FilteredWarpsHandler implements GUIHandler {
                 if (name.trim().length() < 1) return;
                 Warp warp = Search.getWarpByName(name);
                 if (warp == null) return;
-                WarpUtil.warp(player, warp);
+                WarpUtil.warpPlayer(player, warp);
             }
         }
     }

@@ -61,7 +61,7 @@ public class SetWarpCommand implements TabExecutor {
                     player.sendMessage(ChatColor.translateAlternateColorCodes('&', String.format(
                             "%sWarp names must be alphanumeric.", prefix
                     )));
-                } else if (WarpUtil.locationHasClaims(player, warpLocation)) {
+                } else if (WarpUtil.doesLocationHaveClaims(player, warpLocation)) {
                     player.sendMessage(ChatColor.translateAlternateColorCodes('&', String.format(
                             "%sYou can't create warps in others' claims.", prefix
                     )));
@@ -76,20 +76,12 @@ public class SetWarpCommand implements TabExecutor {
                             warpLocation.getY(), warpLocation.getZ(), warpLocation.getPitch(), warpLocation.getYaw(),
                             warpLocation.getWorld().getUID().toString());
 
-                    try {
-                        WarpUtil.createWarp(newWarp);
-                        EconomyUtil.withdraw(player, creationCost);
-                        player.sendMessage(ChatColor.translateAlternateColorCodes('&', String.format(
-                                "%sCreated warp '%s' in your location!", prefix, warpName
-                        )));
-                        player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 1.0f, 1.0f);
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                        player.sendMessage(ChatColor.translateAlternateColorCodes('&', String.format(
-                                "%s&eAn error occurred while creating your warp- notify an admin.", prefix
-                        )));
-                        player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_LAND, 1.0f, 1.0f);
-                    }
+                    WarpUtil.createWarp(newWarp);
+                    EconomyUtil.withdraw(player, creationCost);
+                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', String.format(
+                            "%sCreated warp '%s' in your location!", prefix, warpName
+                    )));
+                    player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 1.0f, 1.0f);
                 }
             }
         });
