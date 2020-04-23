@@ -12,6 +12,7 @@ import xyz.nkomarn.Phase.Phase;
 import xyz.nkomarn.Phase.type.Warp;
 import xyz.nkomarn.Phase.util.Config;
 import xyz.nkomarn.Phase.util.Search;
+import xyz.nkomarn.Phase.util.WarpUtil;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -26,121 +27,94 @@ public class WarpAdminCommand implements TabExecutor {
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', String.format(
                     "%sInsufficient permissions.", Config.getPrefix()
             )));
-            return true;
-        }
-
-        if (args.length < 1) {
+        } else if (args.length < 1) {
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', String.format(
                     "%sSpecify an operation.", Config.getPrefix()
             )));
-            return true;
-        }
+        } else {
+            Bukkit.getScheduler().runTaskAsynchronously(Phase.getPhase(), () -> {
+                switch (args[0].toLowerCase()) {
+                    case "info":
+                        if (args.length < 2) {
+                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', String.format(
+                                    "%sSpecify a warp to view info for.", Config.getPrefix()
+                            )));
+                        } else {
+                            final String warpName = WarpUtil.argsToString(Arrays.copyOfRange(args, 1, args.length));
 
-        final String operation = args[0].toLowerCase();
-        if (operation.equals("info")) {
-            if (args.length < 2) {
-                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', String.format(
-                        "%sSpecify a warp to return info for.", Config.getPrefix()
-                )));
-                return true;
-            }
+                            final Warp warp = Search.getWarpByName(warpName);
+                            if (warp == null) {
+                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', String.format(
+                                        "%sA warp by that name does not exist.", Config.getPrefix()
+                                )));
+                            } else {
+                                StringBuilder information = new StringBuilder();
+                                information.append(String.format("%sInfo for warp '%s':\n", Config.getPrefix(), warp.getName()));
+                                final OfflinePlayer owner = Bukkit.getOfflinePlayer(warp.getOwnerUUID());
+                                information.append(String.format(ChatColor.GRAY + " Owner: &e%s&7 (%s)\n", owner.getName(), warp.getOwnerUUID().toString()));
+                                final Location warpLocation = warp.getLocation();
+                                information.append(String.format(ChatColor.GRAY + " X: &e%s&7, Y: &e%s&7, Z: &e%s&7, " +
+                                                "pitch: &e%s&7, yaw: &e%s&7\n",
+                                        (int) warpLocation.getX(), (int)warpLocation.getY(), (int)warpLocation.getZ(),
+                                        (int)warpLocation.getPitch(), (int)warpLocation.getYaw()));
+                                information.append(String.format(ChatColor.GRAY + " Visits: &e%s&7\n", warp.getVisits()));
+                                information.append(String.format(ChatColor.GRAY + " Featured: &e%s&7\n", warp.isFeatured()));
+                                information.append(String.format(ChatColor.GRAY + " Expired: &e%s&7\n", warp.isExpired()));
+                                information.append(String.format(ChatColor.GRAY + " Last renewed: &e%s\n", warp.getRenewedTime()));
+                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', information.toString()));
+                            }
+                        }
+                        break;
+                    case "feature":
+                        if (args.length < 2) {
+                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', String.format(
+                                    "%sSpecify the warp for which to toggle featured status.", Config.getPrefix()
+                            )));
+                        } else {
+                            final String warpName = WarpUtil.argsToString(Arrays.copyOfRange(args, 1, args.length));
 
-            StringBuilder warpNameBuilder = new StringBuilder();
-            for (int i = 1; i < args.length; i++) {
-                warpNameBuilder.append(args[i]).append(" ");
-            }
-            final String warpName = warpNameBuilder.toString().trim();
+                            try (Connection connection = LocalStorage.getConnection()) {
+                                try (PreparedStatement statement = connection.prepareStatement("UPDATE `warps` SET `featured` = NOT " +
+                                        "featured WHERE name LIKE ?;")) {
+                                    statement.setString(1, warpName);
+                                    statement.executeUpdate();
 
-            final Warp warp = Search.getWarpByName(warpName);
-            if (warp == null) {
-                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', String.format(
-                        "%sA warp by that name does not exist.", Config.getPrefix()
-                )));
-                return true;
-            }
-
-            StringBuilder information = new StringBuilder();
-            information.append(String.format("%sInfo for warp '%s': .\n", Config.getPrefix(), warp.getName()));
-            final OfflinePlayer owner = Bukkit.getOfflinePlayer(warp.getOwnerUUID());
-            information.append(String.format(ChatColor.GRAY + "Owner: %s (%s)\n", owner.getName(), warp.getOwnerUUID().toString()));
-            final Location warpLocation = warp.getLocation();
-            information.append(String.format(ChatColor.GRAY + "X: %s, Y: %s, Z: %s, pitch: %s, yaw: %s, world: %s\n",
-                    warpLocation.getX(), warpLocation.getY(), warpLocation.getZ(), warpLocation.getPitch(),
-                    warpLocation.getYaw(), warpLocation.getWorld().getName()));
-            information.append(String.format(ChatColor.GRAY + "Featured: %s\n", warp.isFeatured()));
-            information.append(String.format(ChatColor.GRAY + "Expired: %s\n", warp.isExpired()));
-            information.append(String.format(ChatColor.GRAY + "Last renewed: %s\n", warp.getRenewedTime()));
-            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', information.toString()));
-            return true;
-        } else if (operation.equals("feature")) {
-           if (args.length < 2) {
-               return false;
-           } else {
-               StringBuilder warpNameBuilder = new StringBuilder();
-               for (int i = 1; i < args.length; i++) {
-                   warpNameBuilder.append(args[i]).append(" ");
-               }
-               final String warpName = warpNameBuilder.toString().trim();
-
-               Bukkit.getScheduler().runTaskAsynchronously(Phase.getPhase(), () -> {
-                   Connection connection = null;
-
-                   try {
-                       connection = LocalStorage.getConnection();
-                       PreparedStatement statement = connection.prepareStatement("UPDATE `warps` SET `featured` = NOT " +
-                               "featured WHERE name LIKE ?;");
-                       statement.setString(1, warpName);
-                       statement.executeUpdate();
-                   } catch (SQLException e) {
-                       e.printStackTrace();
-                   } finally {
-                       if (connection != null) {
-                           try {
-                               connection.close();
-                           } catch (SQLException e) {
-                               e.printStackTrace();
-                           }
-                       }
-                   }
-
-                   sender.sendMessage(ChatColor.translateAlternateColorCodes('&', String.format("%sToggled " +
-                           "featured status for warp '%s'.", Config.getPrefix(), warpName)));
-               });
-           }
-        } else if (operation.equals("delete")) {
-            if (args.length < 2) {
-                return false;
-            } else {
-                StringBuilder warpNameBuilder = new StringBuilder();
-                for (int i = 1; i < args.length; i++) {
-                    warpNameBuilder.append(args[i]).append(" ");
-                }
-                final String warpName = warpNameBuilder.toString().trim();
-
-                Bukkit.getScheduler().runTaskAsynchronously(Phase.getPhase(), () -> {
-                    Connection connection = null;
-
-                    try {
-                        connection = LocalStorage.getConnection();
-                        PreparedStatement statement = connection.prepareStatement("DELETE FROM warps WHERE name LIKE ?;");
-                        statement.setString(1, warpName);
-                        statement.executeUpdate();
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    } finally {
-                        if (connection != null) {
-                            try {
-                                connection.close();
+                                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', String.format("%sToggled " +
+                                            "featured status.", Config.getPrefix())));
+                                }
                             } catch (SQLException e) {
                                 e.printStackTrace();
                             }
                         }
-                    }
+                        break;
+                    case "delete":
+                        if (args.length < 2) {
+                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', String.format(
+                                    "%sSpecify a warp to delete.", Config.getPrefix()
+                            )));
+                        } else {
+                            final String warpName = WarpUtil.argsToString(Arrays.copyOfRange(args, 1, args.length));
 
-                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', String.format("%sToggled " +
-                            "featured status for warp '%s'.", Config.getPrefix(), warpName)));
-                });
-            }
+                            try (Connection connection = LocalStorage.getConnection()) {
+                                try (PreparedStatement statement = connection.prepareStatement("DELETE FROM warps WHERE name LIKE ?;")) {
+                                    statement.setString(1, warpName);
+                                    statement.execute();
+
+                                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', String.format("%sDeleted " +
+                                            "the warp.", Config.getPrefix())));
+                                }
+                            } catch (SQLException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        break;
+                    default:
+                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', String.format(
+                                "%sUnknown operation.", Config.getPrefix()
+                        )));
+                        break;
+                }
+            });
         }
         return true;
     }
@@ -149,6 +123,6 @@ public class WarpAdminCommand implements TabExecutor {
     public List<String> onTabComplete(CommandSender sender, Command command, String s, String[] args) {
         if (!sender.hasPermission("phase.admin")) return null;
         if (args.length != 1) return null;
-        return Arrays.asList("create", "feature", "info", "delete");
+        return Arrays.asList("delete", "feature", "info");
     }
 }

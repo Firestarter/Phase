@@ -2,6 +2,9 @@ package xyz.nkomarn.Phase.type;
 
 import org.bukkit.Material;
 
+/**
+ * Enum representing a warp category.
+ */
 public enum Category {
     ALL("All", Material.BOOK),
     SHOP("Shop", Material.CHEST),

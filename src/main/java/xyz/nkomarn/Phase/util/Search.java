@@ -67,7 +67,8 @@ public class Search {
             try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM warps WHERE name LIKE ?;")) {
                 statement.setString(1, name);
                 try (ResultSet results = statement.executeQuery()) {
-                    return resultSetToArray(results).get(0);
+                    final ArrayList<Warp> warpResults = resultSetToArray(results);
+                    if (warpResults.size() > 0) return warpResults.get(0);
                 }
             }
         } catch (SQLException e) {

@@ -15,6 +15,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
+import java.util.Arrays;
 import java.util.Collection;
 
 public class WarpUtil {
@@ -60,7 +61,7 @@ public class WarpUtil {
      * Adds a warp object into the database.
      * @param warp The warp object to insert.
      */
-    public static void createWarp(final Warp warp) { // TODO direct args, dont require warp object
+    public static void createWarp(final Warp warp) {
         final Location location = warp.getLocation();
         final String query = "INSERT INTO warps (name, owner, visits, category, featured, expired, renewed, x, y, z, " +
                 "pitch, yaw, world) VALUES (?, ?, ?, ?, ?, ?, ?, ? ,?, ?, ?, ?, ?);";
@@ -176,5 +177,11 @@ public class WarpUtil {
 
     public static String formatNumber(final int number) {
         return FORMATTER.format(number);
+    }
+
+    public static String argsToString(final String[] args) {
+        final StringBuilder builder = new StringBuilder();
+        Arrays.stream(args).forEach(arg -> builder.append(arg).append(" "));
+        return builder.toString().trim();
     }
 }

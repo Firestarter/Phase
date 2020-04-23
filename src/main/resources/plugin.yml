@@ -19,3 +19,7 @@ commands:
   warpadmin:
     usage: "/<command> <operation>"
     description: "Manage the warps system in-game."
+
+permissions:
+  phase.admin:
+    default: op
