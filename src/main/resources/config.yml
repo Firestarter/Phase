@@ -6,15 +6,6 @@ messages:
 economy:
   create: 5000
 
-categories:
-  All: BOOK
-  Shop: CHEST
-  Utility: ENDER_CHEST
-  Grinder: EXPERIENCE_BOTTLE
-  PvP: GOLDEN_SWORD
-  Attraction: FIREWORK_ROCKET
-  Town: ORANGE_BED
-
 guide:
   title: "Warps Guide"
   author: "Firestarter Staff"

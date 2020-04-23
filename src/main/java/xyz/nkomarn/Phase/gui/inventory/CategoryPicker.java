@@ -9,10 +9,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import xyz.nkomarn.Phase.gui.GUIHolder;
 import xyz.nkomarn.Phase.gui.GUIType;
+import xyz.nkomarn.Phase.type.Category;
 import xyz.nkomarn.Phase.type.Warp;
-import xyz.nkomarn.Phase.util.WarpUtil;
-
-import java.util.ArrayList;
 import java.util.Arrays;
 
 public class CategoryPicker {
@@ -25,16 +23,16 @@ public class CategoryPicker {
         glass.setItemMeta(glassMeta);
         Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8).forEach(slot -> menu.setItem(slot, glass));
 
-        final ArrayList<String> categories = new ArrayList<>(WarpUtil.getCategories().keySet());
-        categories.forEach(category -> {
-            ItemStack categoryItem = new ItemStack(WarpUtil.getItem(category), 1);
+        int i = 0;
+        for (final Category category : Category.values()) {
+            ItemStack categoryItem = new ItemStack(category.getMaterial());
             ItemMeta categoryItemMeta = categoryItem.getItemMeta();
             categoryItemMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', String.format(
-                    "&6&l%s", category
+                    "&f&l%s", category.getName()
             )));
             categoryItem.setItemMeta(categoryItemMeta);
-            menu.setItem(categories.indexOf(category), categoryItem);
-        });
+            menu.setItem(i++, categoryItem);
+        }
         player.openInventory(menu);
     }
 }

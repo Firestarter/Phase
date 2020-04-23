@@ -12,13 +12,14 @@ import java.util.Arrays;
 import java.util.UUID;
 
 public class Warp {
-    private final String name, owner, category, world;
+    private final String name, owner, world;
+    private final Category category;
     private final int visits;
     private final long renewed;
     private final double x, y, z, pitch, yaw;
     private final boolean featured, expired;
 
-    public Warp(final String name, final String owner, final int visits, final String category,
+    public Warp(final String name, final String owner, final int visits, final Category category,
                 final boolean featured, final boolean expired, final long renewed, final double x, final double y,
                 final double z, final double pitch, final double yaw, final String world) {
         this.name = name;
@@ -48,7 +49,7 @@ public class Warp {
         return this.visits;
     }
 
-    public String getCategory() {
+    public Category getCategory() {
         return this.category;
     }
 
@@ -70,12 +71,12 @@ public class Warp {
     }
 
     public ItemStack getItemStack() {
-        final ItemStack warpItem = new ItemStack(WarpUtil.getItem(this.category));
+        final ItemStack warpItem = new ItemStack(this.category.getMaterial());
         final ItemMeta warpItemMeta = warpItem.getItemMeta();
         warpItemMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&',
                 String.format("&f&l%s", this.name)));
         warpItemMeta.setLore(Arrays.asList(
-                ChatColor.translateAlternateColorCodes('&', String.format("&7Category: &a%s", this.category)),
+                ChatColor.translateAlternateColorCodes('&', String.format("&7Category: &a%s", this.category.getName())),
                 ChatColor.translateAlternateColorCodes('&', String.format("&7Visits: &b%s",
                         WarpUtil.formatNumber(this.visits)))
         ));

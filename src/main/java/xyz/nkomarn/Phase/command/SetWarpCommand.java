@@ -10,6 +10,7 @@ import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import xyz.nkomarn.Kerosene.util.EconomyUtil;
 import xyz.nkomarn.Phase.Phase;
+import xyz.nkomarn.Phase.type.Category;
 import xyz.nkomarn.Phase.type.Warp;
 import xyz.nkomarn.Phase.util.Config;
 import xyz.nkomarn.Phase.util.Search;
@@ -75,7 +76,7 @@ public class SetWarpCommand implements TabExecutor {
                             "%sYou need to have $%s available to create a warp.", prefix, formatter.format(creationCost)
                     )));
                 } else {
-                    final Warp newWarp = new Warp(warpName, player.getUniqueId().toString(), 0, "All",
+                    final Warp newWarp = new Warp(warpName, player.getUniqueId().toString(), 0, Category.ALL,
                             false, false, System.currentTimeMillis(), warpLocation.getX(),
                             warpLocation.getY(), warpLocation.getZ(), warpLocation.getPitch(), warpLocation.getYaw(),
                             warpLocation.getWorld().getUID().toString());
