@@ -113,47 +113,6 @@ public class Search {
     }
 
     /**
-     * Returns all the warps that should be displayed on a page of the GUI.
-     * @return ArrayList of every warp object in the range of the page.
-     */
-    public static ArrayList<Warp> getPublicWarpsPage(final int page) {
-        ArrayList<Warp> warps = new ArrayList<>();
-        Connection connection = null;
-
-        final int startingIndex = Math.max(36 * (page - 1), 0);
-        final int endingIndex = Math.max(36 * page, startingIndex);
-
-        try {
-            connection = LocalStorage.getConnection();
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM warps WHERE expired = 0 ORDER " +
-                    "BY visits DESC LIMIT ?, ?;");
-            statement.setInt(1, startingIndex);
-            statement.setInt(2, endingIndex);
-            ResultSet result = statement.executeQuery();
-
-            while (result.next()) {
-                warps.add(new Warp(result.getString(2), result.getString(3), result.getInt(4),
-                        result.getString(5), result.getBoolean(6), result.getBoolean(7),
-                        result.getLong(8), result.getDouble(9), result.getDouble(10),
-                        result.getDouble(11), result.getDouble(12), result.getDouble(13),
-                        result.getString(14)));
-            }
-            return warps;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            if (connection != null) {
-                try {
-                    connection.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return warps;
-    }
-
-    /**
      * Returns a lost of all of the public featured warps
      * @return ArrayList of all public featured warps
      */
@@ -212,7 +171,8 @@ public class Search {
 
         try {
             connection = LocalStorage.getConnection();
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM warps WHERE category = ? ORDER BY visits DESC;");
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM warps WHERE category = ? " +
+                    "ORDER BY visits DESC;");
             statement.setString(1, category);
             ResultSet result = statement.executeQuery();
 

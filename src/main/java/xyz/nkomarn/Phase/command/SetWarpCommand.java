@@ -53,9 +53,13 @@ public class SetWarpCommand implements TabExecutor {
                 player.sendMessage(ChatColor.translateAlternateColorCodes('&', String.format(
                         "%sA warp with the name '%s' already exists.", prefix, warpName
                 )));
+            } else if (warpName.length() > 20) {
+                player.sendMessage(ChatColor.translateAlternateColorCodes('&', String.format(
+                        "%sWarp names are limited to 20 characters in length.", prefix, warpName
+                )));
             } else {
                 final Location warpLocation = player.getLocation();
-                final Matcher matcher = Pattern.compile("^[a-zA-Z0-9]+$").matcher(warpName);
+                final Matcher matcher = Pattern.compile("^[0-9A-Za-z\\s-]+$").matcher(warpName);
 
                 if (!matcher.matches()) {
                     player.sendMessage(ChatColor.translateAlternateColorCodes('&', String.format(
