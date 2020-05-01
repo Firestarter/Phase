@@ -33,14 +33,14 @@ public class WarpUtil {
             LocationUtil.teleportPlayer(player, location);
             player.sendTitle(ChatColor.translateAlternateColorCodes('&',
                     "&6&lWhoosh."), ChatColor.translateAlternateColorCodes('&',
-                    String.format("You've arrived safely at '%s'.", warp.getName())));
+                    String.format("You've arrived safely at '%s'.", warp.getName())), 10, 70, 20);
             player.playSound(location, Sound.BLOCK_ENDER_CHEST_OPEN, 1.0f, 1.0f);
             player.getWorld().playEffect(warp.getLocation(), Effect.ENDER_SIGNAL, 15);
             if (!player.getUniqueId().equals(warp.getOwnerUUID())) Search.incrementVisits(warp);
         } catch (Exception e) {
             player.sendTitle(ChatColor.translateAlternateColorCodes('&',
                     "&c&lWarping failed."), ChatColor.translateAlternateColorCodes('&',
-                    "A teleportation error occurred."));
+                    "A teleportation error occurred."), 10, 70, 20);
             player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_LAND, 1.0f, 1.0f);
             e.printStackTrace();
         }
@@ -157,22 +157,6 @@ public class WarpUtil {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
-
-    public static boolean doesLocationHaveClaims(final Player player, final Location location) {
-        final Collection<Claim> claims = GriefPrevention.instance.dataStore.getClaims(location.getChunk().getX(),
-                location.getChunk().getZ());
-
-        if (claims.size() > 0) {
-            for (Claim claim : claims) {
-                if (!claim.getOwnerName().equals(player.getName())) {
-                    if (!claim.managers.contains(player.getUniqueId().toString())) {
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
     }
 
     public static String formatNumber(final int number) {

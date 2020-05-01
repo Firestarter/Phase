@@ -8,6 +8,7 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
+import xyz.nkomarn.Kerosene.util.ClaimUtil;
 import xyz.nkomarn.Phase.Phase;
 import xyz.nkomarn.Phase.gui.GUIHolder;
 import xyz.nkomarn.Phase.gui.inventory.CategoryPicker;
@@ -45,7 +46,7 @@ public class OptionsHandler implements GUIHandler {
                         p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 1.0f, 1.0f);
                         player.sendTitle(ChatColor.translateAlternateColorCodes('&',
                                 "&6&lRenamed warp."), ChatColor.translateAlternateColorCodes('&',
-                                String.format("&fIt's now called '%s'.", text)));
+                                String.format("&fIt's now called '%s'.", text)), 10, 70, 20);
                         return AnvilGUI.Response.close();
                     })
                     .title("Rename your Warp")
@@ -55,7 +56,7 @@ public class OptionsHandler implements GUIHandler {
                     .plugin(Phase.getPhase())
                     .open(player);
         } else if (slot == 4) {
-            if (WarpUtil.doesLocationHaveClaims(player, player.getLocation())) {
+            if (ClaimUtil.doesLocationHaveForeignClaims(player, player.getLocation())) {
                 player.sendMessage(ChatColor.translateAlternateColorCodes('&', String.format(
                         "%sYou can't move warps to others' claims.", prefix
                 )));

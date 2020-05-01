@@ -23,7 +23,7 @@
         <dependency>
             <groupId>com.github.FirestarterMC</groupId>
             <artifactId>Kerosene</artifactId>
-            <version>769b3df801</version>
+            <version>cf8ac5280d</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
