@@ -55,8 +55,8 @@ public class WarpAdminCommand implements TabExecutor {
                                 final Location warpLocation = warp.getLocation();
                                 information.append(String.format(ChatColor.GRAY + " X: &e%s&7, Y: &e%s&7, Z: &e%s&7, " +
                                                 "pitch: &e%s&7, yaw: &e%s&7\n",
-                                        (int) warpLocation.getX(), (int)warpLocation.getY(), (int)warpLocation.getZ(),
-                                        (int)warpLocation.getPitch(), (int)warpLocation.getYaw()));
+                                        (int) warpLocation.getX(), (int) warpLocation.getY(), (int) warpLocation.getZ(),
+                                        (int) warpLocation.getPitch(), (int) warpLocation.getYaw()));
                                 information.append(String.format(ChatColor.GRAY + " Visits: &e%s&7\n", warp.getVisits()));
                                 information.append(String.format(ChatColor.GRAY + " Featured: &e%s&7\n", warp.isFeatured()));
                                 information.append(String.format(ChatColor.GRAY + " Expired: &e%s&7\n", warp.isExpired()));

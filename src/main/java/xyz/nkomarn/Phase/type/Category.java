@@ -12,7 +12,7 @@ public enum Category {
     GRINDER("Grinder", Material.EXPERIENCE_BOTTLE),
     PVP("PvP", Material.GOLDEN_SWORD),
     ATTRACTION("Attraction", Material.FIREWORK_ROCKET),
-    TOWN("Town", Material.LIGHT_BLUE_BED);
+    TOWN("Town", Material.LIME_BED);
 
     private final String name;
     private final Material material;

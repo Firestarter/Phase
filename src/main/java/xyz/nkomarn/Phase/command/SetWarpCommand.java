@@ -8,6 +8,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import xyz.nkomarn.Kerosene.util.ClaimUtil;
 import xyz.nkomarn.Kerosene.util.EconomyUtil;
 import xyz.nkomarn.Phase.Phase;
 import xyz.nkomarn.Phase.type.Category;
@@ -53,11 +54,11 @@ public class SetWarpCommand implements CommandExecutor {
                     player.sendMessage(ChatColor.translateAlternateColorCodes('&', String.format(
                             "%sWarp names must be alphanumeric.", Config.getPrefix()
                     )));
-                } else if (WarpUtil.doesLocationHaveClaims(player, warpLocation)) {
+                } else if (ClaimUtil.doesLocationHaveForeignClaims(player, warpLocation)) {
                     player.sendMessage(ChatColor.translateAlternateColorCodes('&', String.format(
                             "%sYou can't create warps in others' claims.", Config.getPrefix()
                     )));
-                } else if (EconomyUtil.getBalance(player) < CREATION_COST) {
+                } else if (EconomyUtil.getEconomy().getBalance(player) < CREATION_COST) {
                     DecimalFormat formatter = new DecimalFormat("#,###");
                     player.sendMessage(ChatColor.translateAlternateColorCodes('&', String.format(
                             "%sYou need to have $%s available to create a warp.",

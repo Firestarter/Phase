@@ -21,5 +21,7 @@ commands:
     description: "Manage the warps system in-game."
 
 permissions:
+  phase.color:
+    default: op
   phase.admin:
     default: op
