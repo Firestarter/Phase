@@ -11,7 +11,7 @@ public class FilterHander implements GUIHandler {
     @Override
     public void handle(Player player, int slot, InventoryClickEvent event) {
         if (event.getCurrentItem() == null || event.getCurrentItem().getType() == Material.WHITE_STAINED_GLASS_PANE) return;
-        final String category = ChatColor.stripColor(event.getCurrentItem().getItemMeta().getDisplayName());
+        String category = ChatColor.stripColor(event.getCurrentItem().getItemMeta().getDisplayName());
         if (category.equals("All")) new PublicWarps(player, 1);
         else new FilteredWarps(player, 1, category);
     }

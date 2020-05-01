@@ -16,15 +16,15 @@ public class InventoryClickListener implements Listener {
         if (event.getInventory().getHolder() == null || !(event.getInventory().getHolder() instanceof GUIHolder)) return;
         if (!(event.getRawSlot() < event.getInventory().getSize())) return; // TODO ignore number keys selection
 
-        final int slot = event.getSlot();
-        final InventoryView view = event.getView();
+        int slot = event.getSlot();
+        InventoryView view = event.getView();
 
         if (slot < 0) return;
         if (slot == view.convertSlot(slot)) {
             event.setCancelled(true);
-            final GUIHolder holder = (GUIHolder) event.getInventory().getHolder();
-            final GUIType type = holder.getType();
-            final Player player = (Player) event.getWhoClicked();
+            GUIHolder holder = (GUIHolder) event.getInventory().getHolder();
+            GUIType type = holder.getType();
+            Player player = (Player) event.getWhoClicked();
 
             GUIHandler handler = null;
             if (type == GUIType.MAIN_MENU) handler = new MainMenuHandler();

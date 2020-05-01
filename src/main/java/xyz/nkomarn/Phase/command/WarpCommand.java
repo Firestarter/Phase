@@ -24,17 +24,17 @@ public class WarpCommand implements TabExecutor {
     public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
         if (!(sender instanceof Player)) return true;
 
-        final Player player = (Player) sender;
+        Player player = (Player) sender;
 
         if (args.length < 1) {
             new MainMenu(player);
             player.playSound(player.getLocation(), Sound.BLOCK_BEACON_ACTIVATE, 1.0f, 1.0f);
             AdvancementUtil.grantAdvancement(player, "warp-menu");
         } else {
-            final String warpName = WarpUtil.argsToString(args);
+            String warpName = WarpUtil.argsToString(args);
 
             Bukkit.getScheduler().runTaskAsynchronously(Phase.getPhase(), () -> {
-                final Warp warp = Search.getWarpByName(warpName);
+                Warp warp = Search.getWarpByName(warpName);
                 if (warp == null) {
                     player.sendMessage(ChatColor.translateAlternateColorCodes('&', String.format(
                             "%sWarp '%s' doesn't exist.", Config.getPrefix(), warpName
@@ -49,7 +49,7 @@ public class WarpCommand implements TabExecutor {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String s, String[] args) {
-        final ArrayList<String> queryResults = new ArrayList<>();
+        ArrayList<String> queryResults = new ArrayList<>();
         Search.getPublicWarps().stream()
                 .filter(warp -> warp.getName().toLowerCase().contains(WarpUtil.argsToString(args).toLowerCase()))
                 .forEach(warp -> queryResults.add(warp.getName()));

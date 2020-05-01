@@ -14,7 +14,7 @@ import xyz.nkomarn.Phase.type.Warp;
 import java.util.Arrays;
 
 public class OptionsMenu {
-    public OptionsMenu(final Player player, final Warp warp) {
+    public OptionsMenu(Player player, Warp warp) {
         Inventory menu = Bukkit.createInventory(new GUIHolder(GUIType.OPTIONS, 1, warp.getName()), 9,
                 String.format("Options: '%s'", warp.getName()));
         player.openInventory(menu);

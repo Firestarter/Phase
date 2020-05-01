@@ -16,7 +16,7 @@ import xyz.nkomarn.Phase.util.WarpUtil;
 public class PublicWarpsHandler implements GUIHandler {
     @Override
     public void handle(Player player, int slot, InventoryClickEvent event) {
-        final GUIHolder holder = (GUIHolder) event.getInventory().getHolder();
+        GUIHolder holder = (GUIHolder) event.getInventory().getHolder();
         int page = holder.getPage();
 
         if (slot == 39) {
@@ -34,7 +34,7 @@ public class PublicWarpsHandler implements GUIHandler {
             if (clickedItem != null && clickedItem.getType() != Material.AIR
                     && clickedItem.getType()
                     != Material.WHITE_STAINED_GLASS_PANE) {
-                final String name = ChatColor.stripColor(clickedItem.getItemMeta().getDisplayName());
+                String name = ChatColor.stripColor(clickedItem.getItemMeta().getDisplayName());
                 if (name.trim().length() < 1) return;
                 Warp warp = Search.getWarpByName(name);
                 if (warp == null) return;

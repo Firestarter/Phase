@@ -18,12 +18,12 @@ import xyz.nkomarn.Phase.util.Search;
 import xyz.nkomarn.Phase.util.WarpUtil;
 
 public class OptionsHandler implements GUIHandler {
-    final String prefix = Config.getString("messages.prefix");
+    String prefix = Config.getString("messages.prefix");
 
     @Override
     public void handle(Player player, int slot, InventoryClickEvent event) {
-        final GUIHolder holder = (GUIHolder) event.getInventory().getHolder();
-        final Warp warp = Search.getWarpByName(holder.getData().toLowerCase());
+        GUIHolder holder = (GUIHolder) event.getInventory().getHolder();
+        Warp warp = Search.getWarpByName(holder.getData().toLowerCase());
         if (warp == null) return;
         player.closeInventory();
 

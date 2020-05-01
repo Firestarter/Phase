@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class PlayerWarps {
-    public PlayerWarps(final Player player, final int page) {
+    public PlayerWarps(Player player, int page) {
         Inventory menu = Bukkit.createInventory(new GUIHolder(GUIType.PLAYER_WARPS, page), 45,
                 String.format("Your Warps (Page %s)", page));
 
@@ -57,9 +57,9 @@ public class PlayerWarps {
             @Override
             public void run() {
                 ArrayList<Warp> warps = Search.getPlayerWarps(player.getUniqueId());
-                final int totalWarps = warps.size();
-                final int startingIndex = Math.min(Math.max(36 * (page - 1), 0), totalWarps);
-                final int endingIndex = Math.min(Math.max(36 * page, startingIndex), warps.size());
+                int totalWarps = warps.size();
+                int startingIndex = Math.min(Math.max(36 * (page - 1), 0), totalWarps);
+                int endingIndex = Math.min(Math.max(36 * page, startingIndex), warps.size());
                 warps.subList(startingIndex, endingIndex).forEach(warp -> menu.setItem(warps.indexOf(warp) % 36, warp.getItemStack()));
                 player.openInventory(menu);
             }

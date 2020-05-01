@@ -15,7 +15,7 @@ public class PlayerJoinListener implements Listener {
     private final String UPDATE_QUERY = "UPDATE warps SET renewed = ?, expired = FALSE WHERE owner = ?;";
 
     @EventHandler
-    public void onPlayerJoin(final PlayerJoinEvent event) {
+    public void onPlayerJoin(PlayerJoinEvent event) {
         Bukkit.getScheduler().runTaskAsynchronously(Phase.getPhase(), () -> {
             try (Connection connection = LocalStorage.getConnection()) {
                 try (PreparedStatement statement = connection.prepareStatement(UPDATE_QUERY)) {

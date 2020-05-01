@@ -13,7 +13,7 @@ import xyz.nkomarn.Phase.gui.GUIType;
 import java.util.Arrays;
 
 public class MainMenu {
-    public MainMenu(final Player player) {
+    public MainMenu(Player player) {
         Inventory menu = Bukkit.createInventory(new GUIHolder(GUIType.MAIN_MENU, 1), 27, "Warps Menu");
         player.openInventory(menu);
 

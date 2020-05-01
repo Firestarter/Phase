@@ -19,9 +19,8 @@ public class Warp {
     private final double x, y, z, pitch, yaw;
     private final boolean featured, expired;
 
-    public Warp(final String name, final String owner, final int visits, final Category category,
-                final boolean featured, final boolean expired, final long renewed, final double x, final double y,
-                final double z, final double pitch, final double yaw, final String world) {
+    public Warp(String name, String owner, int visits, Category category, boolean featured, boolean expired, long renewed,
+                double x, double y, double z, double pitch, double yaw, String world) {
         this.name = name;
         this.owner = owner;
         this.visits = visits;
@@ -66,13 +65,13 @@ public class Warp {
     }
 
     public Location getLocation() {
-        final World world = Bukkit.getWorld(UUID.fromString(this.world));
+        World world = Bukkit.getWorld(UUID.fromString(this.world));
         return new Location(world, this.x, this.y, this.z, (float) this.yaw, (float) this.pitch);
     }
 
     public ItemStack getItemStack() {
-        final ItemStack warpItem = new ItemStack(this.category.getMaterial());
-        final ItemMeta warpItemMeta = warpItem.getItemMeta();
+        ItemStack warpItem = new ItemStack(this.category.getMaterial());
+        ItemMeta warpItemMeta = warpItem.getItemMeta();
         warpItemMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&',
                 String.format("&f&l%s", this.name)));
         warpItemMeta.setLore(Arrays.asList(

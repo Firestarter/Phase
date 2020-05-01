@@ -7,7 +7,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.scheduler.BukkitRunnable;
 import xyz.nkomarn.Phase.Phase;
 import xyz.nkomarn.Phase.gui.GUIHolder;
 import xyz.nkomarn.Phase.gui.GUIType;
@@ -18,7 +17,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class PublicWarps {
-    public PublicWarps(final Player player, final int page) {
+    public PublicWarps(Player player, int page) {
         Inventory menu = Bukkit.createInventory(new GUIHolder(GUIType.PUBLIC_WARPS, page), 45,
                 String.format("Public Warps (Page %s)", page));
 
@@ -50,9 +49,9 @@ public class PublicWarps {
         menu.setItem(41, next);
 
         Bukkit.getScheduler().runTaskAsynchronously(Phase.getPhase(), () -> {
-            final ArrayList<Warp> warps = Search.getPublicWarps();
-            final int startingIndex = Math.min(Math.max(36 * (page - 1), 0), warps.size());
-            final int endingIndex = Math.min(Math.max(36 * page, startingIndex), warps.size());
+            ArrayList<Warp> warps = Search.getPublicWarps();
+            int startingIndex = Math.min(Math.max(36 * (page - 1), 0), warps.size());
+            int endingIndex = Math.min(Math.max(36 * page, startingIndex), warps.size());
             warps.subList(startingIndex, endingIndex).forEach(warp ->
                     menu.setItem(warps.indexOf(warp) % 36, warp.getItemStack()));
             Bukkit.getScheduler().runTask(Phase.getPhase(), () -> player.openInventory(menu));

@@ -40,9 +40,8 @@ public class WarpAdminCommand implements TabExecutor {
                                     "%sSpecify a warp to view info for.", Config.getPrefix()
                             )));
                         } else {
-                            final String warpName = WarpUtil.argsToString(Arrays.copyOfRange(args, 1, args.length));
+                            Warp warp = Search.getWarpByName(WarpUtil.argsToString(Arrays.copyOfRange(args, 1, args.length)));
 
-                            final Warp warp = Search.getWarpByName(warpName);
                             if (warp == null) {
                                 sender.sendMessage(ChatColor.translateAlternateColorCodes('&', String.format(
                                         "%sA warp by that name does not exist.", Config.getPrefix()
@@ -50,9 +49,9 @@ public class WarpAdminCommand implements TabExecutor {
                             } else {
                                 StringBuilder information = new StringBuilder();
                                 information.append(String.format("%sInfo for warp '%s':\n", Config.getPrefix(), warp.getName()));
-                                final OfflinePlayer owner = Bukkit.getOfflinePlayer(warp.getOwnerUUID());
+                                OfflinePlayer owner = Bukkit.getOfflinePlayer(warp.getOwnerUUID());
                                 information.append(String.format(ChatColor.GRAY + " Owner: &e%s&7 (%s)\n", owner.getName(), warp.getOwnerUUID().toString()));
-                                final Location warpLocation = warp.getLocation();
+                                Location warpLocation = warp.getLocation();
                                 information.append(String.format(ChatColor.GRAY + " X: &e%s&7, Y: &e%s&7, Z: &e%s&7, " +
                                                 "pitch: &e%s&7, yaw: &e%s&7\n",
                                         (int) warpLocation.getX(), (int) warpLocation.getY(), (int) warpLocation.getZ(),
@@ -71,12 +70,10 @@ public class WarpAdminCommand implements TabExecutor {
                                     "%sSpecify the warp for which to toggle featured status.", Config.getPrefix()
                             )));
                         } else {
-                            final String warpName = WarpUtil.argsToString(Arrays.copyOfRange(args, 1, args.length));
-
                             try (Connection connection = LocalStorage.getConnection()) {
                                 try (PreparedStatement statement = connection.prepareStatement("UPDATE `warps` SET `featured` = NOT " +
                                         "featured WHERE name LIKE ?;")) {
-                                    statement.setString(1, warpName);
+                                    statement.setString(1, WarpUtil.argsToString(Arrays.copyOfRange(args, 1, args.length)));
                                     statement.executeUpdate();
 
                                     sender.sendMessage(ChatColor.translateAlternateColorCodes('&', String.format("%sToggled " +
@@ -93,11 +90,9 @@ public class WarpAdminCommand implements TabExecutor {
                                     "%sSpecify a warp to delete.", Config.getPrefix()
                             )));
                         } else {
-                            final String warpName = WarpUtil.argsToString(Arrays.copyOfRange(args, 1, args.length));
-
                             try (Connection connection = LocalStorage.getConnection()) {
                                 try (PreparedStatement statement = connection.prepareStatement("DELETE FROM warps WHERE name LIKE ?;")) {
-                                    statement.setString(1, warpName);
+                                    statement.setString(1,  WarpUtil.argsToString(Arrays.copyOfRange(args, 1, args.length)));
                                     statement.execute();
 
                                     sender.sendMessage(ChatColor.translateAlternateColorCodes('&', String.format("%sDeleted " +

@@ -14,7 +14,7 @@ import xyz.nkomarn.Phase.type.Warp;
 import java.util.Arrays;
 
 public class CategoryPicker {
-    public CategoryPicker(final Player player, final Warp warp) {
+    public CategoryPicker(Player player, Warp warp) {
         Inventory menu = Bukkit.createInventory(new GUIHolder(GUIType.CATEGORY_PICKER, 1, warp.getName()), 9, "Select Category");
 
         ItemStack glass = new ItemStack(Material.WHITE_STAINED_GLASS_PANE, 1);
@@ -24,7 +24,7 @@ public class CategoryPicker {
         Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8).forEach(slot -> menu.setItem(slot, glass));
 
         int i = 0;
-        for (final Category category : Category.values()) {
+        for (Category category : Category.values()) {
             ItemStack categoryItem = new ItemStack(category.getMaterial());
             ItemMeta categoryItemMeta = categoryItem.getItemMeta();
             categoryItemMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', String.format(

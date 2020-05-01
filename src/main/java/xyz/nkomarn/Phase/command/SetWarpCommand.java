@@ -28,7 +28,7 @@ public class SetWarpCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
         if (!(sender instanceof Player)) return true;
 
-        final Player player = (Player) sender;
+        Player player = (Player) sender;
 
         if (args.length < 1) {
             player.sendMessage(ChatColor.translateAlternateColorCodes('&', String.format(
@@ -36,11 +36,11 @@ public class SetWarpCommand implements CommandExecutor {
             )));
             return true;
         } else {
-            final String warpName = WarpUtil.argsToString(args);
+            String warpName = WarpUtil.argsToString(args);
 
             Bukkit.getScheduler().runTaskAsynchronously(Phase.getPhase(), () -> {
-                final Warp warp = Search.getWarpByName(warpName);
-                final Location warpLocation = player.getLocation();
+                Warp warp = Search.getWarpByName(warpName);
+                Location warpLocation = player.getLocation();
 
                 if (warp != null) {
                     player.sendMessage(ChatColor.translateAlternateColorCodes('&', String.format(

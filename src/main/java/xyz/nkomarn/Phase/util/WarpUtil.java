@@ -26,8 +26,8 @@ public class WarpUtil {
      * @param player Player to teleport.
      * @param warp The warp object.
      */
-    public static void warpPlayer(final Player player, final Warp warp) {
-        final Location location = warp.getLocation();
+    public static void warpPlayer(Player player, Warp warp) {
+        Location location = warp.getLocation();
 
         try {
             LocationUtil.teleportPlayer(player, location);
@@ -45,9 +45,9 @@ public class WarpUtil {
             e.printStackTrace();
         }
 
-        final OfflinePlayer ownerOffline = Bukkit.getOfflinePlayer(warp.getOwnerUUID());
+        OfflinePlayer ownerOffline = Bukkit.getOfflinePlayer(warp.getOwnerUUID());
         if (ownerOffline.isOnline()) {
-            final Player owner = (Player) ownerOffline;
+            Player owner = (Player) ownerOffline;
             Bukkit.getScheduler().runTask(Phase.getPhase(), () -> {
                 if (warp.getVisits() >= 1000) {
                     AdvancementUtil.grantAdvancement(owner, "warp-visits-1");
@@ -61,9 +61,9 @@ public class WarpUtil {
      * Adds a warp object into the database.
      * @param warp The warp object to insert.
      */
-    public static void createWarp(final Warp warp) {
-        final Location location = warp.getLocation();
-        final String query = "INSERT INTO warps (name, owner, visits, category, featured, expired, renewed, x, y, z, " +
+    public static void createWarp(Warp warp) {
+        Location location = warp.getLocation();
+        String query = "INSERT INTO warps (name, owner, visits, category, featured, expired, renewed, x, y, z, " +
                 "pitch, yaw, world) VALUES (?, ?, ?, ?, ?, ?, ?, ? ,?, ?, ?, ?, ?);";
 
         try (Connection connection = LocalStorage.getConnection()) {
@@ -83,9 +83,9 @@ public class WarpUtil {
                 statement.setString(13, location.getWorld().getUID().toString());
                 statement.execute();
 
-                final OfflinePlayer ownerOffline = Bukkit.getOfflinePlayer(warp.getOwnerUUID());
+                OfflinePlayer ownerOffline = Bukkit.getOfflinePlayer(warp.getOwnerUUID());
                 if (ownerOffline.isOnline()) {
-                    final Player owner = (Player) ownerOffline;
+                    Player owner = (Player) ownerOffline;
                     Bukkit.getScheduler().runTask(Phase.getPhase(), () -> AdvancementUtil
                             .grantAdvancement(owner, "warp-create"));
                 }
@@ -96,9 +96,9 @@ public class WarpUtil {
         } catch (SQLException e) {
             e.printStackTrace();
 
-            final OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(warp.getOwnerUUID());
+            OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(warp.getOwnerUUID());
             if (offlinePlayer.isOnline()) {
-                final Player player = (Player) offlinePlayer;
+                Player player = (Player) offlinePlayer;
                 player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cAn error " +
                                 "occurred while creating your warp- notify an admin."));
                 player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_LAND, 1.0f, 1.0f);
@@ -106,7 +106,7 @@ public class WarpUtil {
         }
     }
 
-    public static void changeWarpCategory(final String warpName, final Category category) {
+    public static void changeWarpCategory(String warpName, Category category) {
         try (Connection connection = LocalStorage.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement("UPDATE warps SET category = ? WHERE name LIKE ?;")) {
                 statement.setString(1, category.getName());
@@ -118,7 +118,7 @@ public class WarpUtil {
         }
     }
 
-    public static void renameWarp(final String warpName, final String newName) {
+    public static void renameWarp(String warpName, String newName) {
         try (Connection connection = LocalStorage.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement("UPDATE warps SET name = ? WHERE name LIKE ?;")) {
                 statement.setString(1, newName);
@@ -130,7 +130,7 @@ public class WarpUtil {
         }
     }
 
-    public static void relocateWarp(final String warpName, final Location newLocation) {
+    public static void relocateWarp(String warpName, Location newLocation) {
         try (Connection connection = LocalStorage.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement("UPDATE warps SET x = ?, y = ?, z = ?, " +
                     "pitch = ?, yaw = ?, world = ? WHERE name LIKE ?;")) {
@@ -148,7 +148,7 @@ public class WarpUtil {
         }
     }
 
-    public static void delete(final String warpName) {
+    public static void delete(String warpName) {
         try (Connection connection = LocalStorage.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement("DELETE FROM warps WHERE name LIKE ?;")) {
                 statement.setString(1, warpName);
@@ -159,12 +159,12 @@ public class WarpUtil {
         }
     }
 
-    public static String formatNumber(final int number) {
+    public static String formatNumber(int number) {
         return FORMATTER.format(number);
     }
 
-    public static String argsToString(final String[] args) {
-        final StringBuilder builder = new StringBuilder();
+    public static String argsToString(String[] args) {
+        StringBuilder builder = new StringBuilder();
         Arrays.stream(args).forEach(arg -> builder.append(arg).append(" "));
         return builder.toString().trim();
     }

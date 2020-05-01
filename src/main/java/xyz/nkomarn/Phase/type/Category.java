@@ -17,7 +17,7 @@ public enum Category {
     private final String name;
     private final Material material;
 
-    Category(final String name, final Material material) {
+    Category(String name, Material material) {
         this.name = name;
         this.material = material;
     }

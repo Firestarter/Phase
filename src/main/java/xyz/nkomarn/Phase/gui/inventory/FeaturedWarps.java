@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class FeaturedWarps {
-    public FeaturedWarps(final Player player, final int page) {
+    public FeaturedWarps(Player player, int page) {
         Inventory menu = Bukkit.createInventory(new GUIHolder(GUIType.FEATURED_WARPS, page), 45,
                 String.format("Featured Warps (Page %s)", page));
 
@@ -44,9 +44,9 @@ public class FeaturedWarps {
             @Override
             public void run() {
                 ArrayList<Warp> warps = Search.getFeaturedWarps();
-                final int totalWarps = warps.size();
-                final int startingIndex = Math.min(Math.max(36 * (page - 1), 0), totalWarps);
-                final int endingIndex = Math.min(Math.max(36 * page, startingIndex), warps.size());
+                int totalWarps = warps.size();
+                int startingIndex = Math.min(Math.max(36 * (page - 1), 0), totalWarps);
+                int endingIndex = Math.min(Math.max(36 * page, startingIndex), warps.size());
                 warps.subList(startingIndex, endingIndex).forEach(warp -> menu.setItem(warps.indexOf(warp) % 36, warp.getItemStack()));
                 player.openInventory(menu);
             }

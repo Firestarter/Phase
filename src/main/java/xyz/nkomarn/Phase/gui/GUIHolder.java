@@ -4,17 +4,16 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 
 public class GUIHolder implements InventoryHolder {
-    private GUIType type;
-    private int page;
+    private final GUIType type;
+    private final int page;
     private String data;
 
-    public GUIHolder(final GUIType type, final int page) {
+    public GUIHolder(GUIType type, int page) {
         this.type = type;
         this.page = page;
     }
 
-    public GUIHolder(final GUIType type, final int page,
-                     final String data) {
+    public GUIHolder(GUIType type, int page, String data) {
         this.type = type;
         this.page = page;
         this.data = data;

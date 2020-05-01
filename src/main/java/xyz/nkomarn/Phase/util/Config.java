@@ -18,7 +18,7 @@ public class Config {
      * if location is not found, <code>false</code> is returned
      * @param location Configuration location of the boolean
      */
-    public static boolean getBoolean(final String location) {
+    public static boolean getBoolean(String location) {
         return Phase.getPhase().getConfig().getBoolean(location, false);
     }
 
@@ -27,7 +27,7 @@ public class Config {
      * if location is not found, <code>empty string</code> is returned
      * @param location Configuration location of the string
      */
-    public static String getString(final String location) {
+    public static String getString(String location) {
         return Phase.getPhase().getConfig().getString(location, "");
     }
 
@@ -36,7 +36,7 @@ public class Config {
      * if location is not found, <code>0</code> is returned
      * @param location Configuration location of the integer
      */
-    public static int getInteger(final String location) {
+    public static int getInteger(String location) {
         return Phase.getPhase().getConfig().getInt(location, 0);
     }
 
@@ -45,7 +45,7 @@ public class Config {
      * if location is not found, <code>0.0</code> is returned
      * @param location Configuration location of the double
      */
-    public static double getDouble(final String location) {
+    public static double getDouble(String location) {
         return Phase.getPhase().getConfig().getDouble(location, 0.0);
     }
 
@@ -54,7 +54,7 @@ public class Config {
      * if location is not found, <code>empty list</code> is returned
      * @param location Configuration location of the list
      */
-    public static List<String> getList(final String location) {
+    public static List<String> getList(String location) {
         return (List<String>) Phase.getPhase().getConfig().getList(location, new ArrayList<>());
     }
 }

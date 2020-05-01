@@ -34,7 +34,7 @@ public class Search {
      * @param uuid Player's UUID
      * @return ArrayList of player's warps
      */
-    public static ArrayList<Warp> getPlayerWarps(final UUID uuid) {
+    public static ArrayList<Warp> getPlayerWarps(UUID uuid) {
         try (Connection connection = LocalStorage.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM warps WHERE owner = ? " +
                     "ORDER BY visits DESC;")) {
@@ -54,7 +54,7 @@ public class Search {
     public static ArrayList<Warp> getFeaturedWarps() {
         return (ArrayList<Warp>) getPublicWarps().stream()
                 .filter(Warp::isFeatured)
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()); // TODO lolwat is this
     }
 
     /**
@@ -62,12 +62,12 @@ public class Search {
      * @param name Warp name (case insensitive)
      * @return Warp object or null in the case of a warp not being found
      */
-    public static Warp getWarpByName(final String name) {
+    public static Warp getWarpByName(String name) {
         try (Connection connection = LocalStorage.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM warps WHERE name LIKE ?;")) {
                 statement.setString(1, name);
                 try (ResultSet results = statement.executeQuery()) {
-                    final ArrayList<Warp> warpResults = resultSetToArray(results);
+                    ArrayList<Warp> warpResults = resultSetToArray(results);
                     if (warpResults.size() > 0) return warpResults.get(0);
                 }
             }
@@ -82,7 +82,7 @@ public class Search {
      * @param category Selected category to search for
      * @return ArrayList of warps that match the category
      */
-    public static ArrayList<Warp> getWarpsByCategory(final String category) {
+    public static ArrayList<Warp> getWarpsByCategory(String category) {
         try (Connection connection = LocalStorage.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM warps WHERE category = ? " +
                     "ORDER BY visits DESC;")) {
@@ -99,7 +99,7 @@ public class Search {
      * Increments the visit count for a warp
      * @param warp Warp object to increment
      */
-    public static void incrementVisits(final Warp warp) {
+    public static void incrementVisits(Warp warp) {
         try (Connection connection = LocalStorage.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement("UPDATE warps SET visits = visits + 1 " +
                     "WHERE name LIKE ?;")) {
@@ -116,8 +116,8 @@ public class Search {
      * @param results Results from a database query.
      * @return ArrayList of warp objects.
      */
-    private static ArrayList<Warp> resultSetToArray(final ResultSet results) {
-        final ArrayList<Warp> warps = new ArrayList<>();
+    private static ArrayList<Warp> resultSetToArray(ResultSet results) {
+        ArrayList<Warp> warps = new ArrayList<>();
         try {
             while (results.next()) {
                 warps.add(new Warp(results.getString(2), results.getString(3), results.getInt(4),
