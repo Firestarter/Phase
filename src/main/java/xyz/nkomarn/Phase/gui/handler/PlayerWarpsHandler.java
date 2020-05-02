@@ -37,9 +37,7 @@ public class PlayerWarpsHandler implements GUIHandler {
                     != Material.WHITE_STAINED_GLASS_PANE) {
                 String name = ChatColor.stripColor(clickedItem.getItemMeta().getDisplayName());
                 if (name.trim().length() < 1) return;
-                Warp warp = Search.getWarpByName(name);
-                if (warp == null) return;
-                new OptionsMenu(player, warp);
+                Search.getWarpByName(name).ifPresent(warp -> new OptionsMenu(player, warp));
             }
         }
     }

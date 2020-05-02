@@ -19,6 +19,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 public class WarpAdminCommand implements TabExecutor {
     @Override
@@ -40,26 +41,26 @@ public class WarpAdminCommand implements TabExecutor {
                                     "%sSpecify a warp to view info for.", Config.getPrefix()
                             )));
                         } else {
-                            Warp warp = Search.getWarpByName(WarpUtil.argsToString(Arrays.copyOfRange(args, 1, args.length)));
+                            Optional<Warp> warp = Search.getWarpByName(WarpUtil.argsToString(Arrays.copyOfRange(args, 1, args.length)));
 
-                            if (warp == null) {
+                            if (warp.isEmpty()) {
                                 sender.sendMessage(ChatColor.translateAlternateColorCodes('&', String.format(
                                         "%sA warp by that name does not exist.", Config.getPrefix()
                                 )));
                             } else {
                                 StringBuilder information = new StringBuilder();
-                                information.append(String.format("%sInfo for warp '%s':\n", Config.getPrefix(), warp.getName()));
-                                OfflinePlayer owner = Bukkit.getOfflinePlayer(warp.getOwnerUUID());
-                                information.append(String.format(ChatColor.GRAY + " Owner: &e%s&7 (%s)\n", owner.getName(), warp.getOwnerUUID().toString()));
-                                Location warpLocation = warp.getLocation();
+                                information.append(String.format("%sInfo for warp '%s':\n", Config.getPrefix(), warp.get().getName()));
+                                OfflinePlayer owner = Bukkit.getOfflinePlayer(warp.get().getOwnerUUID());
+                                information.append(String.format(ChatColor.GRAY + " Owner: &e%s&7 (%s)\n", owner.getName(), warp.get().getOwnerUUID().toString()));
+                                Location warpLocation = warp.get().getLocation();
                                 information.append(String.format(ChatColor.GRAY + " X: &e%s&7, Y: &e%s&7, Z: &e%s&7, " +
                                                 "pitch: &e%s&7, yaw: &e%s&7\n",
                                         (int) warpLocation.getX(), (int) warpLocation.getY(), (int) warpLocation.getZ(),
                                         (int) warpLocation.getPitch(), (int) warpLocation.getYaw()));
-                                information.append(String.format(ChatColor.GRAY + " Visits: &e%s&7\n", warp.getVisits()));
-                                information.append(String.format(ChatColor.GRAY + " Featured: &e%s&7\n", warp.isFeatured()));
-                                information.append(String.format(ChatColor.GRAY + " Expired: &e%s&7\n", warp.isExpired()));
-                                information.append(String.format(ChatColor.GRAY + " Last renewed: &e%s\n", warp.getRenewedTime()));
+                                information.append(String.format(ChatColor.GRAY + " Visits: &e%s&7\n", warp.get().getVisits()));
+                                information.append(String.format(ChatColor.GRAY + " Featured: &e%s&7\n", warp.get().isFeatured()));
+                                information.append(String.format(ChatColor.GRAY + " Expired: &e%s&7\n", warp.get().isExpired()));
+                                information.append(String.format(ChatColor.GRAY + " Last renewed: &e%s\n", warp.get().getRenewedTime()));
                                 sender.sendMessage(ChatColor.translateAlternateColorCodes('&', information.toString()));
                             }
                         }

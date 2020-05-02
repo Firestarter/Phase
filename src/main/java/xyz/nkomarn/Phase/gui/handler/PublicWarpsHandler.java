@@ -13,6 +13,8 @@ import xyz.nkomarn.Phase.type.Warp;
 import xyz.nkomarn.Phase.util.Search;
 import xyz.nkomarn.Phase.util.WarpUtil;
 
+import java.util.Optional;
+
 public class PublicWarpsHandler implements GUIHandler {
     @Override
     public void handle(Player player, int slot, InventoryClickEvent event) {
@@ -36,9 +38,7 @@ public class PublicWarpsHandler implements GUIHandler {
                     != Material.WHITE_STAINED_GLASS_PANE) {
                 String name = ChatColor.stripColor(clickedItem.getItemMeta().getDisplayName());
                 if (name.trim().length() < 1) return;
-                Warp warp = Search.getWarpByName(name);
-                if (warp == null) return;
-                WarpUtil.warpPlayer(player, warp);
+                Search.getWarpByName(name).ifPresent(warp -> WarpUtil.warpPlayer(player, warp));
             }
         }
     }

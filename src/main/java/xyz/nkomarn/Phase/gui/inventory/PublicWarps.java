@@ -10,11 +10,10 @@ import org.bukkit.inventory.meta.ItemMeta;
 import xyz.nkomarn.Phase.Phase;
 import xyz.nkomarn.Phase.gui.GUIHolder;
 import xyz.nkomarn.Phase.gui.GUIType;
-import xyz.nkomarn.Phase.type.Warp;
 import xyz.nkomarn.Phase.util.Search;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class PublicWarps {
     public PublicWarps(Player player, int page) {
@@ -49,11 +48,8 @@ public class PublicWarps {
         menu.setItem(41, next);
 
         Bukkit.getScheduler().runTaskAsynchronously(Phase.getPhase(), () -> {
-            ArrayList<Warp> warps = Search.getPublicWarps();
-            int startingIndex = Math.min(Math.max(36 * (page - 1), 0), warps.size());
-            int endingIndex = Math.min(Math.max(36 * page, startingIndex), warps.size());
-            warps.subList(startingIndex, endingIndex).forEach(warp ->
-                    menu.setItem(warps.indexOf(warp) % 36, warp.getItemStack()));
+            AtomicInteger slot = new AtomicInteger();
+            Search.getPublicWarpsPage(page).forEach(warp -> menu.setItem(slot.getAndIncrement(), warp.getItemStack()));
             Bukkit.getScheduler().runTask(Phase.getPhase(), () -> player.openInventory(menu));
         });
     }

@@ -33,9 +33,7 @@ public class FeaturedWarpsHandler implements GUIHandler {
                     != Material.WHITE_STAINED_GLASS_PANE) {
                 String name = ChatColor.stripColor(clickedItem.getItemMeta().getDisplayName());
                 if (name.trim().length() < 1) return;
-                Warp warp = Search.getWarpByName(name);
-                if (warp == null) return;
-                WarpUtil.warpPlayer(player, warp);
+                Search.getWarpByName(name).ifPresent(warp -> WarpUtil.warpPlayer(player, warp));
             }
         }
     }

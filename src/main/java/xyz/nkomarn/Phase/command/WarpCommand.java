@@ -17,9 +17,9 @@ import xyz.nkomarn.Phase.util.WarpUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class WarpCommand implements TabExecutor {
-
     @Override
     public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
         if (!(sender instanceof Player)) return true;
@@ -34,13 +34,13 @@ public class WarpCommand implements TabExecutor {
             String warpName = WarpUtil.argsToString(args);
 
             Bukkit.getScheduler().runTaskAsynchronously(Phase.getPhase(), () -> {
-                Warp warp = Search.getWarpByName(warpName);
-                if (warp == null) {
+                Optional<Warp> warp = Search.getWarpByName(warpName);
+                if (warp.isEmpty()) {
                     player.sendMessage(ChatColor.translateAlternateColorCodes('&', String.format(
                             "%sWarp '%s' doesn't exist.", Config.getPrefix(), warpName
                     )));
                 } else {
-                    WarpUtil.warpPlayer(player, warp);
+                    WarpUtil.warpPlayer(player, warp.get());
                 }
             });
         }

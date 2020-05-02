@@ -16,8 +16,10 @@ import xyz.nkomarn.Phase.util.Config;
 import xyz.nkomarn.Phase.util.Search;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class PlayerWarps {
     public PlayerWarps(Player player, int page) {
@@ -53,16 +55,12 @@ public class PlayerWarps {
         next.setItemMeta(nextMeta);
         menu.setItem(41, next);
 
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                ArrayList<Warp> warps = Search.getPlayerWarps(player.getUniqueId());
-                int totalWarps = warps.size();
-                int startingIndex = Math.min(Math.max(36 * (page - 1), 0), totalWarps);
-                int endingIndex = Math.min(Math.max(36 * page, startingIndex), warps.size());
-                warps.subList(startingIndex, endingIndex).forEach(warp -> menu.setItem(warps.indexOf(warp) % 36, warp.getItemStack()));
-                player.openInventory(menu);
-            }
-        }.runTask(Phase.getPhase());
+        Bukkit.getScheduler().runTaskAsynchronously(Phase.getPhase(), () -> {
+            List<Warp> warps = Search.getPlayerWarps(player.getUniqueId());
+            int start = Math.min(Math.max(36 * (page - 1), 0), warps.size());
+            int end = Math.min(Math.max(36 * page, start), warps.size());
+            warps.subList(start, end).forEach(warp -> menu.setItem(warps.indexOf(warp) % 36, warp.getItemStack()));
+            Bukkit.getScheduler().runTask(Phase.getPhase(), () -> player.openInventory(menu));
+        });
     }
 }

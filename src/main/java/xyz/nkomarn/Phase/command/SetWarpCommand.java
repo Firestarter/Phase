@@ -18,6 +18,7 @@ import xyz.nkomarn.Phase.util.Search;
 import xyz.nkomarn.Phase.util.WarpUtil;
 
 import java.text.DecimalFormat;
+import java.util.Optional;
 import java.util.regex.Pattern;
 
 public class SetWarpCommand implements CommandExecutor {
@@ -39,10 +40,10 @@ public class SetWarpCommand implements CommandExecutor {
             String warpName = WarpUtil.argsToString(args);
 
             Bukkit.getScheduler().runTaskAsynchronously(Phase.getPhase(), () -> {
-                Warp warp = Search.getWarpByName(warpName);
+                Optional<Warp> warp = Search.getWarpByName(warpName);
                 Location warpLocation = player.getLocation();
 
-                if (warp != null) {
+                if (warp.isPresent()) {
                     player.sendMessage(ChatColor.translateAlternateColorCodes('&', String.format(
                             "%sA warp with the name '%s' already exists.", Config.getPrefix(), warpName
                     )));

@@ -17,23 +17,25 @@ import xyz.nkomarn.Phase.util.Config;
 import xyz.nkomarn.Phase.util.Search;
 import xyz.nkomarn.Phase.util.WarpUtil;
 
+import java.util.Optional;
+
 public class OptionsHandler implements GUIHandler {
     String prefix = Config.getString("messages.prefix");
 
     @Override
     public void handle(Player player, int slot, InventoryClickEvent event) {
         GUIHolder holder = (GUIHolder) event.getInventory().getHolder();
-        Warp warp = Search.getWarpByName(holder.getData().toLowerCase());
-        if (warp == null) return;
+        Optional<Warp> warp = Search.getWarpByName(holder.getData().toLowerCase());
+        if (warp.isEmpty()) return;
         player.closeInventory();
 
         if (slot == 2) {
-            Bukkit.getScheduler().runTaskAsynchronously(Phase.getPhase(), () -> WarpUtil.warpPlayer(player, warp));
+            Bukkit.getScheduler().runTaskAsynchronously(Phase.getPhase(), () -> WarpUtil.warpPlayer(player, warp.get()));
         } else if (slot == 3) {
             new AnvilGUI.Builder()
                     .onComplete((p, text) -> {
-                        Warp existingWarp = Search.getWarpByName(text);
-                        if (existingWarp != null) {
+                        Optional<Warp> existingWarp = Search.getWarpByName(text);
+                        if (existingWarp.isPresent()) {
                             p.sendMessage(ChatColor.translateAlternateColorCodes('&', String.format(
                                     "%sA warp by the name '%s' already exists.", prefix, text
                             )));
@@ -42,7 +44,7 @@ public class OptionsHandler implements GUIHandler {
                         }
 
                         Bukkit.getScheduler().runTaskAsynchronously(Phase.getPhase(), () ->
-                                WarpUtil.renameWarp(warp.getName(), ChatColor.stripColor(text)));
+                                WarpUtil.renameWarp(warp.get().getName(), ChatColor.stripColor(text)));
                         p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 1.0f, 1.0f);
                         player.sendTitle(ChatColor.translateAlternateColorCodes('&',
                                 "&6&lRenamed warp."), ChatColor.translateAlternateColorCodes('&',
@@ -61,15 +63,15 @@ public class OptionsHandler implements GUIHandler {
                         "%sYou can't move warps to others' claims.", prefix
                 )));
             } else {
-                WarpUtil.relocateWarp(warp.getName(), player.getLocation());
+                WarpUtil.relocateWarp(warp.get().getName(), player.getLocation());
                 player.sendTitle(ChatColor.translateAlternateColorCodes('&', "&6&lRelocated"),
                         ChatColor.translateAlternateColorCodes('&', "The warp is now at your location."));
                 player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 1.0f, 1.0f);
             }
         } else if (slot == 5) {
-            new CategoryPicker(player, warp);
+            new CategoryPicker(player, warp.get());
         } else if (slot == 6) {
-            WarpUtil.delete(warp.getName());
+            WarpUtil.delete(warp.get().getName());
             player.sendTitle(ChatColor.translateAlternateColorCodes('&', "&c&lDeleted"),
                     ChatColor.translateAlternateColorCodes('&', "The warp was blown away with the wind."));
             player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_LAND, 1.0f, 1.0f);
