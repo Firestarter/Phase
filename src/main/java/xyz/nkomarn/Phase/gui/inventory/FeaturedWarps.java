@@ -7,21 +7,18 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.scheduler.BukkitRunnable;
 import xyz.nkomarn.Phase.Phase;
-import xyz.nkomarn.Phase.gui.GUIHolder;
-import xyz.nkomarn.Phase.gui.GUIType;
+import xyz.nkomarn.Phase.gui.GuiHolder;
+import xyz.nkomarn.Phase.gui.GuiType;
 import xyz.nkomarn.Phase.type.Warp;
 import xyz.nkomarn.Phase.util.Search;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class FeaturedWarps {
     public FeaturedWarps(Player player, int page) {
-        Inventory menu = Bukkit.createInventory(new GUIHolder(GUIType.FEATURED_WARPS, page), 45,
+        Inventory menu = Bukkit.createInventory(new GuiHolder(GuiType.FEATURED_WARPS, page), 45,
                 String.format("Featured Warps (Page %s)", page));
 
         ItemStack glass = new ItemStack(Material.WHITE_STAINED_GLASS_PANE, 1);

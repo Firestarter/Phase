@@ -7,15 +7,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import xyz.nkomarn.Phase.gui.GUIHolder;
-import xyz.nkomarn.Phase.gui.GUIType;
+import xyz.nkomarn.Phase.gui.GuiHolder;
+import xyz.nkomarn.Phase.gui.GuiType;
 import xyz.nkomarn.Phase.type.Category;
 
 import java.util.Arrays;
 
 public class FilterMenu {
     public FilterMenu(Player player) {
-        Inventory menu = Bukkit.createInventory(new GUIHolder(GUIType.FILTER, 1), 9, "Filter by Category");
+        Inventory menu = Bukkit.createInventory(new GuiHolder(GuiType.FILTER, 1), 9, "Filter by Category");
 
         ItemStack glass = new ItemStack(Material.WHITE_STAINED_GLASS_PANE, 1);
         ItemMeta glassMeta = glass.getItemMeta();

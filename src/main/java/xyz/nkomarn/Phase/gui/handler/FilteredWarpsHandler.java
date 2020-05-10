@@ -5,20 +5,17 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
-import xyz.nkomarn.Phase.gui.GUIHolder;
+import xyz.nkomarn.Phase.gui.GuiHolder;
 import xyz.nkomarn.Phase.gui.inventory.FilterMenu;
 import xyz.nkomarn.Phase.gui.inventory.FilteredWarps;
 import xyz.nkomarn.Phase.gui.inventory.MainMenu;
-import xyz.nkomarn.Phase.type.Warp;
 import xyz.nkomarn.Phase.util.Search;
 import xyz.nkomarn.Phase.util.WarpUtil;
 
-import java.util.Optional;
-
-public class FilteredWarpsHandler implements GUIHandler {
+public class FilteredWarpsHandler implements GuiHandler {
     @Override
     public void handle(Player player, int slot, InventoryClickEvent event) {
-        GUIHolder holder = (GUIHolder) event.getInventory().getHolder();
+        GuiHolder holder = (GuiHolder) event.getInventory().getHolder();
         int page = holder.getPage();
         String category = holder.getData();
 

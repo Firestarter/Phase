@@ -7,14 +7,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import xyz.nkomarn.Phase.gui.GUIHolder;
-import xyz.nkomarn.Phase.gui.GUIType;
+import xyz.nkomarn.Phase.gui.GuiHolder;
+import xyz.nkomarn.Phase.gui.GuiType;
 
 import java.util.Arrays;
 
 public class MainMenu {
     public MainMenu(Player player) {
-        Inventory menu = Bukkit.createInventory(new GUIHolder(GUIType.MAIN_MENU, 1), 27, "Warps Menu");
+        Inventory menu = Bukkit.createInventory(new GuiHolder(GuiType.MAIN_MENU, 1), 27, "Warps Menu");
         player.openInventory(menu);
 
         ItemStack glass = new ItemStack(Material.WHITE_STAINED_GLASS_PANE, 1);

@@ -7,7 +7,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import xyz.nkomarn.Phase.gui.inventory.FilteredWarps;
 import xyz.nkomarn.Phase.gui.inventory.PublicWarps;
 
-public class FilterHander implements GUIHandler {
+public class FilterHander implements GuiHandler {
     @Override
     public void handle(Player player, int slot, InventoryClickEvent event) {
         if (event.getCurrentItem() == null || event.getCurrentItem().getType() == Material.WHITE_STAINED_GLASS_PANE) return;

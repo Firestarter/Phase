@@ -8,8 +8,8 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import xyz.nkomarn.Phase.Phase;
-import xyz.nkomarn.Phase.gui.GUIHolder;
-import xyz.nkomarn.Phase.gui.GUIType;
+import xyz.nkomarn.Phase.gui.GuiHolder;
+import xyz.nkomarn.Phase.gui.GuiType;
 import xyz.nkomarn.Phase.util.Search;
 
 import java.util.Arrays;
@@ -17,7 +17,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class PublicWarps {
     public PublicWarps(Player player, int page) {
-        Inventory menu = Bukkit.createInventory(new GUIHolder(GUIType.PUBLIC_WARPS, page), 45,
+        Inventory menu = Bukkit.createInventory(new GuiHolder(GuiType.PUBLIC_WARPS, page), 45,
                 String.format("Public Warps (Page %s)", page));
 
         ItemStack glass = new ItemStack(Material.WHITE_STAINED_GLASS_PANE, 1);

@@ -52,7 +52,8 @@ public class WarpCommand implements TabExecutor {
         ArrayList<String> queryResults = new ArrayList<>();
         Search.getPublicWarps().stream()
                 .filter(warp -> warp.getName().toLowerCase().contains(WarpUtil.argsToString(args).toLowerCase()))
-                .forEach(warp -> queryResults.add(warp.getName()));
+                .map(warp -> ChatColor.stripColor(warp.getName()))
+                .forEach(queryResults::add);
         return queryResults;
     }
 }

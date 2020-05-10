@@ -7,15 +7,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import xyz.nkomarn.Phase.gui.GUIHolder;
-import xyz.nkomarn.Phase.gui.GUIType;
+import xyz.nkomarn.Phase.gui.GuiHolder;
+import xyz.nkomarn.Phase.gui.GuiType;
 import xyz.nkomarn.Phase.type.Warp;
 
 import java.util.Arrays;
 
 public class OptionsMenu {
     public OptionsMenu(Player player, Warp warp) {
-        Inventory menu = Bukkit.createInventory(new GUIHolder(GUIType.OPTIONS, 1, warp.getName()), 9,
+        Inventory menu = Bukkit.createInventory(new GuiHolder(GuiType.OPTIONS, 1, warp.getName()), 9,
                 String.format("Options: '%s'", warp.getName()));
         player.openInventory(menu);
 

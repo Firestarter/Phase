@@ -3,17 +3,17 @@ package xyz.nkomarn.Phase.gui;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 
-public class GUIHolder implements InventoryHolder {
-    private final GUIType type;
+public class GuiHolder implements InventoryHolder {
+    private final GuiType type;
     private final int page;
     private String data;
 
-    public GUIHolder(GUIType type, int page) {
+    public GuiHolder(GuiType type, int page) {
         this.type = type;
         this.page = page;
     }
 
-    public GUIHolder(GUIType type, int page, String data) {
+    public GuiHolder(GuiType type, int page, String data) {
         this.type = type;
         this.page = page;
         this.data = data;
@@ -27,7 +27,7 @@ public class GUIHolder implements InventoryHolder {
         return this.page;
     }
 
-    public GUIType getType() {
+    public GuiType getType() {
         return this.type;
     }
 

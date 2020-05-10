@@ -66,7 +66,7 @@ public class Search {
     }
 
     /**
-     * Returns a lost of all of the public featured warps
+     * Returns a list of all of the public featured warps
      * @return ArrayList of all public featured warps
      */
     public static List<Warp> getFeaturedWarps() {
@@ -76,9 +76,9 @@ public class Search {
     }
 
     /**
-     * Returns a public warp by name
-     * @param name Warp name (case insensitive)
-     * @return Warp object or null in the case of a warp not being found
+     * Returns a public warp by name.
+     * @param name Warp name (case insensitive).
+     * @return Warp object or null in the case of a warp not being found.
      */
     public static Optional<Warp> getWarpByName(String name) {
         try (Connection connection = LocalStorage.getConnection()) {

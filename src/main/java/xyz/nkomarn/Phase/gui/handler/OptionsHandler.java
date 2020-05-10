@@ -10,7 +10,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import xyz.nkomarn.Kerosene.util.ClaimUtil;
 import xyz.nkomarn.Phase.Phase;
-import xyz.nkomarn.Phase.gui.GUIHolder;
+import xyz.nkomarn.Phase.gui.GuiHolder;
 import xyz.nkomarn.Phase.gui.inventory.CategoryPicker;
 import xyz.nkomarn.Phase.type.Warp;
 import xyz.nkomarn.Phase.util.Config;
@@ -19,12 +19,12 @@ import xyz.nkomarn.Phase.util.WarpUtil;
 
 import java.util.Optional;
 
-public class OptionsHandler implements GUIHandler {
+public class OptionsHandler implements GuiHandler {
     String prefix = Config.getString("messages.prefix");
 
     @Override
     public void handle(Player player, int slot, InventoryClickEvent event) {
-        GUIHolder holder = (GUIHolder) event.getInventory().getHolder();
+        GuiHolder holder = (GuiHolder) event.getInventory().getHolder();
         Optional<Warp> warp = Search.getWarpByName(holder.getData().toLowerCase());
         if (warp.isEmpty()) return;
         player.closeInventory();

@@ -13,7 +13,7 @@ import xyz.nkomarn.Phase.util.Config;
 
 import java.util.stream.Collectors;
 
-public class MainMenuHandler implements GUIHandler {
+public class MainMenuHandler implements GuiHandler {
     @Override
     public void handle(Player player, int slot, InventoryClickEvent event) {
         if (slot == 10) {
