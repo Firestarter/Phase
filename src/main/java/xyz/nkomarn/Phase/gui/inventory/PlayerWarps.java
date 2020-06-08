@@ -31,7 +31,7 @@ public class PlayerWarps {
 
         ItemStack previous = new ItemStack(Material.SPRUCE_BUTTON, 1);
         ItemMeta previousMeta = previous.getItemMeta();
-        previousMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&6&lPrevious"));
+        previousMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&b&lPrevious"));
         previous.setItemMeta(previousMeta);
         menu.setItem(39, previous);
 
@@ -48,7 +48,7 @@ public class PlayerWarps {
 
         ItemStack next = new ItemStack(Material.SPRUCE_BUTTON, 1);
         ItemMeta nextMeta = next.getItemMeta();
-        nextMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&6&lNext"));
+        nextMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&b&lNext"));
         next.setItemMeta(nextMeta);
         menu.setItem(41, next);
 

@@ -9,6 +9,7 @@ public enum Category {
     ALL("All", Material.BOOK),
     SHOP("Shop", Material.CHEST),
     UTILITY("Utility", Material.ENDER_CHEST),
+    FARM("Farm", Material.WHEAT),
     GRINDER("Grinder", Material.EXPERIENCE_BOTTLE),
     PVP("PvP", Material.GOLDEN_SWORD),
     ATTRACTION("Attraction", Material.FIREWORK_ROCKET),

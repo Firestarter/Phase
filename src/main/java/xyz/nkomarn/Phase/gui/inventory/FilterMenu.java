@@ -5,6 +5,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import xyz.nkomarn.Phase.gui.GuiHolder;
@@ -31,6 +32,7 @@ public class FilterMenu {
                     "&f&l%s", category.getName()
             )));
             categoryItem.setItemMeta(categoryItemMeta);
+            categoryItem.addItemFlags(ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_ATTRIBUTES);
             menu.setItem(i++, categoryItem);
         }
         player.openInventory(menu);

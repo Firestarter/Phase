@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import xyz.nkomarn.Phase.util.WarpUtil;
@@ -80,6 +81,7 @@ public class Warp {
                         WarpUtil.formatNumber(this.visits)))
         ));
         warpItem.setItemMeta(warpItemMeta);
+        warpItem.addItemFlags(ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_ATTRIBUTES);
         return warpItem;
     }
 }
