@@ -34,8 +34,10 @@ public class SignListener implements Listener {
         if (event.getAction() == Action.RIGHT_CLICK_BLOCK && event.getClickedBlock() != null) {
             if (event.getClickedBlock().getType().toString().contains("SIGN")) {
                 Sign sign = (Sign) event.getClickedBlock().getState();
-                Search.getWarpByName(ChatColor.stripColor(sign.getLine(2))).ifPresent(warp ->
-                        WarpUtil.warpPlayer(event.getPlayer(), warp));
+                if (isWarpSign(sign.getLines())) {
+                    Search.getWarpByName(ChatColor.stripColor(sign.getLine(2))).ifPresent(warp ->
+                            WarpUtil.warpPlayer(event.getPlayer(), warp));
+                }
             }
         }
     }
