@@ -8,6 +8,7 @@ import xyz.nkomarn.Phase.command.WarpAdminCommand;
 import xyz.nkomarn.Phase.command.WarpCommand;
 import xyz.nkomarn.Phase.listener.InventoryClickListener;
 import xyz.nkomarn.Phase.listener.PlayerJoinListener;
+import xyz.nkomarn.Phase.listener.SignListener;
 import xyz.nkomarn.Phase.task.ExpirationTask;
 import xyz.nkomarn.Phase.util.Database;
 
@@ -34,6 +35,7 @@ public class Phase extends JavaPlugin {
 
         Bukkit.getPluginManager().registerEvents(new PlayerJoinListener(), this);
         Bukkit.getPluginManager().registerEvents(new InventoryClickListener(), this);
+        Bukkit.getPluginManager().registerEvents(new SignListener(), this);
         getServer().getScheduler().runTaskTimerAsynchronously(this, new ExpirationTask(), 0, 10 * 20);
     }
 
