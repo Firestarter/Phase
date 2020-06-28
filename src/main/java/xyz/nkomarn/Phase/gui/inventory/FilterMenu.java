@@ -31,8 +31,8 @@ public class FilterMenu {
             categoryItemMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', String.format(
                     "&f&l%s", category.getName()
             )));
+            categoryItemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_ATTRIBUTES);
             categoryItem.setItemMeta(categoryItemMeta);
-            categoryItem.addItemFlags(ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_ATTRIBUTES);
             menu.setItem(i++, categoryItem);
         }
         player.openInventory(menu);

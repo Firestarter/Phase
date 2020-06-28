@@ -1,15 +1,12 @@
 package xyz.nkomarn.Phase.listener;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import xyz.nkomarn.Phase.Phase;
 import xyz.nkomarn.Phase.util.Config;
 import xyz.nkomarn.Phase.util.Search;
 import xyz.nkomarn.Phase.util.WarpUtil;

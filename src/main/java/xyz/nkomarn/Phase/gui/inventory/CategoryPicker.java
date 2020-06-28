@@ -32,8 +32,8 @@ public class CategoryPicker {
             categoryItemMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', String.format(
                     "&f&l%s", category.getName()
             )));
+            categoryItemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_ATTRIBUTES);
             categoryItem.setItemMeta(categoryItemMeta);
-            categoryItem.addItemFlags(ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_ATTRIBUTES);
             menu.setItem(slot.incrementAndGet() - 1, categoryItem);
         });
         player.openInventory(menu);

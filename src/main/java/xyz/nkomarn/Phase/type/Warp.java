@@ -80,8 +80,8 @@ public class Warp {
                 ChatColor.translateAlternateColorCodes('&', String.format("&7Visits: &b%s",
                         WarpUtil.formatNumber(this.visits)))
         ));
+        warpItemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_ATTRIBUTES);
         warpItem.setItemMeta(warpItemMeta);
-        warpItem.addItemFlags(ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_ATTRIBUTES);
         return warpItem;
     }
 }
