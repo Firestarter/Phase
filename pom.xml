@@ -22,9 +22,15 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.github.FirestarterMC</groupId>
+            <groupId>xyz.nkomarn</groupId>
             <artifactId>Kerosene</artifactId>
-            <version>cf8ac5280d</version>
+            <version>LATEST</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>xyz.nkomarn</groupId>
+            <artifactId>Campfire</artifactId>
+            <version>LATEST</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -42,7 +48,7 @@
         <dependency>
             <groupId>com.github.WesJD</groupId>
             <artifactId>AnvilGUI</artifactId>
-            <version>ef71db62ec</version>
+            <version>4ea5a77841</version>
         </dependency>
         <dependency>
             <groupId>com.github.FirestarterMC</groupId>

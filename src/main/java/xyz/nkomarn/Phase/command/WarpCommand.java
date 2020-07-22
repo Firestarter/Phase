@@ -7,13 +7,13 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
-import xyz.nkomarn.Kerosene.util.AdvancementUtil;
 import xyz.nkomarn.Phase.Phase;
 import xyz.nkomarn.Phase.gui.inventory.MainMenu;
 import xyz.nkomarn.Phase.type.Warp;
 import xyz.nkomarn.Phase.util.Config;
 import xyz.nkomarn.Phase.util.Search;
 import xyz.nkomarn.Phase.util.WarpUtil;
+import xyz.nkomarn.kerosene.util.Advancement;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +29,7 @@ public class WarpCommand implements TabExecutor {
         if (args.length < 1) {
             new MainMenu(player);
             player.playSound(player.getLocation(), Sound.BLOCK_BEACON_ACTIVATE, 1.0f, 1.0f);
-            AdvancementUtil.grantAdvancement(player, "warp-menu");
+            Advancement.grantAdvancement(player, "warp-menu");
         } else {
             String warpName = WarpUtil.argsToString(args);
 

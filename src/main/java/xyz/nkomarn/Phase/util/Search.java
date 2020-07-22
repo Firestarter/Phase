@@ -1,8 +1,8 @@
 package xyz.nkomarn.Phase.util;
 
+import xyz.nkomarn.Phase.Phase;
 import xyz.nkomarn.Phase.type.Category;
-import xyz.nkomarn.Phase.type.Warp;
-import xyz.nkomarn.Kerosene.data.LocalStorage;
+import xyz.nkomarn.Phase.type.Warp;;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -17,7 +17,7 @@ public class Search {
      * @return ArrayList of every warp object in the database.
      */
     public static List<Warp> getPublicWarps() {
-        try (Connection connection = LocalStorage.getConnection()) {
+        try (Connection connection = Phase.getStorage().getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM warps WHERE expired = 0 " +
                     "ORDER BY visits DESC;")) {
                 return resultToSet(statement.executeQuery());
@@ -34,7 +34,7 @@ public class Search {
      * @return A set of public warps that should go on the page.
      */
     public static List<Warp> getPublicWarpsPage(int page) {
-        try (Connection connection = LocalStorage.getConnection()) {
+        try (Connection connection = Phase.getStorage().getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM (SELECT * FROM warps " +
                     "WHERE expired = 0 ORDER BY visits DESC) LIMIT 36 OFFSET ?;")) {
                 statement.setFetchSize(36);
@@ -53,7 +53,7 @@ public class Search {
      * @return ArrayList of player's warps.
      */
     public static List<Warp> getPlayerWarps(UUID uuid) {
-        try (Connection connection = LocalStorage.getConnection()) {
+        try (Connection connection = Phase.getStorage().getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM warps WHERE owner = ? " +
                     "ORDER BY visits DESC;")) {
                 statement.setString(1, uuid.toString());
@@ -81,7 +81,7 @@ public class Search {
      * @return Warp object or null in the case of a warp not being found.
      */
     public static Optional<Warp> getWarpByName(String name) {
-        try (Connection connection = LocalStorage.getConnection()) {
+        try (Connection connection = Phase.getStorage().getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM warps WHERE name LIKE ?;")) {
                 statement.setString(1, name);
                 try (ResultSet results = statement.executeQuery()) {
@@ -103,7 +103,7 @@ public class Search {
      * @return ArrayList of warps that match the category
      */
     public static List<Warp> getWarpsByCategory(String category) {
-        try (Connection connection = LocalStorage.getConnection()) {
+        try (Connection connection = Phase.getStorage().getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM warps WHERE category = ? " +
                     "ORDER BY visits DESC;")) {
                 statement.setString(1, category);
@@ -120,7 +120,7 @@ public class Search {
      * @param warp Warp object to increment
      */
     public static void incrementVisits(Warp warp) {
-        try (Connection connection = LocalStorage.getConnection()) {
+        try (Connection connection = Phase.getStorage().getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement("UPDATE warps SET visits = visits + 1 " +
                     "WHERE name LIKE ?;")) {
                 statement.setString(1, warp.getName());

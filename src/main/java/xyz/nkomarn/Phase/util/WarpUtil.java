@@ -1,36 +1,33 @@
 package xyz.nkomarn.Phase.util;
 
-import me.ryanhamshire.GriefPrevention.Claim;
-import me.ryanhamshire.GriefPrevention.GriefPrevention;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
-import xyz.nkomarn.Kerosene.util.AdvancementUtil;
-import xyz.nkomarn.Kerosene.util.LocationUtil;
 import xyz.nkomarn.Phase.Phase;
 import xyz.nkomarn.Phase.type.Category;
 import xyz.nkomarn.Phase.type.Warp;
-import xyz.nkomarn.Kerosene.data.LocalStorage;
+import xyz.nkomarn.kerosene.util.Advancement;
+import xyz.nkomarn.kerosene.util.world.Teleport;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.util.Arrays;
-import java.util.Collection;
 
 public class WarpUtil {
     private static final DecimalFormat FORMATTER = new DecimalFormat("#,###");
 
     /**
      * Teleports a player asynchronously to a warp location.
+     *
      * @param player Player to teleport.
-     * @param warp The warp object.
+     * @param warp   The warp object.
      */
     public static void warpPlayer(Player player, Warp warp) {
         Location location = warp.getLocation();
 
         try {
-            LocationUtil.teleportPlayer(player, location);
+            Teleport.teleportPlayer(player, location);
             player.sendTitle(ChatColor.translateAlternateColorCodes('&',
                     "&6&lWhoosh."), ChatColor.translateAlternateColorCodes('&',
                     String.format("You've arrived safely at '%s'.", warp.getName())), 10, 70, 20);
@@ -50,8 +47,8 @@ public class WarpUtil {
             Player owner = (Player) ownerOffline;
             Bukkit.getScheduler().runTask(Phase.getPhase(), () -> {
                 if (warp.getVisits() >= 1000) {
-                    AdvancementUtil.grantAdvancement(owner, "warp-visits-1");
-                    if (warp.getVisits() >= 10000) AdvancementUtil.grantAdvancement(owner, "warp-visits-2");
+                    Advancement.grantAdvancement(owner, "warp-visits-1");
+                    if (warp.getVisits() >= 10000) Advancement.grantAdvancement(owner, "warp-visits-2");
                 }
             });
         }
@@ -59,6 +56,7 @@ public class WarpUtil {
 
     /**
      * Adds a warp object into the database.
+     *
      * @param warp The warp object to insert.
      */
     public static void createWarp(Warp warp) {
@@ -66,7 +64,7 @@ public class WarpUtil {
         String query = "INSERT INTO warps (name, owner, visits, category, featured, expired, renewed, x, y, z, " +
                 "pitch, yaw, world) VALUES (?, ?, ?, ?, ?, ?, ?, ? ,?, ?, ?, ?, ?);";
 
-        try (Connection connection = LocalStorage.getConnection()) {
+        try (Connection connection = Phase.getStorage().getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(query)) {
                 statement.setString(1, warp.getName());
                 statement.setString(2, warp.getOwnerUUID().toString());
@@ -86,8 +84,7 @@ public class WarpUtil {
                 OfflinePlayer ownerOffline = Bukkit.getOfflinePlayer(warp.getOwnerUUID());
                 if (ownerOffline.isOnline()) {
                     Player owner = (Player) ownerOffline;
-                    Bukkit.getScheduler().runTask(Phase.getPhase(), () -> AdvancementUtil
-                            .grantAdvancement(owner, "warp-create"));
+                    Bukkit.getScheduler().runTask(Phase.getPhase(), () -> Advancement.grantAdvancement(owner, "warp-create"));
                 }
 
                 Phase.getPhase().getLogger().info(String.format("%s created warp '%s'.",
@@ -100,14 +97,14 @@ public class WarpUtil {
             if (offlinePlayer.isOnline()) {
                 Player player = (Player) offlinePlayer;
                 player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cAn error " +
-                                "occurred while creating your warp- notify an admin."));
+                        "occurred while creating your warp- notify an admin."));
                 player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_LAND, 1.0f, 1.0f);
             }
         }
     }
 
     public static void changeWarpCategory(String warpName, Category category) {
-        try (Connection connection = LocalStorage.getConnection()) {
+        try (Connection connection = Phase.getStorage().getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement("UPDATE warps SET category = ? WHERE name LIKE ?;")) {
                 statement.setString(1, category.getName());
                 statement.setString(2, warpName);
@@ -119,7 +116,7 @@ public class WarpUtil {
     }
 
     public static void renameWarp(String warpName, String newName) {
-        try (Connection connection = LocalStorage.getConnection()) {
+        try (Connection connection = Phase.getStorage().getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement("UPDATE warps SET name = ? WHERE name LIKE ?;")) {
                 statement.setString(1, newName);
                 statement.setString(2, warpName);
@@ -131,7 +128,7 @@ public class WarpUtil {
     }
 
     public static void relocateWarp(String warpName, Location newLocation) {
-        try (Connection connection = LocalStorage.getConnection()) {
+        try (Connection connection = Phase.getStorage().getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement("UPDATE warps SET x = ?, y = ?, z = ?, " +
                     "pitch = ?, yaw = ?, world = ? WHERE name LIKE ?;")) {
                 statement.setDouble(1, newLocation.getX());
@@ -149,7 +146,7 @@ public class WarpUtil {
     }
 
     public static void delete(String warpName) {
-        try (Connection connection = LocalStorage.getConnection()) {
+        try (Connection connection = Phase.getStorage().getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement("DELETE FROM warps WHERE name LIKE ?;")) {
                 statement.setString(1, warpName);
                 statement.execute();

@@ -4,7 +4,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import xyz.nkomarn.Kerosene.data.LocalStorage;
 import xyz.nkomarn.Phase.Phase;
 
 import java.sql.Connection;
@@ -17,7 +16,7 @@ public class PlayerJoinListener implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         Bukkit.getScheduler().runTaskAsynchronously(Phase.getPhase(), () -> {
-            try (Connection connection = LocalStorage.getConnection()) {
+            try (Connection connection = Phase.getStorage().getConnection()) {
                 try (PreparedStatement statement = connection.prepareStatement(UPDATE_QUERY)) {
                     statement.setLong(1, System.currentTimeMillis());
                     statement.setString(2, event.getPlayer().getUniqueId().toString());

@@ -1,6 +1,5 @@
 package xyz.nkomarn.Phase.task;
 
-import xyz.nkomarn.Kerosene.data.LocalStorage;
 import xyz.nkomarn.Phase.Phase;
 import xyz.nkomarn.Phase.util.Search;
 
@@ -14,7 +13,7 @@ public class ExpirationTask implements Runnable {
 
     @Override
     public void run() {
-        try (Connection connection = LocalStorage.getConnection()) {
+        try (Connection connection = Phase.getStorage().getConnection()) {
             Search.getPublicWarps().forEach(warp -> {
                 if (TimeUnit.MILLISECONDS.toDays(System.currentTimeMillis() - warp.getRenewedTime()) >= 14) {
                     Phase.getPhase().getLogger().info(String.format("Warp '%s' expired.", warp.getName()));

@@ -1,6 +1,6 @@
 package xyz.nkomarn.Phase.util;
 
-import xyz.nkomarn.Kerosene.data.LocalStorage;
+import xyz.nkomarn.Phase.Phase;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,25 +13,15 @@ public class Database {
             " NOT NULL, y REAL NOT NULL, z REAL NOT NULL, pitch REAL NOT NULL, yaw REAL NOT NULL, world TEXT NOT NULL)";
 
     public static boolean initialize() {
-        Connection connection = null;
-
-        try {
-            connection = LocalStorage.getConnection();
-            PreparedStatement statement = connection.prepareStatement(TABLE_QUERY);
-            statement.execute();
-            connection.close();
-            return true;
+        try (Connection connection = Phase.getStorage().getConnection()) {
+            try (PreparedStatement statement = connection.prepareStatement(TABLE_QUERY);) {
+                statement.execute();
+                return true;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
-        } finally {
-            if (connection != null) {
-                try {
-                    connection.close();
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
-                }
-            }
         }
+
+        return false;
     }
 }

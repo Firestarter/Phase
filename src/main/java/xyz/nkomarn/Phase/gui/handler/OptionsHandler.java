@@ -8,7 +8,6 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
-import xyz.nkomarn.Kerosene.util.ClaimUtil;
 import xyz.nkomarn.Phase.Phase;
 import xyz.nkomarn.Phase.gui.GuiHolder;
 import xyz.nkomarn.Phase.gui.inventory.CategoryPicker;
@@ -16,6 +15,7 @@ import xyz.nkomarn.Phase.type.Warp;
 import xyz.nkomarn.Phase.util.Config;
 import xyz.nkomarn.Phase.util.Search;
 import xyz.nkomarn.Phase.util.WarpUtil;
+import xyz.nkomarn.campfire.util.Claims;
 
 import java.util.Optional;
 
@@ -58,7 +58,7 @@ public class OptionsHandler implements GuiHandler {
                     .plugin(Phase.getPhase())
                     .open(player);
         } else if (slot == 4) {
-            if (ClaimUtil.doesLocationHaveForeignClaims(player, player.getLocation())) {
+            if (Claims.checkForeignClaims(player, player.getLocation())) {
                 player.sendMessage(ChatColor.translateAlternateColorCodes('&', String.format(
                         "%sYou can't move warps to others' claims.", prefix
                 )));

@@ -11,13 +11,18 @@ import xyz.nkomarn.Phase.listener.PlayerJoinListener;
 import xyz.nkomarn.Phase.listener.SignListener;
 import xyz.nkomarn.Phase.task.ExpirationTask;
 import xyz.nkomarn.Phase.util.Database;
+import xyz.nkomarn.kerosene.data.db.LocalStorage;
 
 public class Phase extends JavaPlugin {
-    private static Phase phase;
+
+    private static Phase PHASE;
+    private static LocalStorage STORAGE;
 
     public void onEnable() {
-        phase = this;
+        PHASE = this;
         saveDefaultConfig();
+
+        STORAGE = new LocalStorage("phase");
 
         if (!Database.initialize()) {
             getLogger().severe("Failed to initialize the database.");
@@ -39,9 +44,14 @@ public class Phase extends JavaPlugin {
         getServer().getScheduler().runTaskTimerAsynchronously(this, new ExpirationTask(), 0, 10 * 20);
     }
 
-    public void onDisable() { }
+    public void onDisable() {
+    }
 
     public static Phase getPhase() {
-        return phase;
+        return PHASE;
+    }
+
+    public static LocalStorage getStorage() {
+        return STORAGE;
     }
 }

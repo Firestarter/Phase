@@ -4,7 +4,6 @@ import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
-import xyz.nkomarn.Kerosene.data.LocalStorage;
 import xyz.nkomarn.Phase.Phase;
 import xyz.nkomarn.Phase.type.Warp;
 import xyz.nkomarn.Phase.util.Config;
@@ -19,6 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class WarpAdminCommand implements TabExecutor {
+
     @Override
     public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
         if (!sender.hasPermission("phase.admin")) {
@@ -68,7 +68,7 @@ public class WarpAdminCommand implements TabExecutor {
                                     "%sSpecify the warp for which to toggle featured status.", Config.getPrefix()
                             )));
                         } else {
-                            try (Connection connection = LocalStorage.getConnection()) {
+                            try (Connection connection = Phase.getStorage().getConnection()) {
                                 try (PreparedStatement statement = connection.prepareStatement("UPDATE `warps` SET `featured` = NOT " +
                                         "featured WHERE name LIKE ?;")) {
                                     statement.setString(1, WarpUtil.argsToString(Arrays.copyOfRange(args, 1, args.length)));
@@ -88,7 +88,7 @@ public class WarpAdminCommand implements TabExecutor {
                                     "%sSpecify a warp to delete.", Config.getPrefix()
                             )));
                         } else {
-                            try (Connection connection = LocalStorage.getConnection()) {
+                            try (Connection connection = Phase.getStorage().getConnection()) {
                                 try (PreparedStatement statement = connection.prepareStatement("DELETE FROM warps WHERE name LIKE ?;")) {
                                     statement.setString(1,  WarpUtil.argsToString(Arrays.copyOfRange(args, 1, args.length)));
                                     statement.execute();
