@@ -26,21 +26,24 @@ public class WarpUtil {
     public static void warpPlayer(Player player, Warp warp) {
         Location location = warp.getLocation();
 
-        try {
-            Teleport.teleportPlayer(player, location);
-            player.sendTitle(ChatColor.translateAlternateColorCodes('&',
-                    "&6&lWhoosh."), ChatColor.translateAlternateColorCodes('&',
-                    String.format("You've arrived safely at '%s'.", warp.getName())), 10, 70, 20);
-            player.playSound(location, Sound.BLOCK_ENDER_CHEST_OPEN, 1.0f, 1.0f);
-            player.getWorld().playEffect(warp.getLocation(), Effect.ENDER_SIGNAL, 15);
-            if (!player.getUniqueId().equals(warp.getOwnerUUID())) Search.incrementVisits(warp);
-        } catch (Exception e) {
-            player.sendTitle(ChatColor.translateAlternateColorCodes('&',
-                    "&c&lWarping failed."), ChatColor.translateAlternateColorCodes('&',
-                    "A teleportation error occurred."), 10, 70, 20);
-            player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_LAND, 1.0f, 1.0f);
-            e.printStackTrace();
-        }
+        Teleport.teleportPlayer(player, location).thenAccept(result -> {
+           if (result) {
+               player.sendTitle(ChatColor.translateAlternateColorCodes('&',
+                       "&6&lWhoosh."), ChatColor.translateAlternateColorCodes('&',
+                       String.format("You've arrived safely at '%s'.", warp.getName())), 10, 70, 20);
+               player.playSound(location, Sound.BLOCK_ENDER_CHEST_OPEN, 1.0f, 1.0f);
+               player.getWorld().playEffect(warp.getLocation(), Effect.ENDER_SIGNAL, 15);
+
+               if (!player.getUniqueId().equals(warp.getOwnerUUID())) {
+                   Search.incrementVisits(warp);
+               }
+           } else {
+               player.sendTitle(ChatColor.translateAlternateColorCodes('&',
+                       "&c&lWarping failed."), ChatColor.translateAlternateColorCodes('&',
+                       "A teleportation error occurred."), 10, 70, 20);
+               player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_LAND, 1.0f, 1.0f);
+           }
+        });
 
         OfflinePlayer ownerOffline = Bukkit.getOfflinePlayer(warp.getOwnerUUID());
         if (ownerOffline.isOnline()) {
