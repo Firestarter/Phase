@@ -7,6 +7,8 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import xyz.nkomarn.Phase.gui.GuiHolder;
 import xyz.nkomarn.Phase.gui.inventory.*;
+import xyz.nkomarn.Phase.gui.menu.MainMenu;
+import xyz.nkomarn.Phase.gui.menu.SettingsMenu;
 import xyz.nkomarn.Phase.util.Config;
 import xyz.nkomarn.Phase.util.Search;
 
@@ -18,7 +20,7 @@ public class PlayerWarpsHandler implements GuiHandler {
 
         if (slot == 39) {
             if (page <= 1) {
-                new MainMenu(player);
+                new MainMenu().open(player);
             } else {
                 new PlayerWarps(player, Math.max(0, --page));
             }
@@ -35,7 +37,7 @@ public class PlayerWarpsHandler implements GuiHandler {
                     != Material.WHITE_STAINED_GLASS_PANE) {
                 String name = ChatColor.stripColor(clickedItem.getItemMeta().getDisplayName());
                 if (name.trim().length() < 1) return;
-                Search.getWarpByName(name).ifPresent(warp -> new OptionsMenu(player, warp));
+                Search.getWarpByName(name).ifPresent(warp -> new SettingsMenu(warp).open(player));
             }
         }
     }

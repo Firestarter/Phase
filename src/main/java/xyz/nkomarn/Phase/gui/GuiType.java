@@ -7,6 +7,5 @@ public enum GuiType {
     PLAYER_WARPS,
     FILTER,
     FILTERED_WARPS,
-    OPTIONS,
     CATEGORY_PICKER
 }

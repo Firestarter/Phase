@@ -8,7 +8,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import xyz.nkomarn.Phase.Phase;
-import xyz.nkomarn.Phase.gui.inventory.MainMenu;
+import xyz.nkomarn.Phase.gui.menu.MainMenu;
 import xyz.nkomarn.Phase.type.Warp;
 import xyz.nkomarn.Phase.util.Config;
 import xyz.nkomarn.Phase.util.Search;
@@ -27,7 +27,7 @@ public class WarpCommand implements TabExecutor {
         Player player = (Player) sender;
 
         if (args.length < 1) {
-            new MainMenu(player);
+            new MainMenu().open(player);
             player.playSound(player.getLocation(), Sound.BLOCK_BEACON_ACTIVATE, 1.0f, 1.0f);
             Advancement.grantAdvancement(player, "warp-menu");
         } else {

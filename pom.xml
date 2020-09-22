@@ -48,7 +48,7 @@
         <dependency>
             <groupId>com.github.WesJD</groupId>
             <artifactId>AnvilGUI</artifactId>
-            <version>4ea5a77841</version>
+            <version>ff3d22d9c8</version>
         </dependency>
         <dependency>
             <groupId>com.github.FirestarterMC</groupId>

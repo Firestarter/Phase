@@ -8,7 +8,7 @@ import org.bukkit.inventory.ItemStack;
 import xyz.nkomarn.Phase.gui.GuiHolder;
 import xyz.nkomarn.Phase.gui.inventory.FilterMenu;
 import xyz.nkomarn.Phase.gui.inventory.FilteredWarps;
-import xyz.nkomarn.Phase.gui.inventory.MainMenu;
+import xyz.nkomarn.Phase.gui.menu.MainMenu;
 import xyz.nkomarn.Phase.util.Search;
 import xyz.nkomarn.Phase.util.WarpUtil;
 
@@ -21,7 +21,7 @@ public class FilteredWarpsHandler implements GuiHandler {
 
         if (slot == 39) {
             if (page <= 1) {
-                new MainMenu(player);
+                new MainMenu().open(player);
             } else {
                 new FilteredWarps(player, Math.max(0, --page), category);
             }

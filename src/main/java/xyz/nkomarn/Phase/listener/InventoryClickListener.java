@@ -33,7 +33,6 @@ public class InventoryClickListener implements Listener {
             else if (type == GuiType.PLAYER_WARPS) handler = new PlayerWarpsHandler();
             else if (type == GuiType.FILTERED_WARPS) handler = new FilteredWarpsHandler();
             else if (type == GuiType.FILTER) handler = new FilterHander();
-            else if (type == GuiType.OPTIONS) handler = new OptionsHandler();
             else if (type == GuiType.CATEGORY_PICKER) handler = new CategoryPickerHandler();
 
             if (handler != null) {
