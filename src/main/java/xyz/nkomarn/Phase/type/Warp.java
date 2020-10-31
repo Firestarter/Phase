@@ -1,87 +1,150 @@
 package xyz.nkomarn.Phase.type;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.World;
+import com.firestartermc.kerosene.item.ItemBuilder;
+import com.firestartermc.kerosene.util.AdvancementUtils;
+import com.firestartermc.kerosene.util.PlayerUtils;
+import org.bukkit.*;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import xyz.nkomarn.Phase.util.WarpUtil;
+import org.jetbrains.annotations.NotNull;
+import xyz.nkomarn.Phase.util.Search;
 
-import java.util.Arrays;
 import java.util.UUID;
 
 public class Warp {
-    private final String name, owner, world;
-    private final Category category;
-    private final int visits;
-    private final long renewed;
-    private final double x, y, z, pitch, yaw;
-    private final boolean featured, expired;
 
-    public Warp(String name, String owner, int visits, Category category, boolean featured, boolean expired, long renewed,
-                double x, double y, double z, double pitch, double yaw, String world) {
+    private String name;
+    private UUID owner;
+    private Location location;
+    private int visits;
+    private Category category;
+    private boolean featured;
+    private boolean expired;
+    private long renewed;
+
+    public boolean visitsModified;
+
+    public Warp(@NotNull String name, @NotNull UUID owner, @NotNull Location location, @NotNull Category category, int visits, boolean featured, boolean expired, long renewed) {
         this.name = name;
         this.owner = owner;
-        this.visits = visits;
+        this.location = location;
         this.category = category;
+        this.visits = visits;
         this.featured = featured;
         this.expired = expired;
         this.renewed = renewed;
-        this.x = x;
-        this.y = y;
-        this.z = z;
-        this.pitch = pitch;
-        this.yaw = yaw;
-        this.world = world;
     }
 
+    @NotNull
     public String getName() {
         return this.name;
     }
 
-    public UUID getOwnerUUID() {
-        return UUID.fromString(owner);
+    public void setName(@NotNull String name) {
+        this.name = name;
+    }
+
+    @NotNull
+    public UUID getOwner() {
+        return owner;
+    }
+
+    public void setOwner(@NotNull UUID owner) {
+        this.owner = owner;
+    }
+
+    @NotNull
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(@NotNull Location location) {
+        this.location = location;
     }
 
     public int getVisits() {
-        return this.visits;
+        return visits;
     }
 
+    public void setVisits(int visits) {
+        this.visits = visits;
+        visitsModified = true;
+    }
+
+    public void incrementVisits() {
+        visits++;
+        visitsModified = true;
+    }
+
+    @NotNull
     public Category getCategory() {
-        return this.category;
+        return category;
+    }
+
+    public void setCategory(@NotNull Category category) {
+        this.category = category;
     }
 
     public boolean isFeatured() {
-        return this.featured;
+        return featured;
+    }
+
+    public void setFeatured(boolean featured) {
+        this.featured = featured;
     }
 
     public boolean isExpired() {
-        return this.expired;
+        return expired;
     }
 
-    public long getRenewedTime() {
-        return this.renewed;
+    public void setExpired(boolean expired) {
+        this.expired = expired;
     }
 
-    public Location getLocation() {
-        World world = Bukkit.getWorld(UUID.fromString(this.world));
-        return new Location(world, this.x, this.y, this.z, (float) this.yaw, (float) this.pitch);
+    public long getLastRenewed() {
+        return renewed;
     }
 
-    public ItemStack getItemStack() {
-        ItemStack warpItem = new ItemStack(this.category.getMaterial());
-        ItemMeta warpItemMeta = warpItem.getItemMeta();
-        warpItemMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&',
-                String.format("&f&l%s", this.name)));
-        warpItemMeta.setLore(Arrays.asList(
-                ChatColor.translateAlternateColorCodes('&', String.format("&7Category: &a%s", this.category.getName())),
-                ChatColor.translateAlternateColorCodes('&', String.format("&7Visits: &b%s",
-                        WarpUtil.formatNumber(this.visits)))
-        ));
-        warpItemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_ATTRIBUTES);
-        warpItem.setItemMeta(warpItemMeta);
-        return warpItem;
+    public void setLastRenewed(long renewed) {
+        this.renewed = renewed;
+    }
+
+    @NotNull
+    public ItemStack getDisplayItem() {
+        return ItemBuilder.of(category.getMaterial())
+                .name(ChatColor.WHITE + ChatColor.BOLD.toString() + name)
+                .lore(ChatColor.GRAY + "Category: " + ChatColor.GREEN + category.getName(), ChatColor.GRAY + "Visits: " + ChatColor.AQUA + visits)
+                .addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS)
+                .build();
+    }
+
+    public void teleport(@NotNull Player player) {
+        PlayerUtils.teleportAsync(player, location).thenAccept(success -> {
+            if (!success) {
+                player.sendTitle(ChatColor.RED + ChatColor.BOLD.toString() + "WARP FAILURE", "An error occured- notify staff", 10, 70, 20);
+                player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_LAND, 1.0f, 1.0f);
+                return;
+            }
+
+            player.sendTitle(ChatColor.GOLD + ChatColor.BOLD.toString() + "WHOOSH", "You've arrived at '" + name + "'", 10, 70, 20);
+            player.playSound(location, Sound.BLOCK_ENDER_CHEST_OPEN, 1.0f, 1.0f);
+            player.getWorld().playEffect(location, Effect.DRAGON_BREATH, 3);
+
+            if (!player.getUniqueId().equals(owner)) {
+                Search.incrementVisits(this);
+            }
+        });
+
+        var owner = Bukkit.getPlayer(this.owner);
+        if (owner == null) {
+            return;
+        }
+
+        if (visits >= 1000 && visits < 10000) {
+            AdvancementUtils.grant(owner, "warp-visits-1");
+        } else if (visits >= 10000) {
+            AdvancementUtils.grant(owner, "warp-visits-2");
+        }
     }
 }

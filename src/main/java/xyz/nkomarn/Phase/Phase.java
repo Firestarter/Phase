@@ -1,5 +1,7 @@
 package xyz.nkomarn.Phase;
 
+import com.firestartermc.kerosene.Kerosene;
+import com.firestartermc.kerosene.data.db.LocalStorage;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -11,7 +13,6 @@ import xyz.nkomarn.Phase.listener.PlayerJoinListener;
 import xyz.nkomarn.Phase.listener.SignListener;
 import xyz.nkomarn.Phase.task.ExpirationTask;
 import xyz.nkomarn.Phase.util.Database;
-import xyz.nkomarn.kerosene.data.db.LocalStorage;
 
 public class Phase extends JavaPlugin {
 
@@ -22,7 +23,7 @@ public class Phase extends JavaPlugin {
         PHASE = this;
         saveDefaultConfig();
 
-        STORAGE = new LocalStorage("phase");
+        STORAGE = Kerosene.getKerosene().getLocalStorage("phase");
 
         if (!Database.initialize()) {
             getLogger().severe("Failed to initialize the database.");

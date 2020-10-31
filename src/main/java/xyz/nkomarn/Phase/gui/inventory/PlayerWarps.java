@@ -56,7 +56,7 @@ public class PlayerWarps {
             List<Warp> warps = Search.getPlayerWarps(player.getUniqueId());
             int start = Math.min(Math.max(36 * (page - 1), 0), warps.size());
             int end = Math.min(Math.max(36 * page, start), warps.size());
-            warps.subList(start, end).forEach(warp -> menu.setItem(warps.indexOf(warp) % 36, warp.getItemStack()));
+            warps.subList(start, end).forEach(warp -> menu.setItem(warps.indexOf(warp) % 36, warp.getDisplayItem()));
             Bukkit.getScheduler().runTask(Phase.getPhase(), () -> player.openInventory(menu));
         });
     }

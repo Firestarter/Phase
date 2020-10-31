@@ -1,5 +1,7 @@
 package xyz.nkomarn.Phase.util;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import xyz.nkomarn.Phase.Phase;
 import xyz.nkomarn.Phase.type.Category;
 import xyz.nkomarn.Phase.type.Warp;;
@@ -119,16 +121,18 @@ public class Search {
      * Increments the visit count for a warp
      * @param warp Warp object to increment
      */
-    public static void incrementVisits(Warp warp) {
-        try (Connection connection = Phase.getStorage().getConnection()) {
-            try (PreparedStatement statement = connection.prepareStatement("UPDATE warps SET visits = visits + 1 " +
-                    "WHERE name LIKE ?;")) {
-                statement.setString(1, warp.getName());
-                statement.executeUpdate();
+    public static void incrementVisits(Warp warp) { // TODO IS RAN SYNC, THUS INNER MUST BE ASYNC
+        Bukkit.getScheduler().runTaskAsynchronously(Phase.getPhase(), () -> {
+            try (Connection connection = Phase.getStorage().getConnection()) {
+                try (PreparedStatement statement = connection.prepareStatement("UPDATE warps SET visits = visits + 1 " +
+                        "WHERE name LIKE ?;")) {
+                    statement.setString(1, warp.getName());
+                    statement.executeUpdate();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        });
     }
 
     /**
@@ -136,20 +140,31 @@ public class Search {
      * @param results Results from a database query.
      * @return ArrayList of warp objects.
      */
-    private static List<Warp> resultToSet(ResultSet results) {
+    private static List<Warp> resultToSet(ResultSet results) throws SQLException {
         List<Warp> warps = new ArrayList<>();
-        try {
-            while (results.next()) {
-                warps.add(new Warp(results.getString(2), results.getString(3), results.getInt(4),
-                        Category.valueOf(results.getString(5).toUpperCase()), results.getBoolean(6),
-                        results.getBoolean(7), results.getLong(8), results.getDouble(9),
-                        results.getDouble(10), results.getDouble(11), results.getDouble(12),
-                        results.getDouble(13), results.getString(14))
-                );
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+
+        while (results.next()) {
+            Location location = new Location(
+                    Bukkit.getWorld(UUID.fromString(results.getString(14))),
+                    results.getDouble(9),
+                    results.getDouble(10),
+                    results.getDouble(11),
+                    results.getFloat(13),
+                    results.getFloat(12)
+            );
+
+            warps.add(new Warp(
+                    results.getString(2),
+                    UUID.fromString(results.getString(3)),
+                    location,
+                    Category.valueOf(results.getString(5).toUpperCase()),
+                    results.getInt(4),
+                    results.getBoolean(6),
+                    results.getBoolean(7),
+                    results.getLong(8)
+            ));
         }
+
         return warps;
     }
 }

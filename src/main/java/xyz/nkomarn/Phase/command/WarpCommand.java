@@ -1,5 +1,6 @@
 package xyz.nkomarn.Phase.command;
 
+import com.firestartermc.kerosene.util.AdvancementUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
@@ -13,7 +14,6 @@ import xyz.nkomarn.Phase.type.Warp;
 import xyz.nkomarn.Phase.util.Config;
 import xyz.nkomarn.Phase.util.Search;
 import xyz.nkomarn.Phase.util.WarpUtil;
-import xyz.nkomarn.kerosene.util.Advancement;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +29,7 @@ public class WarpCommand implements TabExecutor {
         if (args.length < 1) {
             new MainMenu().open(player);
             player.playSound(player.getLocation(), Sound.BLOCK_BEACON_ACTIVATE, 1.0f, 1.0f);
-            Advancement.grantAdvancement(player, "warp-menu");
+            AdvancementUtils.grant(player, "warp-menu");
         } else {
             String warpName = WarpUtil.argsToString(args);
 

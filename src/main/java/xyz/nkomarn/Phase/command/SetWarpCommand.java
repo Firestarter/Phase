@@ -1,5 +1,6 @@
 package xyz.nkomarn.Phase.command;
 
+import com.firestartermc.kerosene.Kerosene;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -11,11 +12,10 @@ import org.bukkit.entity.Player;
 import xyz.nkomarn.Phase.Phase;
 import xyz.nkomarn.Phase.type.Category;
 import xyz.nkomarn.Phase.type.Warp;
+import xyz.nkomarn.Phase.util.ClaimUtils;
 import xyz.nkomarn.Phase.util.Config;
 import xyz.nkomarn.Phase.util.Search;
 import xyz.nkomarn.Phase.util.WarpUtil;
-import xyz.nkomarn.campfire.util.Claims;
-import xyz.nkomarn.kerosene.util.Economy;
 
 import java.text.DecimalFormat;
 import java.util.Optional;
@@ -42,6 +42,7 @@ public class SetWarpCommand implements CommandExecutor {
             Bukkit.getScheduler().runTaskAsynchronously(Phase.getPhase(), () -> {
                 Optional<Warp> warp = Search.getWarpByName(warpName);
                 Location warpLocation = player.getLocation();
+                var economy = Kerosene.getKerosene().getEconomy();
 
                 if (warp.isPresent()) {
                     player.sendMessage(ChatColor.translateAlternateColorCodes('&', String.format(
@@ -55,22 +56,19 @@ public class SetWarpCommand implements CommandExecutor {
                     player.sendMessage(ChatColor.translateAlternateColorCodes('&', String.format(
                             "%sWarp names must be alphanumeric.", Config.getPrefix()
                     )));
-                } else if (Claims.checkForeignClaims(player, warpLocation)) {
+                } else if (ClaimUtils.isForeignClaim(player, warpLocation)) {
                     player.sendMessage(ChatColor.translateAlternateColorCodes('&', String.format(
                             "%sYou can't create warps in others' claims.", Config.getPrefix()
                     )));
-                } else if (Economy.getEconomy().getBalance(player) < CREATION_COST) {
+                } else if (economy.getBalance(player) < CREATION_COST) {
                     DecimalFormat formatter = new DecimalFormat("#,###");
                     player.sendMessage(ChatColor.translateAlternateColorCodes('&', String.format(
                             "%sYou need to have $%s available to create a warp.",
                             Config.getPrefix(), formatter.format(CREATION_COST)
                     )));
                 } else {
-                    WarpUtil.createWarp(new Warp(warpName, player.getUniqueId().toString(), 0, Category.ALL,
-                            false, false, System.currentTimeMillis(), warpLocation.getX(),
-                            warpLocation.getY(), warpLocation.getZ(), warpLocation.getPitch(), warpLocation.getYaw(),
-                            warpLocation.getWorld().getUID().toString()));
-                    Economy.withdraw(player, CREATION_COST);
+                    WarpUtil.createWarp(warpName, player.getUniqueId(), warpLocation, Category.ALL);
+                    economy.withdrawPlayer(player, CREATION_COST);
                     player.sendTitle(ChatColor.translateAlternateColorCodes('&', "&6&lCreated warp."),
                             ChatColor.translateAlternateColorCodes('&', "&fCreated a warp in this location."));
                     player.sendMessage(ChatColor.translateAlternateColorCodes('&', String.format(

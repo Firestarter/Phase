@@ -15,7 +15,7 @@ public class ExpirationTask implements Runnable {
     public void run() {
         try (Connection connection = Phase.getStorage().getConnection()) {
             Search.getPublicWarps().forEach(warp -> {
-                if (TimeUnit.MILLISECONDS.toDays(System.currentTimeMillis() - warp.getRenewedTime()) >= 14) {
+                if (TimeUnit.MILLISECONDS.toDays(System.currentTimeMillis() - warp.getLastRenewed()) >= 14) {
                     Phase.getPhase().getLogger().info(String.format("Warp '%s' expired.", warp.getName()));
                     try (PreparedStatement statement = connection.prepareStatement(EXPIRATION_QUERY)) {
                         statement.setString(1, warp.getName());

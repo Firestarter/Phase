@@ -49,7 +49,7 @@ public class PublicWarps {
 
         Bukkit.getScheduler().runTaskAsynchronously(Phase.getPhase(), () -> {
             AtomicInteger slot = new AtomicInteger();
-            Search.getPublicWarpsPage(page).forEach(warp -> menu.setItem(slot.getAndIncrement(), warp.getItemStack()));
+            Search.getPublicWarpsPage(page).forEach(warp -> menu.setItem(slot.getAndIncrement(), warp.getDisplayItem()));
             Bukkit.getScheduler().runTask(Phase.getPhase(), () -> player.openInventory(menu));
         });
     }

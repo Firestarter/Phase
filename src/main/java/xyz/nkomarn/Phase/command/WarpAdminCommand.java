@@ -47,8 +47,8 @@ public class WarpAdminCommand implements TabExecutor {
                             } else {
                                 StringBuilder information = new StringBuilder();
                                 information.append(String.format("%sInfo for warp '%s':\n", Config.getPrefix(), warp.get().getName()));
-                                OfflinePlayer owner = Bukkit.getOfflinePlayer(warp.get().getOwnerUUID());
-                                information.append(String.format(ChatColor.GRAY + " Owner: &e%s&7 (%s)\n", owner.getName(), warp.get().getOwnerUUID().toString()));
+                                OfflinePlayer owner = Bukkit.getOfflinePlayer(warp.get().getOwner());
+                                information.append(String.format(ChatColor.GRAY + " Owner: &e%s&7 (%s)\n", owner.getName(), warp.get().getOwner().toString()));
                                 Location warpLocation = warp.get().getLocation();
                                 information.append(String.format(ChatColor.GRAY + " X: &e%s&7, Y: &e%s&7, Z: &e%s&7, " +
                                                 "pitch: &e%s&7, yaw: &e%s&7\n",
@@ -57,7 +57,7 @@ public class WarpAdminCommand implements TabExecutor {
                                 information.append(String.format(ChatColor.GRAY + " Visits: &e%s&7\n", warp.get().getVisits()));
                                 information.append(String.format(ChatColor.GRAY + " Featured: &e%s&7\n", warp.get().isFeatured()));
                                 information.append(String.format(ChatColor.GRAY + " Expired: &e%s&7\n", warp.get().isExpired()));
-                                information.append(String.format(ChatColor.GRAY + " Last renewed: &e%s\n", warp.get().getRenewedTime()));
+                                information.append(String.format(ChatColor.GRAY + " Last renewed: &e%s\n", warp.get().getLastRenewed()));
                                 sender.sendMessage(ChatColor.translateAlternateColorCodes('&', information.toString()));
                             }
                         }
