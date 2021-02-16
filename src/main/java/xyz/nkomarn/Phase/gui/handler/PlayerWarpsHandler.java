@@ -27,7 +27,7 @@ public class PlayerWarpsHandler implements GuiHandler {
         } else if (slot == 40) {
             player.closeInventory();
             player.sendMessage(ChatColor.translateAlternateColorCodes('&',
-                    Config.getPrefix() + "&7Use the /setwarp command to create a warp."));
+                    Config.getPrefix() + "Use the /setwarp command to create a warp."));
         } else if (slot == 41) {
             new PlayerWarps(player, Math.max(0, ++page));
         } else {

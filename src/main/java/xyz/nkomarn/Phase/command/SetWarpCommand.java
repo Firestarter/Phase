@@ -33,7 +33,7 @@ public class SetWarpCommand implements CommandExecutor {
 
         if (args.length < 1) {
             player.sendMessage(ChatColor.translateAlternateColorCodes('&', String.format(
-                    "%sCreate a warp using /setwarp [warp name].", Config.getPrefix()
+                    "%sCreate a warp at your location using /setwarp <name>", Config.getPrefix()
             )));
             return true;
         } else {

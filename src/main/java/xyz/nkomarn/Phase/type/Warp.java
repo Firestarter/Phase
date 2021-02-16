@@ -149,7 +149,7 @@ public class Warp {
                 return;
             }
 
-            player.sendTitle(ChatColor.GOLD + ChatColor.BOLD.toString() + "WHOOSH", "You've arrived at '" + name + "'", 10, 70, 20);
+            player.sendTitle(MessageUtils.formatColors("&#dcff9c&lWHOOSH", true), "You've arrived at '" + name + "'", 10, 40, 10);
             player.playSound(location, Sound.BLOCK_ENDER_CHEST_OPEN, 1.0f, 1.0f);
             player.getWorld().playEffect(location, Effect.DRAGON_BREATH, 3);
 

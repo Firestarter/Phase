@@ -1,5 +1,6 @@
 package xyz.nkomarn.Phase.util;
 
+import com.firestartermc.kerosene.util.MessageUtils;
 import xyz.nkomarn.Phase.Phase;
 
 import java.util.ArrayList;
@@ -10,7 +11,7 @@ public class Config {
      * Fetches the message prefix from the configuration
      */
     public static String getPrefix() {
-        return getString("messages.prefix");
+        return MessageUtils.formatColors("&#dcff9c&lWARPS: &f", true);
     }
 
     /**
