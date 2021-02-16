@@ -30,7 +30,7 @@ public class WarpUtil {
 
     public static void createWarp(String name, UUID owner, Location location, Category category) {
         String query = "INSERT INTO warps (name, owner, visits, category, featured, expired, renewed, x, y, z, " +
-                "pitch, yaw, world) VALUES (?, ?, ?, ?, ?, ?, ?, ? ,?, ?, ?, ?, ?);";
+                "pitch, yaw, world, description) VALUES (?, ?, ?, ?, ?, ?, ?, ? ,?, ?, ?, ?, ?, ?);";
 
         try (Connection connection = Phase.getStorage().getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(query)) {
@@ -47,6 +47,7 @@ public class WarpUtil {
                 statement.setDouble(11, location.getPitch());
                 statement.setDouble(12, location.getYaw());
                 statement.setString(13, location.getWorld().getUID().toString());
+                statement.setString(14, "");
                 statement.execute();
 
                 var ownerOffline = Bukkit.getOfflinePlayer(owner);
@@ -73,6 +74,18 @@ public class WarpUtil {
         try (Connection connection = Phase.getStorage().getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement("UPDATE warps SET category = ? WHERE name LIKE ?;")) {
                 statement.setString(1, category.getName());
+                statement.setString(2, warpName);
+                statement.executeUpdate();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void changeWarpDescription(String warpName, String description) {
+        try (Connection connection = Phase.getStorage().getConnection()) {
+            try (PreparedStatement statement = connection.prepareStatement("UPDATE warps SET description = ? WHERE name LIKE ?;")) {
+                statement.setString(1, description);
                 statement.setString(2, warpName);
                 statement.executeUpdate();
             }

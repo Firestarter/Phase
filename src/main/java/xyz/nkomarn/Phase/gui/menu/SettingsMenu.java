@@ -7,6 +7,7 @@ import com.firestartermc.kerosene.gui.components.cosmetic.FillComponent;
 import com.firestartermc.kerosene.gui.components.item.ItemComponent;
 import com.firestartermc.kerosene.gui.predefined.ConfirmationGui;
 import com.firestartermc.kerosene.item.ItemBuilder;
+import com.firestartermc.kerosene.util.MessageUtils;
 import net.wesjd.anvilgui.AnvilGUI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -29,7 +30,7 @@ import java.util.Optional;
 public class SettingsMenu extends Gui {
 
     public SettingsMenu(@NotNull Warp warp) {
-        super("Settings: " + warp.getName(), 3);
+        super(MessageUtils.formatColors("&lSETTINGS&r " + warp.getName(), false), 3);
 
         addElement(new FillComponent(Material.GRAY_STAINED_GLASS_PANE));
         addElement(new BorderAlternatingComponent(Material.BLACK_STAINED_GLASS_PANE, Material.GRAY_STAINED_GLASS_PANE));
@@ -56,23 +57,53 @@ public class SettingsMenu extends Gui {
                 .build();
         addElement(new ButtonComponent(3, 1, rename, event -> rename(event.getPlayer(), warp)));
 
+        ItemStack description = ItemBuilder.of(Material.WRITABLE_BOOK)
+                .name("&f&lChange Description")
+                .lore("&7Change your warp's description.")
+                .build();
+        addElement(new ButtonComponent(4, 1, description, event -> changeDescription(event.getPlayer(), warp)));
+
         ItemStack relocate = ItemBuilder.of(Material.FILLED_MAP)
                 .name("&f&lRelocate")
                 .lore("&7Move the warp to your", "&7current location.")
                 .build();
-        addElement(new ButtonComponent(4, 1, relocate, event -> relocate(event.getPlayer(), warp)));
+        addElement(new ButtonComponent(5, 1, relocate, event -> relocate(event.getPlayer(), warp)));
 
         ItemStack category = ItemBuilder.of(Material.HOPPER)
                 .name("&f&lChange Category")
                 .lore("&7Make your warp more", "&7visible to players.")
                 .build();
-        addElement(new ButtonComponent(5, 1, category, event -> changeCategory(event.getPlayer(), warp)));
+        addElement(new ButtonComponent(6, 1, category, event -> changeCategory(event.getPlayer(), warp)));
 
         ItemStack delete = ItemBuilder.of(Material.BARRIER)
                 .name("&c&lDelete Warp")
                 .lore("&7Completely remove your", "&7warp from existence.")
                 .build();
         addElement(new ButtonComponent(7, 1, delete, event -> delete(event.getPlayer(), warp)));
+    }
+
+    private void changeDescription(@NotNull Player player, @NotNull Warp warp) {
+        new AnvilGUI.Builder()
+                .onComplete((p, text) -> {
+                    if (text.length() > 50) {
+                        return AnvilGUI.Response.text("Description must be 30 characters or less.");
+                    }
+
+                    var sanitized = ChatColor.stripColor(MessageUtils.formatColors(text, true)).trim();
+
+                    Bukkit.getScheduler().runTaskAsynchronously(Phase.getPhase(), () -> {
+                        WarpUtil.changeWarpDescription(warp.getName(), sanitized);
+                        p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 1.0f, 1.0f);
+                        p.sendTitle(ChatColor.translateAlternateColorCodes('&', "&6&lChanged description."), "How exciting.", 10, 70, 20);
+                    });
+
+                    return AnvilGUI.Response.close();
+                })
+                .title("Change warp description")
+                .text("Enter a new description.")
+                .item(new ItemStack(Material.BOOK))
+                .plugin(Phase.getPhase())
+                .open(player);
     }
 
     private void rename(@NotNull Player player, @NotNull Warp warp) {

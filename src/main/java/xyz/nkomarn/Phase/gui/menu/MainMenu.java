@@ -5,6 +5,7 @@ import com.firestartermc.kerosene.gui.components.buttons.ButtonComponent;
 import com.firestartermc.kerosene.gui.components.cosmetic.BorderAlternatingComponent;
 import com.firestartermc.kerosene.item.ItemBuilder;
 import com.firestartermc.kerosene.item.SkullBuilder;
+import com.firestartermc.kerosene.util.MessageUtils;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -19,7 +20,7 @@ import xyz.nkomarn.Phase.type.Category;
 public class MainMenu extends Gui {
 
     public MainMenu() {
-        super("Warps Menu", 6);
+        super(MessageUtils.formatColors("&lWARPS&r Menu", false), 6);
 
         addElement(new BorderAlternatingComponent(Material.MAGENTA_STAINED_GLASS_PANE, Material.PURPLE_STAINED_GLASS_PANE));
 

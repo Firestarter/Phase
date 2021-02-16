@@ -41,7 +41,8 @@ public class Cache {
                 visits,
                 false,
                 false,
-                System.currentTimeMillis()
+                System.currentTimeMillis(),
+                "uwu"
         );
 
         warps.put(name.toLowerCase(), warp);

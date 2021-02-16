@@ -161,7 +161,8 @@ public class Search {
                     results.getInt(4),
                     results.getBoolean(6),
                     results.getBoolean(7),
-                    results.getLong(8)
+                    results.getLong(8),
+                    results.getString(15)
             ));
         }
 
