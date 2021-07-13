@@ -30,14 +30,9 @@ public class Phase extends JavaPlugin {
             getServer().getPluginManager().disablePlugin(this);
         }
 
-        PluginCommand warpCommand = getCommand("warp");
-        warpCommand.setExecutor(new WarpCommand());
-        warpCommand.setTabCompleter(new WarpCommand());
-        PluginCommand warpAdminCommand = getCommand("warpadmin");
-        warpAdminCommand.setExecutor(new WarpAdminCommand());
-        warpAdminCommand.setTabCompleter(new WarpAdminCommand());
-        PluginCommand setWarpCommand = getCommand("setwarp");
-        setWarpCommand.setExecutor(new SetWarpCommand());
+        getCommand("warp").setExecutor(new WarpCommand());
+        getCommand("warpadmin").setTabCompleter(new WarpAdminCommand());
+        getCommand("setwarp").setExecutor(new SetWarpCommand());
 
         Bukkit.getPluginManager().registerEvents(new PlayerJoinListener(), this);
         Bukkit.getPluginManager().registerEvents(new InventoryClickListener(), this);

@@ -11,7 +11,7 @@ commands:
   warp:
     usage: "/<command> <warp>"
     description: "View the warp GUI or teleport to a warp."
-    aliases: ['warps', 'go']
+    aliases: ['warps']
   setwarp:
     usage: "/<command> <name>"
     description: "Set a warp at your current location."
