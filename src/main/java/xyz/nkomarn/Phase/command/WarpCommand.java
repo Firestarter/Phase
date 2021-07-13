@@ -36,6 +36,7 @@ public class WarpCommand extends BrigadierCommand {
             new MainMenu().open(player);
             player.playSound(player.getLocation(), Sound.BLOCK_BEACON_ACTIVATE, 1.0f, 1.0f);
             AdvancementUtils.grant(player, "warp-menu");
+            return true;
         }
 
         var warpName = WarpUtil.argsToString(args);
