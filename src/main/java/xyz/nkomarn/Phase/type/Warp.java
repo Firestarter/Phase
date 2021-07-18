@@ -4,6 +4,7 @@ import com.firestartermc.kerosene.item.ItemBuilder;
 import com.firestartermc.kerosene.util.AdvancementUtils;
 import com.firestartermc.kerosene.util.MessageUtils;
 import com.firestartermc.kerosene.util.PlayerUtils;
+import com.firestartermc.kerosene.util.TeleportUtils;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
@@ -12,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import xyz.nkomarn.Phase.util.Search;
 
+import java.text.NumberFormat;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -122,27 +124,24 @@ public class Warp {
     @NotNull
     public ItemStack getDisplayItem() {
         var builder = ItemBuilder.of(category.getMaterial())
-                .name(ChatColor.WHITE + ChatColor.BOLD.toString() + name);
+                .name(ChatColor.WHITE + name)
+                .lore(MessageUtils.formatColors("&#59ffa1" + NumberFormat.getInstance().format(visits) + " visits", true))
+                .addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS);
 
         if (getDescription() != null && getDescription().length() > 0) {
-            var description = MessageUtils.splitString(getDescription(), 25).stream()
-                    .map(line -> ChatColor.YELLOW + line)
+            var description = MessageUtils.splitString(getDescription(), 30).stream()
+                    .map(line -> MessageUtils.formatColors(ChatColor.WHITE + line))
                     .collect(Collectors.toList());
 
-            builder.addLore(description);
             builder.addLore(" ");
+            builder.addLore(description);
         }
 
-        return builder
-                .addLore(ChatColor.GRAY + "Category: " + ChatColor.GREEN + category.getName())
-                .addLore(ChatColor.GRAY + "Visits: " + ChatColor.AQUA + visits)
-                .addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS)
-                .build();
-
+        return builder.build();
     }
 
     public void teleport(@NotNull Player player) {
-        PlayerUtils.teleportAsync(player, location).thenAccept(success -> {
+        TeleportUtils.teleportAsync(player, location).thenAccept(success -> {
             if (!success) {
                 player.sendTitle(ChatColor.RED + ChatColor.BOLD.toString() + "WARP FAILURE", "An error occurred- notify staff", 10, 70, 20);
                 player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_LAND, 1.0f, 1.0f);

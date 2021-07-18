@@ -24,8 +24,8 @@
 
         <dependency>
             <groupId>com.firestartermc</groupId>
-            <artifactId>Kerosene</artifactId>
-            <version>5.1.4</version>
+            <artifactId>kerosene</artifactId>
+            <version>5.2</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

@@ -2,9 +2,8 @@ package xyz.nkomarn.Phase;
 
 import com.firestartermc.kerosene.Kerosene;
 import com.firestartermc.kerosene.data.db.LocalStorage;
+import com.firestartermc.kerosene.plugin.BukkitPlugin;
 import org.bukkit.Bukkit;
-import org.bukkit.command.PluginCommand;
-import org.bukkit.plugin.java.JavaPlugin;
 import xyz.nkomarn.Phase.command.SetWarpCommand;
 import xyz.nkomarn.Phase.command.WarpAdminCommand;
 import xyz.nkomarn.Phase.command.WarpCommand;
@@ -14,7 +13,7 @@ import xyz.nkomarn.Phase.listener.SignListener;
 import xyz.nkomarn.Phase.task.ExpirationTask;
 import xyz.nkomarn.Phase.util.Database;
 
-public class Phase extends JavaPlugin {
+public class Phase extends BukkitPlugin {
 
     private static Phase PHASE;
     private static LocalStorage STORAGE;
@@ -30,9 +29,9 @@ public class Phase extends JavaPlugin {
             getServer().getPluginManager().disablePlugin(this);
         }
 
-        getCommand("warp").setExecutor(new WarpCommand());
-        getCommand("warpadmin").setTabCompleter(new WarpAdminCommand());
-        getCommand("setwarp").setExecutor(new SetWarpCommand());
+        registerCommand("warp", new WarpCommand());
+        registerCommand("warpadmin", new WarpAdminCommand());
+        registerCommand("setwarp", new SetWarpCommand());
 
         Bukkit.getPluginManager().registerEvents(new PlayerJoinListener(), this);
         Bukkit.getPluginManager().registerEvents(new InventoryClickListener(), this);

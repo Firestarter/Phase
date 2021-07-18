@@ -1,6 +1,6 @@
 package xyz.nkomarn.Phase.command;
 
-import com.firestartermc.kerosene.command.BrigadierCommand;
+import com.firestartermc.kerosene.command.BrigadierExecutor;
 import com.firestartermc.kerosene.util.AdvancementUtils;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -20,11 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-public class WarpCommand extends BrigadierCommand {
-
-    public WarpCommand() {
-        registerCompletions();
-    }
+public class WarpCommand implements BrigadierExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
